@@ -1,4 +1,0 @@
-/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/usr/bin/make -DCMAKE_C_COMPILER=/usr/bin/gcc-11 -DCMAKE_CXX_COMPILER=/usr/bin/g++-11 -G "CodeBlocks - Unix Makefiles" -S /tmp/tmp.mVpPkaiCIB -B /tmp/tmp.mVpPkaiCIB/build/debug
--- Configuring done
--- Generating done
--- Build files have been written to: /tmp/tmp.mVpPkaiCIB/build/debug
