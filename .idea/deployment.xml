@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="硅云 (aa74a00b-a058-40d2-acee-77841ed377e4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/tmp.mVpPkaiCIB" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/build/debug" />
+            <excludedPath local="true" path="$PROJECT_DIR$/build/release" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
