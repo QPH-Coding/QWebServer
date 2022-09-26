@@ -4,7 +4,7 @@
 
 ## OverView
 
-`QWebServer` is a Linux high performance WebServer written in C++.
+`QWebServer` is a Linux high performance WebServer written in modern C++.
 
 ## Development Environment
 
@@ -17,6 +17,10 @@ Here is the list of the environment of this project:
 - Memory: 2 GB
 
 And before you run this project, please make sure:
+
+- CMake 3.24.1 (can be lower)
+
+- g++ 11 (at least support C++20)
 
 - MySql 5.7 
 
