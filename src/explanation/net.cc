@@ -4,10 +4,19 @@
 
 #include "net.h"
 
-int net::Socket() {
+int net::TcpSocket() {
   int res = socket(PF_INET, SOCK_STREAM, 0);
   if (res == -1) {
-    std::cout << "Socket init failed" << std::endl;
+    std::cout << "TcpSocket init failed" << std::endl;
+    exit(101);
+  }
+  return res;
+}
+
+int net::UdpSocket() {
+  int res = socket(PF_INET, SOCK_DGRAM, 0);
+  if (res == -1) {
+    std::cout << "UdpSocket init failed" << std::endl;
     exit(101);
   }
   return res;
@@ -40,4 +49,9 @@ void net::Listen(int socket_fd, int backlog) {
     std::cout << "Listen socket failed." << std::endl;
     exit(103);
   }
+}
+
+void net::SetNonblockSocket(int fd) {
+  int flag = fcntl(fd, F_GETFL);
+  fcntl(fd, F_SETFL, flag | O_NONBLOCK);
 }
