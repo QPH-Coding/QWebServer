@@ -4,13 +4,9 @@
 
 ## OverView
 
----
-
 `QWebServer` is a Linux high performance WebServer written in C++.
 
 ## Development Environment
-
----
 
 Here is the list of the environment of this project:
 
