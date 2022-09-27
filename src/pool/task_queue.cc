@@ -5,20 +5,30 @@
 #include "task_queue.h"
 
 template<typename T>
-void TaskQueue<T>::PushTask(const T &task) noexcept {
+void TaskQueue<T>::Enqueue(const T &task) noexcept {
   std::unique_lock<std::mutex> lock(this->mutex_);
   this->tasks_.push(task);
 }
 
 template<typename T>
-T TaskQueue<T>::PopTask() const noexcept {
+bool TaskQueue<T>::Dequeue(T &task) const noexcept {
+  if (empty()) {
+    return false;
+  }
   std::unique_lock<std::mutex> lock(this->mutex_);
-  T task = this->tasks_.front();
+  task = std::move(this->tasks_.front());
   this->tasks_.pop();
-  return task;
+  return true;
 }
 
 template<typename T>
-int TaskQueue<T>::get_tasks_num() const noexcept {
+int TaskQueue<T>::size() const noexcept {
+  std::unique_lock<std::mutex> lock(this->mutex_);
   return this->tasks_.size();
+}
+
+template<typename T>
+bool TaskQueue<T>::empty() const noexcept {
+  std::unique_lock<std::mutex> lock(this->mutex_);
+  return this->tasks_.empty();
 }

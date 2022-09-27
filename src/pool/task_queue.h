@@ -11,9 +11,10 @@ template<typename T>
 class TaskQueue {
  public:
   TaskQueue() noexcept = default;
-  void PushTask(const T &task) noexcept;
-  T PopTask() const noexcept;
-  int get_tasks_num() const noexcept;
+  void Enqueue(const T &task) noexcept;
+  bool Dequeue(T& task) const noexcept;
+  int size() const noexcept;
+  bool empty() const noexcept;
 
  private:
   std::mutex mutex_;
