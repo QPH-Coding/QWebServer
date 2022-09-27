@@ -6,12 +6,13 @@
 #define QWEBSERVER_SRC_EXPLANATION_EPOLL_LISTENER_H_
 #include <sys/epoll.h>
 #include <vector>
+#include <atomic>
 
 #include "net.h"
 
 class EpollListener {
  public:
-  EpollListener(int max_event_num) noexcept;
+  explicit EpollListener(int max_event_num) noexcept;
   void AddEvent(int fd) noexcept;
   ~EpollListener() noexcept;
 

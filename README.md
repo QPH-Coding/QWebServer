@@ -33,5 +33,13 @@ You can use this command to install `MySql-connector-c++` in Ubuntu 20.04:
 ```shell
 $ sudo apt-get install libmysql++-dev
 ```
+## TODO List
 
+- HTTP 解析
+
+- 日志系统
+
+- MySql 连接
+
+- ES 连接
 

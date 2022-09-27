@@ -10,6 +10,7 @@ EpollListener::EpollListener(int max_event_num) noexcept: max_event_num_(max_eve
 
 EpollListener::~EpollListener() noexcept {
   delete[] epoll_events_;
+  close(epoll_fd_);
 }
 
 void EpollListener::AddEvent(int fd) noexcept {

@@ -6,11 +6,14 @@
 #define QWEBSERVER_SRC_CONFIG_CONFIG_H_
 #include <string>
 
-namespace Config {
+namespace config {
 const static int kPort = 8080;
 
 const static std::string kMySqlUsername = "";
 const static std::string KMySqlPassword = "";
+
+const static std::string kESUsername = "";
+const static std::string kESPassword = "";
 }
 
 #endif //QWEBSERVER_SRC_CONFIG_CONFIG_H_

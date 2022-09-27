@@ -21,8 +21,11 @@ using workFunc = std::function<void()>;
 
 class Thread {
  public:
-  Thread(workFunc& work) noexcept;
+  explicit Thread(workFunc &work) noexcept;
   ~Thread() noexcept;
+  // Effective C++: let copy&operator= private, C++11: use delete
+  Thread(Thread &) = delete;
+  Thread &operator=(Thread &) = delete;
 
   void join();
   void start();
@@ -31,10 +34,6 @@ class Thread {
 
  private:
   static void *_run(void *arg);
-
-  // let copy&operator= private, and use delete(C++11)
-  Thread(Thread &) = delete;
-  Thread &operator=(Thread &) = delete;
 
   pthread_t thread_id_;
   bool is_running_;
