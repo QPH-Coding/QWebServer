@@ -10,9 +10,15 @@
 template<typename T>
 class TaskQueue {
  public:
-  TaskQueue() noexcept = default;
+  TaskQueue() = default;
+  TaskQueue(const TaskQueue<T> &) = delete;
+  TaskQueue(const TaskQueue<T> &&) = delete;
+  TaskQueue &operator=(const TaskQueue<T> &) = delete;
+  TaskQueue &operator=(const TaskQueue<T> &&) = delete;
+  ~TaskQueue() = default;
+
   void Enqueue(const T &task) noexcept;
-  bool Dequeue(T& task) const noexcept;
+  bool Dequeue(T &task) const noexcept;
   int size() const noexcept;
   bool empty() const noexcept;
 
