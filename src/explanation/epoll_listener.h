@@ -8,8 +8,9 @@
 #include <sys/epoll.h>
 #include <vector>
 #include <atomic>
+#include <memory>
 
-#include "net.h"
+#include "file.h"
 #include "../base/uncopyable.h"
 
 class EpollListener : private Uncopyable {
@@ -21,7 +22,7 @@ class EpollListener : private Uncopyable {
   std::vector<epoll_event> GetEpollReadyEvents();
  private:
   int max_event_num_;
-  epoll_event *epoll_events_;
+  std::shared_ptr<epoll_event> epoll_events_;
   int epoll_fd_;
 };
 

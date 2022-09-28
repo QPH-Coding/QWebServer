@@ -4,7 +4,7 @@
 
 ## OverView
 
-`QWebServer` is a Linux high performance WebServer written in modern C++.
+`QWebServer` is a Linux high performance WebServer written in modern C++. And QWebServer refers to the design concept of the `muduo` Net Library.
 
 ## Development Environment
 

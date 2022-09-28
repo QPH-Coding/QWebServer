@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(/usr/include/mysql++ /usr/include/mysql)
 
 set(explanation
         src/explanation/net.cc
+        src/explanation/file.cc
         src/explanation/thread.cc
         src/explanation/semaphore.cc
         src/explanation/epoll_listener.cc)

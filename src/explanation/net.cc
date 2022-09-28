@@ -51,8 +51,3 @@ void net::Listen(int socket_fd, int backlog) {
     exit(103);
   }
 }
-
-void net::SetNonblockSocket(int fd) {
-  int flag = fcntl(fd, F_GETFL);
-  fcntl(fd, F_SETFL, flag | O_NONBLOCK);
-}
