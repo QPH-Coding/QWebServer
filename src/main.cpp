@@ -2,7 +2,7 @@
 #include "demo/demo.h"
 
 int main() {
-  EpollDemo epoll_demo;
-  epoll_demo.Test();
+  ThreadPoolDemo thread_pool_demo;
+  thread_pool_demo.Test();
   return 0;
 }

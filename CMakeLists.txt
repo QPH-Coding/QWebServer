@@ -19,9 +19,10 @@ set(pools
         src/pool/thread_pool.cc
         src/pool/mysql_connection_pool.cc
         src/pool/es_connection_pool.cc
-        src/pool/task_queue.cc)
+        )
 set(demo
-        src/demo/epoll_demo.cc)
+        src/demo/epoll_demo.cc
+        src/demo/thread_pool_demo.cc)
 
 add_executable(QWebServer src/main.cpp
         ${explanation}

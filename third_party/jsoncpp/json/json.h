@@ -1111,7 +1111,7 @@ public:
   iterator begin();
   iterator end();
 
-  // Accessors for the [start, limit) range of bytes within the JSON text from
+  // Accessors for the [Start, limit) range of bytes within the JSON text from
   // which this value was parsed, if any.
   void setOffsetStart(ptrdiff_t start);
   void setOffsetLimit(ptrdiff_t limit);
@@ -1175,7 +1175,7 @@ private:
   };
   Comments comments_;
 
-  // [start, limit) byte offsets in the source JSON text from which this Value
+  // [Start, limit) byte offsets in the source JSON text from which this Value
   // was extracted.
   ptrdiff_t start_;
   ptrdiff_t limit_;
@@ -1517,7 +1517,7 @@ public:
 
   /** \brief An error tagged with where in the JSON text it was encountered.
    *
-   * The offsets give the [start, limit) range of bytes within the text. Note
+   * The offsets give the [Start, limit) range of bytes within the text. Note
    * that this is bytes, not codepoints.
    */
   struct StructuredError {

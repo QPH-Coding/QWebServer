@@ -5,6 +5,7 @@
 #ifndef QWEBSERVER_SRC_SERVER_SERVER_H_
 #define QWEBSERVER_SRC_SERVER_SERVER_H_
 #include <string>
+#include "../pool/thread_pool.h"
 
 class QWebServer {
  public:
@@ -12,4 +13,8 @@ class QWebServer {
 
 };
 
+namespace ServerThreadWork{
+void ServerTask();
+
+}
 #endif //QWEBSERVER_SRC_SERVER_SERVER_H_

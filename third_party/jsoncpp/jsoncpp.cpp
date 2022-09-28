@@ -372,7 +372,7 @@ bool Reader::parse(const char* beginDoc, const char* endDoc, Value& root,
     root.setComment(commentsBefore_, commentAfter);
   if (features_.strictRoot_) {
     if (!root.isArray() && !root.isObject()) {
-      // Set error location to start of doc, ideally should be first token found
+      // Set error location to Start of doc, ideally should be first token found
       // in doc
       token.type_ = tokenError;
       token.start_ = beginDoc;
@@ -1020,7 +1020,7 @@ void Reader::getLocationLineAndColumn(Location location, int& line,
       ++line;
     }
   }
-  // column & line start at 1
+  // column & line Start at 1
   column = int(location - lastLineStart) + 1;
   ++line;
 }
@@ -1277,7 +1277,7 @@ bool OurReader::parse(const char* beginDoc, const char* endDoc, Value& root,
     root.setComment(commentsBefore_, commentAfter);
   if (features_.strictRoot_) {
     if (!root.isArray() && !root.isObject()) {
-      // Set error location to start of doc, ideally should be first token found
+      // Set error location to Start of doc, ideally should be first token found
       // in doc
       token.type_ = tokenError;
       token.start_ = beginDoc;
@@ -2072,7 +2072,7 @@ void OurReader::getLocationLineAndColumn(Location location, int& line,
       ++line;
     }
   }
-  // column & line start at 1
+  // column & line Start at 1
   column = int(location - lastLineStart) + 1;
   ++line;
 }
@@ -2573,7 +2573,7 @@ static inline char* duplicateAndPrefixStringValue(const char* value,
   *reinterpret_cast<unsigned*>(newString) = length;
   memcpy(newString + sizeof(unsigned), value, length);
   newString[actualLength - 1U] =
-      0; // to avoid buffer over-workFunc accidents by users later
+      0; // to avoid buffer over-thread_work_func accidents by users later
   return newString;
 }
 inline static void decodePrefixedString(bool isPrefixed, char const* prefixed,
@@ -3839,7 +3839,7 @@ void Value::setComment(String comment, CommentPlacement placement) {
   JSON_ASSERT(!comment.empty());
   JSON_ASSERT_MESSAGE(
       comment[0] == '\0' || comment[0] == '/',
-      "in Json::Value::setComment(): Comments must start with /");
+      "in Json::Value::setComment(): Comments must Start with /");
   comments_.set(placement, std::move(comment));
 }
 

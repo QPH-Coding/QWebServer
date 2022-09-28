@@ -5,19 +5,20 @@
 #ifndef QWEBSERVER_SRC_EXPLANATION_SEMAPHORE_H_
 #define QWEBSERVER_SRC_EXPLANATION_SEMAPHORE_H_
 
-#include <mutex>
-#include <condition_variable>
+#include <semaphore.h>
+#include <cassert>
 
-class Semaphore {
+#include "../base/uncopyable.h"
+
+class Semaphore : private Uncopyable {
  public:
   explicit Semaphore(int count = 0) noexcept;
-  void Signal() noexcept;
-  void Wait() noexcept;
+  ~Semaphore() noexcept;
+  bool Signal() noexcept;
+  bool Wait() noexcept;
 
  private:
-  std::mutex mutex_;
-  std::condition_variable cv_;
-  int count_;
+  sem_t sem_;
 };
 
 #endif //QWEBSERVER_SRC_EXPLANATION_SEMAPHORE_H_

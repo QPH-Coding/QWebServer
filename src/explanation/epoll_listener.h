@@ -9,8 +9,9 @@
 #include <atomic>
 
 #include "net.h"
+#include "../base/uncopyable.h"
 
-class EpollListener {
+class EpollListener : private Uncopyable {
  public:
   explicit EpollListener(int max_event_num) noexcept;
   void AddEvent(int fd) noexcept;

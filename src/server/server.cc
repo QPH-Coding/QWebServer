@@ -3,3 +3,5 @@
 //
 #include "server.h"
 
+void ServerThreadWork::ServerTask() {
+}

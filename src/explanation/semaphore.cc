@@ -1,18 +1,22 @@
 //
 // Created by 钱沛桦 on 2022/9/26.
 //
+#include <iostream>
 #include "semaphore.h"
 
-Semaphore::Semaphore(int count) noexcept: count_(count) {}
-
-void Semaphore::Signal() noexcept {
-  std::unique_lock<std::mutex> lock(mutex_);
-  ++count_;
-  cv_.notify_one();
+Semaphore::Semaphore(int num) noexcept {
+  int res = sem_init(&sem_, 0, num);
+  assert(res == 0);
 }
 
-void Semaphore::Wait() noexcept {
-  std::unique_lock<std::mutex> lock(mutex_);
-  cv_.wait(lock, [=] { return count_ > 0; });
-  --count_;
+Semaphore::~Semaphore() noexcept {
+  sem_destroy(&sem_);
+}
+
+bool Semaphore::Signal() noexcept {
+  return sem_post(&sem_) == 0;
+}
+
+bool Semaphore::Wait() noexcept {
+  return sem_wait(&sem_) == 0;
 }
