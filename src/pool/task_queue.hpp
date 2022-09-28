@@ -1,6 +1,8 @@
-//
-// Created by 钱沛桦 on 2022/9/26.
-//
+// Author: QPH-Coding
+// Create: 2022/9/26
+// File: task_queue.hpp
+// License: Apache 2.0
+
 #pragma once
 #ifndef QWEBSERVER_SRC_POOL_TASKQUEUE_H_
 #define QWEBSERVER_SRC_POOL_TASKQUEUE_H_
@@ -48,12 +50,6 @@ bool TaskQueue<T>::closed() const noexcept {
   std::lock_guard<std::mutex> lock(mutex_);
   return is_closed;
 }
-
-//template<typename T>
-//void TaskQueue<T>::enqueue(T *task) noexcept {
-//  std::unique_lock<std::mutex> lock(mutex_);
-//  tasks_.push(task);
-//}
 
 template<typename T>
 void TaskQueue<T>::enqueue(const std::shared_ptr<T> &task) noexcept {

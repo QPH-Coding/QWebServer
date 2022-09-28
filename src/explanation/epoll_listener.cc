@@ -1,6 +1,8 @@
-//
-// Created by 钱沛桦 on 2022/9/26.
-//
+// Author: QPH-Coding
+// Create: 2022/9/26
+// File: epoll_listener.cc
+// License: Apache 2.0
+
 #include "epoll_listener.h"
 
 EpollListener::EpollListener(int max_event_num) noexcept: max_event_num_(max_event_num) {

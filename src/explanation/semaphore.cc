@@ -1,7 +1,8 @@
-//
-// Created by 钱沛桦 on 2022/9/26.
-//
-#include <iostream>
+// Author: QPH-Coding
+// Create: 2022/9/26
+// File: semaphore.cc
+// License: Apache 2.0
+
 #include "semaphore.h"
 
 Semaphore::Semaphore(int num) noexcept {

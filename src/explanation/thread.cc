@@ -1,6 +1,8 @@
-//
-// Created by 钱沛桦 on 2022/9/26.
-//
+// Author: QPH-Coding
+// Create: 2022/9/19
+// File: thread.cc
+// License: Apache 2.0
+
 #include "thread.h"
 
 Thread::Thread() noexcept

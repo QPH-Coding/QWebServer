@@ -1,6 +1,7 @@
-//
-// Created by 钱沛桦 on 2022/9/27.
-//
+// Author: QPH-Coding
+// Create: 2022/9/27
+// File: thread_pool_demo.cc
+// License: Apache 2.0
 
 #include "demo.h"
 

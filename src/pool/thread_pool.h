@@ -1,6 +1,8 @@
-//
-// Created by 钱沛桦 on 2022/9/26.
-//
+// Author: QPH-Coding
+// Create: 2022/9/26
+// File: thread_pool.h
+// License: Apache 2.0
+
 #pragma once
 #ifndef QWEBSERVER_SRC_POOL_THREAD_POOL_H_
 #define QWEBSERVER_SRC_POOL_THREAD_POOL_H_

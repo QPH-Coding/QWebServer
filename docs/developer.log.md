@@ -23,6 +23,14 @@ Summary:
 
 - 11:50:00: `Thread Pool` can work normally. When I debug and log something, I notice a `thread safe log` is very important. If I use `std::cout` or `printf` , the threads will race to write to the output stream, it will make the log can not be read.
 
+- 15:54:56: After reading the book of ChenShuo carefully. I think before I develop the Async Log System, I should develop the module as follows:
+  
+  - Buffer
+
+  - Timer
+
+  - File IO System
+
 ## Bug Fixing
 
 ---

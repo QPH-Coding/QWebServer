@@ -1,6 +1,7 @@
-//
-// Created by 钱沛桦 on 2022/9/27.
-//
+// Author: QPH-Coding
+// Create: 2022/9/27
+// File: uncopyable.h
+// License: Apache 2.0
 
 #ifndef QWEBSERVER_SRC_BASE_UNCOPYABLE_H_
 #define QWEBSERVER_SRC_BASE_UNCOPYABLE_H_

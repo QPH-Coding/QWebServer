@@ -5,14 +5,14 @@
 
 void EpollDemo::Test() {
   EpollListener epoll_listener(5);
-    epoll_listener.AddEvent(STDIN_FILENO);
-    int times = 3;
-    while (times > 0) {
-      std::vector<epoll_event> epoll_events = epoll_listener.GetEpollReadyEvents();
-      for (auto v : epoll_events) {
-        if (v.data.fd == STDIN_FILENO) {
-          std::cout << "Epoll trigger, will trigger " << --times << std::endl;
-        }
+  epoll_listener.AddEvent(STDIN_FILENO);
+  int times = 3;
+  while (times > 0) {
+    std::vector<epoll_event> epoll_events = epoll_listener.GetEpollReadyEvents();
+    for (auto v : epoll_events) {
+      if (v.data.fd == STDIN_FILENO) {
+        std::cout << "Epoll trigger, will trigger " << --times << std::endl;
       }
     }
+  }
 }

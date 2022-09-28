@@ -17,8 +17,6 @@ set(explanation
 set(server src/server/server.cc)
 set(pools
         src/pool/thread_pool.cc
-        src/pool/mysql_connection_pool.cc
-        src/pool/es_connection_pool.cc
         )
 set(demo
         src/demo/epoll_demo.cc

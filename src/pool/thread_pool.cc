@@ -1,6 +1,8 @@
-//
-// Created by 钱沛桦 on 2022/9/26.
-//
+// Author: QPH-Coding
+// Create: 2022/9/26
+// File: thread_pool.cc
+// License: Apache 2.0
+
 #include "thread_pool.h"
 
 ThreadPool ThreadPool::instance_ = ThreadPool();

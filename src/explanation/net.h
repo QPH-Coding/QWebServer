@@ -1,6 +1,7 @@
-//
-// Created by 钱沛桦 on 2022/9/19.
-//
+// Author: QPH-Coding
+// Create: 2022/9/19
+// File: net.h
+// License: Apache 2.0
 
 #ifndef WEBSERVER_NET_H
 #define WEBSERVER_NET_H
