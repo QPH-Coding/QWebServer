@@ -6,7 +6,7 @@
 #include "epoll_listener.h"
 
 EpollListener::EpollListener(int max_event_num) noexcept: max_event_num_(max_event_num) {
-  this->epoll_fd_ = epoll_create(5);
+  epoll_fd_ = epoll_create(5);
   epoll_events_.reset(new epoll_event[max_event_num_]);
 }
 
@@ -14,12 +14,27 @@ EpollListener::~EpollListener() noexcept {
   close(epoll_fd_);
 }
 
-void EpollListener::AddEvent(int fd) noexcept {
+void EpollListener::AddReadEvent(int fd) const noexcept {
   epoll_event event{};
   event.events = EPOLLIN | EPOLLET;
   event.data.fd = fd;
-  epoll_ctl(this->epoll_fd_, EPOLL_CTL_ADD, fd, &event);
+  epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, fd, &event);
   file::SetNonblockSocket(fd);
+}
+
+void EpollListener::AddWriteEvent(int fd) noexcept {
+  epoll_event event{};
+  event.events = EPOLLOUT | EPOLLET;
+  event.data.fd = fd;
+  epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, fd, &event);
+  file::SetNonblockSocket(fd);
+}
+
+void EpollListener::RemoveEvent(int fd) noexcept {
+  epoll_event event{};
+  event.events = EPOLLOUT | EPOLLET;
+  event.data.fd = fd;
+  epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, fd, &event);
 }
 
 std::vector<epoll_event> EpollListener::GetEpollReadyEvents() {

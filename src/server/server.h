@@ -6,16 +6,24 @@
 #ifndef QWEBSERVER_SRC_SERVER_SERVER_H_
 #define QWEBSERVER_SRC_SERVER_SERVER_H_
 #include <string>
-#include "../pool/thread_pool.h"
+#include "../pool/thread_pool.hpp"
+#include "../explanation/net.h"
+#include "../http/http_connection.h"
+#include "../explanation/epoll_listener.h"
 
 class QWebServer {
  public:
 //  QWebServer(int thread_num, int request_num)
 
+  void EventLoop();
+
+ private:
+  ThreadPool<Client> sub_reactor_read_; // responsible for reading from socket
+  ThreadPool<Response> sub_reactor_write_; // responsible for writing to socket and send file
+  ThreadPool<HttpConnection> service_; // responsible for deal with the http request
+  // TODO time wheel
+  EpollListener epoll_listener_;
+//  static void SubReactorFunc(std::shared_ptr<Client> &sp_client);
+//  static void ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection);
 };
-
-namespace ServerThreadWork{
-void ServerTask();
-
-}
 #endif //QWEBSERVER_SRC_SERVER_SERVER_H_

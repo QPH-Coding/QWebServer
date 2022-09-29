@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <iostream>
+#include <memory>
 
 class Client {
  public:
@@ -23,6 +24,10 @@ class Client {
   sockaddr_in address_;
 };
 
+class Response {
+
+};
+
 namespace net {
 int TcpSocket();
 int UdpSocket();
@@ -30,6 +35,6 @@ sockaddr_in SocketAddress4(int domain, int port, in_addr_t address);
 void SetReuseAddress(int socket_fd, bool enable);
 void Bind(int socket_fd, sockaddr_in socket_address);
 void Listen(int socket_fd, int backlog);
-Client Accept(int socket_fd);
+std::shared_ptr<Client> Accept(int socket_fd);
 }  // namespace net
 #endif  // WEBSERVER_NET_H

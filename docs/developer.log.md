@@ -9,6 +9,17 @@
 
 - 15:23:49: I have redesign the `class ThreadPool`, now the Thread Pool have high **reusability**.
 
+- 20:59:04: Finish `class Timer`(`timer_fd` + `epoll`)
+
+The days after:
+
+- Time Wheel
+
+- Async Log System - `AsyncLog4Q` and Buffer
+
+- HttpConnection - Http Request analyze and make Response
+
+
 ## 2022.09.28
 
 ---

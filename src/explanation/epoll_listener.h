@@ -16,7 +16,9 @@
 class EpollListener : private Uncopyable {
  public:
   explicit EpollListener(int max_event_num) noexcept;
-  void AddEvent(int fd) noexcept;
+  void AddReadEvent(int fd) const noexcept;
+  void AddWriteEvent(int fd) noexcept;
+  void RemoveEvent(int fd) noexcept;
   ~EpollListener() noexcept;
 
   std::vector<epoll_event> GetEpollReadyEvents();

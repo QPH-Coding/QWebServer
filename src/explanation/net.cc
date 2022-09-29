@@ -5,6 +5,8 @@
 
 #include "net.h"
 
+#include <memory>
+
 Client::Client(int fd, const sockaddr_in &address) noexcept
     : fd_(fd),
       address_(address) {}
@@ -36,7 +38,7 @@ sockaddr_in net::SocketAddress4(int domain, int port, in_addr_t address) {
   bzero(&ip_address_4, sizeof(ip_address_4));
   ip_address_4.sin_family = domain;
   ip_address_4.sin_port = htons(port);
-  ip_address_4.sin_addr.s_addr = address;
+  ip_address_4.sin_addr.s_addr = htonl(address);
   return ip_address_4;
 }
 
@@ -46,7 +48,7 @@ void net::SetReuseAddress(int socket_fd, bool enable) {
 
 void net::Bind(int socket_fd, sockaddr_in socket_address) {
   int res = bind(socket_fd, (sockaddr *) &socket_address, sizeof(socket_address));
-  if (res == -1) {
+  if (res < 0) {
     std::cout << "Bind socket failed." << std::endl;
     exit(102);
   }
@@ -60,9 +62,9 @@ void net::Listen(int socket_fd, int backlog) {
   }
 }
 
-Client net::Accept(int socket_fd) {
+std::shared_ptr<Client> net::Accept(int socket_fd) {
   sockaddr_in client_address;
   socklen_t client_address_len = sizeof(client_address);
   int fd = accept(socket_fd, (sockaddr *) &client_address, &client_address_len);
-  return {fd, client_address};
+  return std::make_shared<Client>(fd, client_address);
 }

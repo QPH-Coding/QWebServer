@@ -17,7 +17,7 @@
 template<typename T>
 class ThreadPool : private Uncopyable {
  public:
-  using deal_task_func = std::function<void(std::shared_ptr<T> &task)>;
+  using deal_task_func = std::function<void(std::shared_ptr<T> &sp_task)>;
   ThreadPool(int thread_num, int max_task_num, const deal_task_func& func) noexcept;
   ~ThreadPool() noexcept;
 
@@ -25,7 +25,7 @@ class ThreadPool : private Uncopyable {
 
   void Enqueue(const std::shared_ptr<T> &task);
 
-//  virtual void DealTask(const std::shared_ptr<T> &task) = 0;
+//  virtual void DealTask(const std::shared_ptr<T> &sp_task) = 0;
 
  private:
 
@@ -88,9 +88,9 @@ ThreadPool<T>::ThreadPool(int thread_num, int max_task_num, const deal_task_func
 
 template<typename T>
 ThreadPool<T>::~ThreadPool() noexcept {
-  for (auto &thread : thread_vector_) {
-    thread.Join();
-  }
+//  for (auto &thread : thread_vector_) {
+//    thread.Join();
+//  }
 }
 
 template<typename T>
