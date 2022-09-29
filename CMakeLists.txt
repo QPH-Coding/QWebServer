@@ -19,6 +19,8 @@ set(server src/server/server.cc)
 set(pools
         src/pool/thread_pool.cc
         )
+set(http
+        src/http/http_connection.cc)
 set(demo
         src/demo/epoll_demo.cc
         src/demo/thread_pool_demo.cc)
@@ -27,6 +29,7 @@ add_executable(QWebServer src/main.cpp
         ${explanation}
         ${server}
         ${pools}
+        ${http}
         ${demo})
 
 # 链接子工程

@@ -7,6 +7,7 @@
 #define WEBSERVER_THREAD_H
 
 #include <pthread.h>
+#include <cerrno>
 
 #include <cstdio>
 #include <cstdlib>

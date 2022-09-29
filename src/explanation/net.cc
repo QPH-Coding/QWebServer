@@ -5,6 +5,14 @@
 
 #include "net.h"
 
+Client::Client(int fd, const sockaddr_in &address) noexcept
+    : fd_(fd),
+      address_(address) {}
+
+int Client::GetFd() const { return fd_; }
+
+sockaddr_in Client::GetAddress() const { return address_; }
+
 int net::TcpSocket() {
   int res = socket(PF_INET, SOCK_STREAM, 0);
   if (res == -1) {
@@ -50,4 +58,11 @@ void net::Listen(int socket_fd, int backlog) {
     std::cout << "Listen socket failed." << std::endl;
     exit(103);
   }
+}
+
+Client net::Accept(int socket_fd) {
+  sockaddr_in client_address;
+  socklen_t client_address_len = sizeof(client_address);
+  int fd = accept(socket_fd, (sockaddr *) &client_address, &client_address_len);
+  return {fd, client_address};
 }

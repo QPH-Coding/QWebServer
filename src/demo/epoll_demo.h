@@ -4,21 +4,10 @@
 // License: Apache 2.0
 
 #include "../explanation/epoll_listener.h"
-#include "../pool/thread_pool.h"
+#include "../pool/thread_pool.hpp"
 #include <unistd.h>
 
 class EpollDemo {
  public:
   void Test();
-};
-
-class ThreadPoolDemo {
- public:
-  void Test();
- private:
-  class ProducerThread : public Thread {
-   public:
-    void Run() override;
-
-  };
 };

@@ -1,11 +1,17 @@
 # Developer Log
 ## Log
 
-## 2022.09.28
+## 2022.09.29
 
 ---
 
-Summary:
+- 11:17:11: I learned about a better model: `mulitied-Reactor`, this model actually need two thread pools, one is `sub-Reactor` which is responsible for I/O operating, the other is `logic-operating`. So I think I should reduce coupling of the thread pool, redesign it.
+
+- 15:23:49: I have redesign the `class ThreadPool`, now the Thread Pool have high **reusability**.
+
+## 2022.09.28
+
+---
 
 - 11:50:00: `Thread Pool` can work normally. When I debug and log something, I notice a `thread safe log` is very important. If I use `std::cout` or `printf` , the threads will race to write to the output stream, it will make the log can not be read.
 

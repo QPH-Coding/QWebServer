@@ -3,20 +3,22 @@
 // File: thread_pool_demo.cc
 // License: Apache 2.0
 
-#include "demo.h"
+#include "thread_pool_demo.h"
 
 #include <memory>
 
-void test_func() {
-  std::cout << gettid() << std::endl;
+void deal_task(std::shared_ptr<double> &task) {
+  std::cout << gettid() << ": " << *task << std::endl;
 }
 
 void ThreadPoolDemo::Test() {
-  ThreadPool::get_instance().Start(5);
 
-  ProducerThread producer_thread_0;
-  ProducerThread producer_thread_1;
-  ProducerThread producer_thread_2;
+  ThreadPool<double> thread_pool(5, 100, deal_task);
+  thread_pool.Start();
+
+  ProducerThread producer_thread_0(&thread_pool);
+  ProducerThread producer_thread_1(&thread_pool);
+  ProducerThread producer_thread_2(&thread_pool);
 
   producer_thread_0.Start();
   producer_thread_1.Start();
@@ -27,11 +29,14 @@ void ThreadPoolDemo::Test() {
   producer_thread_2.Join();
 }
 
+ThreadPoolDemo::ProducerThread::ProducerThread(ThreadPool<double> *thread_pool)
+    : thread_pool_(thread_pool) {}
+
 void ThreadPoolDemo::ProducerThread::Run() {
   for (int i = 0; i < 5; ++i) {
     sleep(1);
     std::cout << "producer " << gettid() << " will produce: " << i << std::endl;
     std::shared_ptr<double> task = std::make_shared<double>(i);
-    ThreadPool::get_instance().EnqueueTask(task);
+    thread_pool_->Enqueue(task);
   }
 }

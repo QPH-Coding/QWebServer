@@ -30,10 +30,17 @@ void Thread::Join() {
     return;
   }
   int res = pthread_join(this->thread_id_, nullptr);
-  if (res != 0) {
-    // TODO log
-    std::cout << "thread " << thread_id_ << " Join failed. " << std::endl;
+  if (res == EDEADLK) {
+    std::cout << gettid() << " EDEADLK" << std::endl;
+  } else if (res == EINVAL) {
+    std::cout << gettid() << " EINVAL" << std::endl;
+  } else if (res == ESRCH) {
+    std::cout << gettid() << " ESRCH" << std::endl;
   }
+//  if (res != 0) {
+//    // TODO log
+//    std::cout << "thread " << thread_id_ << " Join failed. " << std::endl;
+//  }
   is_join_ = true;
 }
 
