@@ -9,15 +9,21 @@
 #include "../base/uncopyable.h"
 #include <vector>
 #include <memory>
+#include <cstring>
 
 class Buffer : private Uncopyable {
  public:
-  void append(const char *string, int length);
-  int size() const noexcept;
+  explicit Buffer() noexcept;
+  bool Append(const char *str, size_t length);
+  void Reset() noexcept;
+  size_t rest_size() const noexcept;
+  size_t size() const noexcept;
+  size_t WriteToFd(FILE *fd, size_t length);
  private:
-  std::shared_ptr<char> buffer = std::shared_ptr<char>(new char[2048]);
-  int read_index_;
-  int write_index;
+  char buffer_[4096]{};
+  size_t read_index_;
+  size_t write_index_;
+  size_t capacity_ = 4096;
 };
 
 #endif //QWEBSERVER_SRC_EXPLANATION_BUFFER_H_

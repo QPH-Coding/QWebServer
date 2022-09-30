@@ -9,6 +9,9 @@
 namespace config {
 const static int kPort = 8080;
 
+const static std::string kLogPath = "/server/log";
+const static int kPid = getpid();
+
 const static std::string kMySqlUsername = "";
 const static std::string KMySqlPassword = "";
 

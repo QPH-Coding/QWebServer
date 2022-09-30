@@ -12,7 +12,7 @@ INCLUDE_DIRECTORIES(/usr/include/mysql++ /usr/include/mysql)
 set(explanation
         src/explanation/net.cc
         src/explanation/file.cc
-        src/explanation/buffer.cc
+        src/log/buffer.cc
         src/explanation/thread.cc
         src/explanation/semaphore.cc
         src/explanation/epoll_listener.cc)
@@ -22,6 +22,10 @@ set(time
         src/time/timer.cc)
 set(http
         src/http/http_connection.cc)
+
+set(log
+        src/log/async_log4q.cc)
+
 set(demo
         src/demo/epoll_demo.cc
         src/demo/thread_pool_demo.cc)
@@ -29,6 +33,7 @@ set(demo
 add_executable(QWebServer src/main.cpp
         ${explanation}
         ${time}
+        ${log}
         ${server}
         ${http}
         ${demo})

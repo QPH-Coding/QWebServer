@@ -4427,7 +4427,7 @@ String valueToQuotedString(const char* value) {
   return valueToQuotedStringN(value, strlen(value));
 }
 
-// Class Writer
+// Class WriterThread
 // //////////////////////////////////////////////////////////////////
 Writer::~Writer() = default;
 

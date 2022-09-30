@@ -466,7 +466,7 @@ class ValueConstIterator;
 namespace Json {
 
 /** \brief Configuration passed to reader and writer.
- * This configuration object can be used to force the Reader or Writer
+ * This configuration object can be used to force the Reader or WriterThread
  * to behave in a standard conforming way.
  */
 class JSON_API Features {
@@ -2081,7 +2081,7 @@ public:
 
   void omitEndingLineFeed();
 
-public: // overridden from Writer
+public: // overridden from WriterThread
   String write(const Value& root) override;
 
 private:
@@ -2130,7 +2130,7 @@ public:
   StyledWriter();
   ~StyledWriter() override = default;
 
-public: // overridden from Writer
+public: // overridden from WriterThread
   /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
    * \param root Value to serialize.
    * \return String containing the JSON document that represents the root value.
@@ -2206,7 +2206,7 @@ public:
   /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
    * \param out Stream to write to. (Can be ostringstream, e.g.)
    * \param root Value to serialize.
-   * \note There is no point in deriving from Writer, since write() should not
+   * \note There is no point in deriving from WriterThread, since write() should not
    * return a value.
    */
   void write(OStream& out, const Value& root);
