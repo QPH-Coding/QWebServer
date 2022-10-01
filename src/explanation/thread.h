@@ -45,6 +45,7 @@ class Thread : private Uncopyable {
   static void *_thread_function(void *arg);
 
   pthread_t thread_id_;
+  pthread_t org_thread_id_;
   bool is_running_;
   bool is_join_;
   bool is_detach_;

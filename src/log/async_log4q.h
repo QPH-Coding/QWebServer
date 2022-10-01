@@ -21,6 +21,8 @@ class AsyncLog4Q {
     Debug = 0, Info = 1, Warn = 2, Error = 4
   };
 
+  static void Init() noexcept;
+
   static void SetLevel(const Level &level, AsyncLog4Q &async_log = instance_) noexcept;
 
   static void Debug(const std::string &content, AsyncLog4Q &async_log = instance_);
@@ -30,23 +32,20 @@ class AsyncLog4Q {
 
  private:
   AsyncLog4Q() noexcept;
-
   void Log(const Level &level, const std::string &content);
 
   void UpdateFileName() noexcept;
 
   class BufferTimerThread : public Thread {
    public:
-    explicit BufferTimerThread(AsyncLog4Q *async_log) noexcept;
+    explicit BufferTimerThread() noexcept;
     void Run() override;
     void Reset() noexcept;
    private:
     class BufferTimer : public Timer {
      public:
-      explicit BufferTimer(AsyncLog4Q *async_log) noexcept;
+      explicit BufferTimer() noexcept;
       void OnTick() override;
-     private:
-      AsyncLog4Q *async_log_;
     };
     BufferTimer buffer_timer_;
   };
@@ -66,10 +65,7 @@ class AsyncLog4Q {
 
   class WriterThread : public Thread {
    public:
-    explicit WriterThread(AsyncLog4Q *async_log) noexcept;
     void Run() override;
-   private:
-    AsyncLog4Q *async_log_;
   };
 
   class TimeStamp : private Uncopyable {

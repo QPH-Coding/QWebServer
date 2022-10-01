@@ -7,6 +7,7 @@
 
 Thread::Thread() noexcept
     : thread_id_(thread::thread_id++),
+      org_thread_id_(thread_id_),
       is_running_(false),
       is_detach_(false),
       is_join_(false) {

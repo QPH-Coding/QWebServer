@@ -31,10 +31,7 @@ void EpollListener::AddWriteEvent(int fd) noexcept {
 }
 
 void EpollListener::RemoveEvent(int fd) noexcept {
-  epoll_event event{};
-  event.events = EPOLLOUT | EPOLLET;
-  event.data.fd = fd;
-  epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, fd, &event);
+  epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, fd, nullptr);
 }
 
 std::vector<epoll_event> EpollListener::GetEpollReadyEvents() {

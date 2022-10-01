@@ -15,6 +15,7 @@ class Timer {
   explicit Timer(int wait_second) noexcept;
   void Start() noexcept;
   void Stop() noexcept;
+  void Reset() noexcept;
   void SetWaitTime(int wait_second) noexcept;
   virtual void OnTick() = 0;
  private:

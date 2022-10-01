@@ -18,7 +18,7 @@ sockaddr_in Client::GetAddress() const { return address_; }
 int net::TcpSocket() {
   int res = socket(PF_INET, SOCK_STREAM, 0);
   if (res == -1) {
-    std::cout << "TcpSocket init failed" << std::endl;
+    std::cout << "TcpSocket Init failed" << std::endl;
     exit(101);
   }
   return res;
@@ -27,7 +27,7 @@ int net::TcpSocket() {
 int net::UdpSocket() {
   int res = socket(PF_INET, SOCK_DGRAM, 0);
   if (res == -1) {
-    std::cout << "UdpSocket init failed" << std::endl;
+    std::cout << "UdpSocket Init failed" << std::endl;
     exit(101);
   }
   return res;

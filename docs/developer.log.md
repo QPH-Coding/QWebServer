@@ -5,6 +5,8 @@
 
 - 13:55:20: Finish Time Wheel. But I have no idea to test.
 
+- 16:30:42: Fix the `Timer` bug, it can reset correctly now.
+
 ## 2022.09.30
 
 - 23:58:03: Finish Async Log System. During the developing, I find I must create 2 thread to manage their timers separately and create a writer thread to write to a file. 
@@ -90,3 +92,7 @@ Future arrangement:
 - Question: `fwrite()` can not write into the file
 
   Solution: must insert `fseek()`, insert it and work correctly.
+
+- Question: `Timer` can not reset correctly.
+
+  Solution: I use `stop()` and `start()` to do reset simply, but it can not work. After read `timerfd_settime()` carefully, I find I can use this function to reset the Timer instead of using `Stop()` and `Start()`. And now I think the Timer member function's name `Exit()`  more appropriate than `Stop()`

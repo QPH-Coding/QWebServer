@@ -67,7 +67,7 @@ void AsyncLog4Q::TimeStamp::Tick() {
     time_t now = time(nullptr);
     tm *ltm = localtime(&now);
     year = ltm->tm_year + 1900;
-    month = ltm->tm_mon;
+    month = ltm->tm_mon + 1;
     day = ltm->tm_mday;
     // TODO maybe can optimize
     instance_.UpdateFileName();
@@ -77,9 +77,9 @@ void AsyncLog4Q::TimeStamp::Tick() {
 AsyncLog4Q::AsyncLog4Q() noexcept
     : mutex_(std::mutex()),
       semaphore_(Semaphore()),
-      writer_thread_(WriterThread(this)),
+      writer_thread_(WriterThread()),
       time_stamp_timer_thread_(TimeStampTimerThread()),
-      buffer_timer_thread_(BufferTimerThread(this)),
+      buffer_timer_thread_(BufferTimerThread()),
       level_(Level::Info) {
   sp_curr_buffer_.reset(new Buffer);
   empty_buffers_ = std::queue<std::shared_ptr<Buffer>>();
@@ -87,13 +87,16 @@ AsyncLog4Q::AsyncLog4Q() noexcept
     empty_buffers_.push(std::make_shared<Buffer>());
   }
   full_buffers_ = std::queue<std::shared_ptr<Buffer>>();
+  Init();
+}
 
-  // en: init the timestamp
+void AsyncLog4Q::Init() noexcept {
+  // en: Init the timestamp
   // zh: 初始化时间戳timestamp
   time_t now = time(nullptr);
   tm *ltm = localtime(&now);
   AsyncLog4Q::TimeStamp::year = ltm->tm_year + 1900;
-  AsyncLog4Q::TimeStamp::month = ltm->tm_mon;
+  AsyncLog4Q::TimeStamp::month = ltm->tm_mon + 1;
   AsyncLog4Q::TimeStamp::day = ltm->tm_mday;
   AsyncLog4Q::TimeStamp::hour = ltm->tm_hour;
   AsyncLog4Q::TimeStamp::minute = ltm->tm_min;
@@ -103,48 +106,48 @@ AsyncLog4Q::AsyncLog4Q() noexcept
   system("mkdir -p /server/log");
   // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
   // log_file_name example: QWebServer.20220930-202826.10612.Log
-  log_file_name_ = "QWebServer." +
+  instance_.log_file_name_ = "QWebServer." +
       AsyncLog4Q::TimeStamp::GetDate() +
       "-" +
       AsyncLog4Q::TimeStamp::GetTime() +
       "." +
       std::to_string(config::kPid) + ".log";
 
-  log_file_full_path_ = config::kLogPath + "/" + log_file_name_;
+  instance_.log_file_full_path_ = config::kLogPath + "/" + instance_.log_file_name_;
 
-  time_stamp_timer_thread_.Start();
-  buffer_timer_thread_.Start();
-  writer_thread_.Start();
-  time_stamp_timer_thread_.Detach();
-  buffer_timer_thread_.Detach();
-  writer_thread_.Detach();
+  instance_.time_stamp_timer_thread_.Start();
+  instance_.buffer_timer_thread_.Start();
+  instance_.writer_thread_.Start();
+  instance_.time_stamp_timer_thread_.Detach();
+  instance_.buffer_timer_thread_.Detach();
+  instance_.writer_thread_.Detach();
 }
 
-AsyncLog4Q::BufferTimerThread::BufferTimer::BufferTimer(AsyncLog4Q *async_log) noexcept
-    : Timer(3), async_log_(async_log) {}
+AsyncLog4Q::BufferTimerThread::BufferTimer::BufferTimer() noexcept: Timer(3) {}
 
 void AsyncLog4Q::BufferTimerThread::BufferTimer::OnTick() {
-  std::lock_guard<std::mutex> lock(async_log_->mutex_);
-  async_log_->full_buffers_.push(async_log_->sp_curr_buffer_);
-  async_log_->semaphore_.Signal();
-  if (async_log_->empty_buffers_.empty()) {
-    async_log_->sp_curr_buffer_ = nullptr;
+  std::lock_guard<std::mutex> lock(instance_.mutex_);
+  instance_.full_buffers_.push(instance_.sp_curr_buffer_);
+  instance_.semaphore_.Signal();
+  if (instance_.empty_buffers_.empty()) {
+    instance_.sp_curr_buffer_ = nullptr;
     return;
   }
-  async_log_->sp_curr_buffer_ = async_log_->empty_buffers_.front();
-  async_log_->empty_buffers_.pop();
+  instance_.sp_curr_buffer_ = instance_.empty_buffers_.front();
+  instance_.empty_buffers_.pop();
 }
 
-AsyncLog4Q::BufferTimerThread::BufferTimerThread(AsyncLog4Q *async_log) noexcept
-    : buffer_timer_(BufferTimer(async_log)) {}
+AsyncLog4Q::BufferTimerThread::BufferTimerThread() noexcept
+    : buffer_timer_(BufferTimer()) {}
 
 void AsyncLog4Q::BufferTimerThread::Run() {
   buffer_timer_.Start();
 }
 
 void AsyncLog4Q::BufferTimerThread::Reset() noexcept {
-  buffer_timer_.Stop();
-  buffer_timer_.Start();
+//  buffer_timer_.reset(new BufferTimer);
+//  buffer_timer_->Start();
+  buffer_timer_.Reset();
 }
 
 AsyncLog4Q::TimeStampTimerThread::TimeStampTimer::TimeStampTimer() noexcept
@@ -161,24 +164,23 @@ void AsyncLog4Q::TimeStampTimerThread::Run() {
   time_stamp_timer_.Start();
 }
 
-AsyncLog4Q::WriterThread::WriterThread(AsyncLog4Q *async_log) noexcept
-    : async_log_(async_log) {}
-
 void AsyncLog4Q::WriterThread::Run() {
   while (true) {
     // en:
     // semaphore_ add one means have one full buffer wait to write
     // zh:
     // semaphore_加一说明有一块写满的buffer要去写入文件
-    async_log_->semaphore_.Wait();
-    FILE *write_file = fopen(async_log_->log_file_full_path_.c_str(), "a");
-    std::shared_ptr<Buffer> sp_write_buffer = async_log_->full_buffers_.front();
+    instance_.semaphore_.Wait();
+    FILE *write_file = fopen(instance_.log_file_full_path_.c_str(), "a");
+    std::shared_ptr<Buffer> sp_write_buffer = instance_.full_buffers_.front();
+    std::cout << "will write: " << sp_write_buffer->size() << std::endl;
     while (sp_write_buffer->WriteToFd(write_file, sp_write_buffer->size()) > 0) {}
     sp_write_buffer->Reset();
     {
-      std::lock_guard<std::mutex> lock(async_log_->mutex_);
-      async_log_->empty_buffers_.push(sp_write_buffer);
-      async_log_->full_buffers_.pop();
+      std::lock_guard<std::mutex> lock(instance_.mutex_);
+      std::cout << "will push empty buffer" << std::endl;
+      instance_.empty_buffers_.push(sp_write_buffer);
+      instance_.full_buffers_.pop();
     }
     fclose(write_file);
   }
@@ -193,14 +195,18 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   // 如果sp_curr_buffer_是空指针，并且empty_buffers是空的
   // 就说明有什么错误发生了，并且在之前已经检测出错误了
   // 在这里保持扔掉日志就可以了
-  if (!sp_curr_buffer_) {
-    if (empty_buffers_.empty()) {
-      return;
-    } else {
-      sp_curr_buffer_ = empty_buffers_.front();
-      empty_buffers_.pop();
+  {
+    std::lock_guard lock(mutex_);
+    if (!sp_curr_buffer_) {
+      if (empty_buffers_.empty()) {
+        return;
+      } else {
+        sp_curr_buffer_ = empty_buffers_.front();
+        empty_buffers_.pop();
+      }
     }
   }
+
 
   // log_line format: ${date} ${time}.${nanosecond}Z ${level} ${content}
   // log_line example: "20220930 214950.513518Z INFO Hello world"
@@ -250,9 +256,12 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   if (!sp_curr_buffer_->Append(log_line.c_str(), log_line.length())) {
     full_buffers_.push(sp_curr_buffer_);
     semaphore_.Signal();
+    // Test
+    std::cout << " empty buffers: " << empty_buffers_.size() << std::endl;
     // en: after push a new full buffer, should reset the buffer timer
     // zh: 在放入一块新的full buffer后，要重置buffer的计时器
     buffer_timer_thread_.Reset();
+
     if (empty_buffers_.empty()) {
       sp_curr_buffer_ = nullptr;
       return;

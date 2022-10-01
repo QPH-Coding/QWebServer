@@ -29,7 +29,8 @@ set(log
 
 set(demo
         src/demo/epoll_demo.cc
-        src/demo/thread_pool_demo.cc)
+        src/demo/thread_pool_demo.cc
+        src/demo/async_log_demo.cc)
 
 add_executable(QWebServer src/main.cpp
         ${explanation}
