@@ -230,6 +230,7 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   log_line += " " + content + "\n";
   // endregion
 
+  // TODO @TEST
   std::cout << log_line << std::endl;
   // en: while append current buffer, should lock the mutex_
   // zh: 当往当前的buffer写入东西时，需要加锁

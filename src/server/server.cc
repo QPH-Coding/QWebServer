@@ -20,7 +20,7 @@ void QWebServer::EventLoop() {
       if (epoll_event.data.fd == listen_socket_fd) {
         std::shared_ptr<Client> sp_client = net::Accept(listen_socket_fd);
         sub_reactor_read_.Enqueue(sp_client);
-        // TODO time wheel use
+        time_wheel_.add(sp_client->GetFd());
       }
     }
   }

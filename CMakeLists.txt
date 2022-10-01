@@ -19,7 +19,8 @@ set(explanation
 set(server src/server/server.cc)
 
 set(time
-        src/time/timer.cc)
+        src/time/timer.cc
+        src/time/time_wheel.cc)
 set(http
         src/http/http_connection.cc)
 

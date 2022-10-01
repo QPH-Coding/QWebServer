@@ -1,6 +1,10 @@
 # Developer Log
 ## Log
 
+## 2022.10.01
+
+- 13:55:20: Finish Time Wheel. But I have no idea to test.
+
 ## 2022.09.30
 
 - 23:58:03: Finish Async Log System. During the developing, I find I must create 2 thread to manage their timers separately and create a writer thread to write to a file. 
