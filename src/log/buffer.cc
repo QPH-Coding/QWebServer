@@ -21,7 +21,7 @@ bool Buffer::Append(const char *str, size_t length) {
 }
 
 size_t Buffer::rest_size() const noexcept {
-  return capacity_ - write_index_ - 1;
+  return kCapacity - write_index_ - 1;
 }
 
 size_t Buffer::WriteToFd(FILE *fd, size_t length) {

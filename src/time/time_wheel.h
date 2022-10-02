@@ -8,17 +8,15 @@
 
 #include <unordered_map>
 #include "timer.h"
-#include "../explanation/thread.h"
+#include <thread>
 #include "cycle_queue.hpp"
 
-class TimeWheel : public Thread {
+class TimeWheel {
  public:
   TimeWheel() noexcept;
-  // TODO maybe can optimize: set Thread::Start virtual?
-  //  or use other method to set pointer
   void Start() noexcept;
   void add(int fd) noexcept;
-  void Run() override;
+  void Run();
  private:
   class CloseTimer : public Timer {
    public:

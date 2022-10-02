@@ -10,18 +10,20 @@
 #include <mutex>
 #include <queue>
 #include "buffer.h"
-#include "../explanation/thread.h"
+#include <thread>
 #include "../time/timer.h"
 #include "../explanation/semaphore.h"
 #include "../config/config.h"
 
+
+// TODO can optimize: use std::thread
 class AsyncLog4Q {
  public:
   enum class Level {
     Debug = 0, Info = 1, Warn = 2, Error = 4
   };
 
-  static void Init() noexcept;
+//  static void Init() noexcept;
 
   static void SetLevel(const Level &level, AsyncLog4Q &async_log = instance_) noexcept;
 
@@ -36,36 +38,22 @@ class AsyncLog4Q {
 
   void UpdateFileName() noexcept;
 
-  class BufferTimerThread : public Thread {
+  void RunBufferTimer();
+
+  void RunTimeStampTimer();
+
+  void WriteBufferToFile();
+
+  class TimeStampTimer : public Timer {
    public:
-    explicit BufferTimerThread() noexcept;
-    void Run() override;
-    void Reset() noexcept;
-   private:
-    class BufferTimer : public Timer {
-     public:
-      explicit BufferTimer() noexcept;
-      void OnTick() override;
-    };
-    BufferTimer buffer_timer_;
+    TimeStampTimer() noexcept;
+    void OnTick() override;
   };
 
-  class TimeStampTimerThread : public Thread {
+  class BufferTimer : public Timer {
    public:
-    explicit TimeStampTimerThread() noexcept;
-    void Run() override;
-   private:
-    class TimeStampTimer : public Timer {
-     public:
-      TimeStampTimer() noexcept;
-      void OnTick() override;
-    };
-    TimeStampTimer time_stamp_timer_;
-  };
-
-  class WriterThread : public Thread {
-   public:
-    void Run() override;
+    explicit BufferTimer() noexcept;
+    void OnTick() override;
   };
 
   class TimeStamp : private Uncopyable {
@@ -87,9 +75,12 @@ class AsyncLog4Q {
   std::string log_file_full_path_;
   std::string log_file_name_;
 
-  WriterThread writer_thread_;
-  BufferTimerThread buffer_timer_thread_;
-  TimeStampTimerThread time_stamp_timer_thread_;
+  BufferTimer buffer_timer_;
+  TimeStampTimer time_stamp_timer_;
+  std::thread buffer_timer_thread_;
+  std::thread time_stamp_timer_thread_;
+  std::thread write_to_file_thread_;
+
   std::mutex mutex_;
   Semaphore semaphore_;
   std::shared_ptr<Buffer> sp_curr_buffer_;

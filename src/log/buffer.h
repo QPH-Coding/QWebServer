@@ -20,10 +20,10 @@ class Buffer : private Uncopyable {
   size_t size() const noexcept;
   size_t WriteToFd(FILE *fd, size_t length);
  private:
-  char buffer_[4096]{};
+  static const size_t kCapacity = 2 * 1024 * 1024; // 2 MB
+  char buffer_[kCapacity]{};
   size_t read_index_;
   size_t write_index_;
-  size_t capacity_ = 4096;
 };
 
 #endif //QWEBSERVER_SRC_EXPLANATION_BUFFER_H_

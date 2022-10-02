@@ -3,6 +3,7 @@
 // File: async_log4q.cc
 // License: Apache 2.0
 
+#include <iostream>
 #include "async_log4q.h"
 
 AsyncLog4Q AsyncLog4Q::instance_ = AsyncLog4Q();
@@ -77,9 +78,8 @@ void AsyncLog4Q::TimeStamp::Tick() {
 AsyncLog4Q::AsyncLog4Q() noexcept
     : mutex_(std::mutex()),
       semaphore_(Semaphore()),
-      writer_thread_(WriterThread()),
-      time_stamp_timer_thread_(TimeStampTimerThread()),
-      buffer_timer_thread_(BufferTimerThread()),
+      buffer_timer_(BufferTimer()),
+      time_stamp_timer_(TimeStampTimer()),
       level_(Level::Info) {
   sp_curr_buffer_.reset(new Buffer);
   empty_buffers_ = std::queue<std::shared_ptr<Buffer>>();
@@ -87,10 +87,7 @@ AsyncLog4Q::AsyncLog4Q() noexcept
     empty_buffers_.push(std::make_shared<Buffer>());
   }
   full_buffers_ = std::queue<std::shared_ptr<Buffer>>();
-  Init();
-}
 
-void AsyncLog4Q::Init() noexcept {
   // en: Init the timestamp
   // zh: 初始化时间戳timestamp
   time_t now = time(nullptr);
@@ -102,30 +99,56 @@ void AsyncLog4Q::Init() noexcept {
   AsyncLog4Q::TimeStamp::minute = ltm->tm_min;
   AsyncLog4Q::TimeStamp::second = ltm->tm_sec;
 
-  // TODO dir choose can optimize
+  // TODO dir choose can optimize, can write a shell instead it
   system("mkdir -p /server/log");
-  // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
-  // log_file_name example: QWebServer.20220930-202826.10612.Log
-  instance_.log_file_name_ = "QWebServer." +
-      AsyncLog4Q::TimeStamp::GetDate() +
-      "-" +
-      AsyncLog4Q::TimeStamp::GetTime() +
-      "." +
-      std::to_string(config::kPid) + ".log";
+  UpdateFileName();
 
-  instance_.log_file_full_path_ = config::kLogPath + "/" + instance_.log_file_name_;
-
-  instance_.time_stamp_timer_thread_.Start();
-  instance_.buffer_timer_thread_.Start();
-  instance_.writer_thread_.Start();
-  instance_.time_stamp_timer_thread_.Detach();
-  instance_.buffer_timer_thread_.Detach();
-  instance_.writer_thread_.Detach();
+  buffer_timer_thread_ = std::thread([&] { buffer_timer_.Start(); });
+  time_stamp_timer_thread_ = std::thread([&] { time_stamp_timer_.Start(); });
+  write_to_file_thread_ = std::thread(&AsyncLog4Q::WriteBufferToFile, this);
+  buffer_timer_thread_.detach();
+  time_stamp_timer_thread_.detach();
+  write_to_file_thread_.detach();
 }
 
-AsyncLog4Q::BufferTimerThread::BufferTimer::BufferTimer() noexcept: Timer(3) {}
+//void AsyncLog4Q::Init() noexcept {
+//  // en: Init the timestamp
+//  // zh: 初始化时间戳timestamp
+//  time_t now = time(nullptr);
+//  tm *ltm = localtime(&now);
+//  AsyncLog4Q::TimeStamp::year = ltm->tm_year + 1900;
+//  AsyncLog4Q::TimeStamp::month = ltm->tm_mon + 1;
+//  AsyncLog4Q::TimeStamp::day = ltm->tm_mday;
+//  AsyncLog4Q::TimeStamp::hour = ltm->tm_hour;
+//  AsyncLog4Q::TimeStamp::minute = ltm->tm_min;
+//  AsyncLog4Q::TimeStamp::second = ltm->tm_sec;
+//
+//  // TODO dir choose can optimize
+//  system("mkdir -p /server/log");
+//  // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
+//  // log_file_name example: QWebServer.20220930-202826.10612.Log
+//  instance_.log_file_name_ = "QWebServer." +
+//      AsyncLog4Q::TimeStamp::GetDate() +
+//      "-" +
+//      AsyncLog4Q::TimeStamp::GetTime() +
+//      "." +
+//      std::to_string(config::kPid) + ".log";
+//
+//  instance_.log_file_full_path_ = config::kLogPath + "/" + instance_.log_file_name_;
+//
+////  instance_.time_stamp_timer_thread_.Start();
+////  instance_.buffer_timer_thread_.Start();
+////  instance_.writer_thread_.Start();
+////  instance_.time_stamp_timer_thread_.Detach();
+////  instance_.buffer_timer_thread_.Detach();
+////  instance_.writer_thread_.Detach();
+//  instance_.buffer_timer_thread_ = std::thread([&] { instance_.buffer_timer_.Start(); });
+//  instance_.time_stamp_timer_thread_ = std::thread([&] { instance_. })
+//}
 
-void AsyncLog4Q::BufferTimerThread::BufferTimer::OnTick() {
+AsyncLog4Q::BufferTimer::BufferTimer() noexcept: Timer(3) {}
+
+void AsyncLog4Q::BufferTimer::OnTick() {
   std::lock_guard<std::mutex> lock(instance_.mutex_);
   instance_.full_buffers_.push(instance_.sp_curr_buffer_);
   instance_.semaphore_.Signal();
@@ -137,53 +160,38 @@ void AsyncLog4Q::BufferTimerThread::BufferTimer::OnTick() {
   instance_.empty_buffers_.pop();
 }
 
-AsyncLog4Q::BufferTimerThread::BufferTimerThread() noexcept
-    : buffer_timer_(BufferTimer()) {}
-
-void AsyncLog4Q::BufferTimerThread::Run() {
+void AsyncLog4Q::RunBufferTimer() {
   buffer_timer_.Start();
 }
 
-void AsyncLog4Q::BufferTimerThread::Reset() noexcept {
-//  buffer_timer_.reset(new BufferTimer);
-//  buffer_timer_->Start();
-  buffer_timer_.Reset();
-}
-
-AsyncLog4Q::TimeStampTimerThread::TimeStampTimer::TimeStampTimer() noexcept
-    : Timer(1) {}
-
-void AsyncLog4Q::TimeStampTimerThread::TimeStampTimer::OnTick() {
-  AsyncLog4Q::TimeStamp::Tick();
-}
-
-AsyncLog4Q::TimeStampTimerThread::TimeStampTimerThread() noexcept
-    : time_stamp_timer_(TimeStampTimer()) {}
-
-void AsyncLog4Q::TimeStampTimerThread::Run() {
+void AsyncLog4Q::RunTimeStampTimer() {
   time_stamp_timer_.Start();
 }
 
-void AsyncLog4Q::WriterThread::Run() {
+void AsyncLog4Q::WriteBufferToFile() {
   while (true) {
     // en:
     // semaphore_ add one means have one full buffer wait to write
     // zh:
     // semaphore_加一说明有一块写满的buffer要去写入文件
-    instance_.semaphore_.Wait();
-    FILE *write_file = fopen(instance_.log_file_full_path_.c_str(), "a");
-    std::shared_ptr<Buffer> sp_write_buffer = instance_.full_buffers_.front();
-    std::cout << "will write: " << sp_write_buffer->size() << std::endl;
+    semaphore_.Wait();
+    FILE *write_file = fopen(log_file_full_path_.c_str(), "a");
+    std::shared_ptr<Buffer> sp_write_buffer = full_buffers_.front();
     while (sp_write_buffer->WriteToFd(write_file, sp_write_buffer->size()) > 0) {}
     sp_write_buffer->Reset();
     {
-      std::lock_guard<std::mutex> lock(instance_.mutex_);
-      std::cout << "will push empty buffer" << std::endl;
-      instance_.empty_buffers_.push(sp_write_buffer);
-      instance_.full_buffers_.pop();
+      std::lock_guard<std::mutex> lock(mutex_);
+      empty_buffers_.push(sp_write_buffer);
+      full_buffers_.pop();
     }
     fclose(write_file);
   }
+}
+
+AsyncLog4Q::TimeStampTimer::TimeStampTimer() noexcept: Timer(1) {}
+
+void AsyncLog4Q::TimeStampTimer::OnTick() {
+  AsyncLog4Q::TimeStamp::Tick();
 }
 
 void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content) {
@@ -256,11 +264,9 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   if (!sp_curr_buffer_->Append(log_line.c_str(), log_line.length())) {
     full_buffers_.push(sp_curr_buffer_);
     semaphore_.Signal();
-    // Test
-    std::cout << " empty buffers: " << empty_buffers_.size() << std::endl;
     // en: after push a new full buffer, should reset the buffer timer
     // zh: 在放入一块新的full buffer后，要重置buffer的计时器
-    buffer_timer_thread_.Reset();
+    buffer_timer_.Reset();
 
     if (empty_buffers_.empty()) {
       sp_curr_buffer_ = nullptr;
@@ -302,6 +308,8 @@ void AsyncLog4Q::SetLevel(const AsyncLog4Q::Level &level, AsyncLog4Q &async_log)
 }
 
 void AsyncLog4Q::UpdateFileName() noexcept {
+  // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
+  // log_file_name example: QWebServer.20220930-202826.10612.Log
   log_file_name_ = "QWebServer." +
       AsyncLog4Q::TimeStamp::GetDate() +
       "-" +

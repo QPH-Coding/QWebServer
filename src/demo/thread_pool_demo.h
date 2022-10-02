@@ -6,20 +6,16 @@
 #ifndef QWEBSERVER_SRC_DEMO_THREAD_POOL_DEMO_H_
 #define QWEBSERVER_SRC_DEMO_THREAD_POOL_DEMO_H_
 #include "../pool/thread_pool.hpp"
+#include "../log/async_log4q.h"
 
-void deal_task(std::shared_ptr<double> &task);
 
 class ThreadPoolDemo {
  public:
+  ThreadPoolDemo() noexcept;
   void Test();
  private:
-  class ProducerThread : public Thread {
-   public:
-    explicit ProducerThread(ThreadPool<double> *thread_pool);
-    void Run() override;
-
-   private:
-    ThreadPool<double> *thread_pool_;
-  };
+  void ProduceTask();
+  static void DealTask(std::shared_ptr<double> &task);
+  ThreadPool<double> thread_pool_;
 };
 #endif //QWEBSERVER_SRC_DEMO_THREAD_POOL_DEMO_H_

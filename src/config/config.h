@@ -9,6 +9,7 @@
 namespace config {
 const static int kPort = 8080;
 
+// TODO change dir
 const static std::string kLogPath = "/server/log";
 const static int kPid = getpid();
 

@@ -3,8 +3,6 @@
 // File: timer.cc
 // License: Apache 2.0
 
-#include <iostream>
-#include <semaphore>
 #include "timer.h"
 
 Timer::Timer(int wait_second) noexcept
@@ -26,7 +24,6 @@ void Timer::Start() noexcept {
   is_running_ = true;
 
   while (is_running_) {
-    std::cout << gettid() << " start wait epoll" << std::endl;
     std::vector<epoll_event> epoll_events = epoll_listener_.GetEpollReadyEvents();
     for (auto &epoll_event : epoll_events) {
       if (epoll_event.data.fd == timer_fd_) {

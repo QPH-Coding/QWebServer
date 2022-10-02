@@ -13,7 +13,6 @@ set(explanation
         src/explanation/net.cc
         src/explanation/file.cc
         src/log/buffer.cc
-        src/explanation/thread.cc
         src/explanation/semaphore.cc
         src/explanation/epoll_listener.cc)
 set(server src/server/server.cc)

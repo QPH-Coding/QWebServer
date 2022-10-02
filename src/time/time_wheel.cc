@@ -14,8 +14,9 @@ TimeWheel::TimeWheel() noexcept
 }
 
 void TimeWheel::Start() noexcept {
-  Thread::Start();
   close_timer_.SetTimeWheel(this);
+  std::thread time_wheel_thread(&TimeWheel::Run, this);
+  time_wheel_thread.detach();
 }
 
 void TimeWheel::add(int fd) noexcept {
