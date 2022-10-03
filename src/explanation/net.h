@@ -13,26 +13,23 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include "../log/async_log4q.h"
 
 class Client {
  public:
-  Client(int fd, const sockaddr_in &address) noexcept;
-  int GetFd() const;
-  sockaddr_in GetAddress() const;
+  Client(int fd, std::string address_port) noexcept;
+  int get_fd() const;
+  std::string get_address_port() const;
  private:
   int fd_;
-  sockaddr_in address_;
-};
-
-class Response {
-
+  std::string address_port_;
 };
 
 namespace net {
 int TcpSocket();
 int UdpSocket();
 sockaddr_in SocketAddress4(int domain, int port, in_addr_t address);
-void SetReuseAddress(int socket_fd, bool enable);
+void SetReuseAddress(int socket_fd);
 void Bind(int socket_fd, sockaddr_in socket_address);
 void Listen(int socket_fd, int backlog);
 std::shared_ptr<Client> Accept(int socket_fd);

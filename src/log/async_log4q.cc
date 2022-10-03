@@ -15,7 +15,7 @@ int AsyncLog4Q::TimeStamp::hour = 0;
 int AsyncLog4Q::TimeStamp::minute = 0;
 int AsyncLog4Q::TimeStamp::second = 0;
 
-std::string AsyncLog4Q::TimeStamp::GetDate() {
+std::string AsyncLog4Q::TimeStamp::get_date() {
   std::string year_str, month_str, day_str;
   year_str = std::to_string(AsyncLog4Q::TimeStamp::year);
   if (AsyncLog4Q::TimeStamp::month < 10) {
@@ -31,7 +31,7 @@ std::string AsyncLog4Q::TimeStamp::GetDate() {
   return year_str + month_str + day_str;
 }
 
-std::string AsyncLog4Q::TimeStamp::GetTime() {
+std::string AsyncLog4Q::TimeStamp::get_time() {
   std::string hour_str, minute_str, second_str;
   if (AsyncLog4Q::TimeStamp::hour < 10) {
     hour_str = "0" + std::to_string(AsyncLog4Q::TimeStamp::hour);
@@ -111,41 +111,6 @@ AsyncLog4Q::AsyncLog4Q() noexcept
   write_to_file_thread_.detach();
 }
 
-//void AsyncLog4Q::Init() noexcept {
-//  // en: Init the timestamp
-//  // zh: 初始化时间戳timestamp
-//  time_t now = time(nullptr);
-//  tm *ltm = localtime(&now);
-//  AsyncLog4Q::TimeStamp::year = ltm->tm_year + 1900;
-//  AsyncLog4Q::TimeStamp::month = ltm->tm_mon + 1;
-//  AsyncLog4Q::TimeStamp::day = ltm->tm_mday;
-//  AsyncLog4Q::TimeStamp::hour = ltm->tm_hour;
-//  AsyncLog4Q::TimeStamp::minute = ltm->tm_min;
-//  AsyncLog4Q::TimeStamp::second = ltm->tm_sec;
-//
-//  // TODO dir choose can optimize
-//  system("mkdir -p /server/log");
-//  // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
-//  // log_file_name example: QWebServer.20220930-202826.10612.Log
-//  instance_.log_file_name_ = "QWebServer." +
-//      AsyncLog4Q::TimeStamp::GetDate() +
-//      "-" +
-//      AsyncLog4Q::TimeStamp::GetTime() +
-//      "." +
-//      std::to_string(config::kPid) + ".log";
-//
-//  instance_.log_file_full_path_ = config::kLogPath + "/" + instance_.log_file_name_;
-//
-////  instance_.time_stamp_timer_thread_.Start();
-////  instance_.buffer_timer_thread_.Start();
-////  instance_.writer_thread_.Start();
-////  instance_.time_stamp_timer_thread_.Detach();
-////  instance_.buffer_timer_thread_.Detach();
-////  instance_.writer_thread_.Detach();
-//  instance_.buffer_timer_thread_ = std::thread([&] { instance_.buffer_timer_.Start(); });
-//  instance_.time_stamp_timer_thread_ = std::thread([&] { instance_. })
-//}
-
 AsyncLog4Q::BufferTimer::BufferTimer() noexcept: Timer(3) {}
 
 void AsyncLog4Q::BufferTimer::OnTick() {
@@ -220,8 +185,8 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   // log_line example: "20220930 214950.513518Z INFO Hello world"
   // region make Log
   std::string log_line =
-      AsyncLog4Q::TimeStamp::GetDate() + " " +
-          AsyncLog4Q::TimeStamp::GetTime() + ".";
+      AsyncLog4Q::TimeStamp::get_date() + " " +
+          AsyncLog4Q::TimeStamp::get_time() + ".";
   timespec now{};
   clock_gettime(CLOCK_REALTIME, &now);
   std::string nsec_str = std::to_string(now.tv_nsec);
@@ -278,45 +243,65 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   }
 }
 
-void AsyncLog4Q::Debug(const std::string &content, AsyncLog4Q &async_log) {
-  if (async_log.level_ > Level::Debug) {
+void AsyncLog4Q::Debug(const std::string &content) {
+  if (instance_.level_ > Level::Debug) {
     return;
   }
-  async_log.Log(Level::Debug, content);
+  instance_.Log(Level::Debug, content);
 }
 
-void AsyncLog4Q::Info(const std::string &content, AsyncLog4Q &async_log) {
-  if (async_log.level_ > Level::Info) {
+void AsyncLog4Q::Debug(const std::string &content, const std::string &file, const int line) {
+  instance_.Log(Level::Debug, content + " " + file + ":" + std::to_string(line));
+}
+
+void AsyncLog4Q::Info(const std::string &content) {
+  if (instance_.level_ > Level::Info) {
     return;
   }
-  async_log.Log(Level::Info, content);
+  instance_.Log(Level::Info, content);
 }
 
-void AsyncLog4Q::Warn(const std::string &content, AsyncLog4Q &async_log) {
-  if (async_log.level_ > Level::Warn) {
+void AsyncLog4Q::Info(const std::string &content, const std::string &file, const int line) {
+  instance_.Log(Level::Info, content + " " + file + ":" + std::to_string(line));
+}
+
+void AsyncLog4Q::Warn(const std::string &content) {
+  if (instance_.level_ > Level::Warn) {
     return;
   }
-  async_log.Log(Level::Warn, content);
+  instance_.Log(Level::Warn, content);
 }
 
-void AsyncLog4Q::Error(const std::string &content, AsyncLog4Q &async_log) {
-  async_log.Log(Level::Error, content);
+void AsyncLog4Q::Warn(const std::string &content, const std::string &file, const int line) {
+  instance_.Log(Level::Warn, content + " " + file + ":" + std::to_string(line));
 }
 
-void AsyncLog4Q::SetLevel(const AsyncLog4Q::Level &level, AsyncLog4Q &async_log) noexcept {
-  async_log.level_ = level;
+void AsyncLog4Q::Error(const std::string &content) {
+  instance_.Log(Level::Error, content);
+}
+
+void AsyncLog4Q::Error(const std::string &content, const std::string &file, const int line) {
+  instance_.Log(Level::Error, content + " " + file + ":" + std::to_string(line));
+}
+
+void AsyncLog4Q::set_level(const AsyncLog4Q::Level &level) noexcept {
+  instance_.level_ = level;
 }
 
 void AsyncLog4Q::UpdateFileName() noexcept {
   // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
   // log_file_name example: QWebServer.20220930-202826.10612.Log
   log_file_name_ = "QWebServer." +
-      AsyncLog4Q::TimeStamp::GetDate() +
+      AsyncLog4Q::TimeStamp::get_date() +
       "-" +
-      AsyncLog4Q::TimeStamp::GetTime() +
+      AsyncLog4Q::TimeStamp::get_time() +
       "." +
       std::to_string(config::kPid) + ".Log";
   log_file_full_path_ = config::kLogPath + "/" + log_file_name_;
 }
+AsyncLog4Q::Level AsyncLog4Q::get_level() noexcept {
+  return instance_.level_;
+}
+
 
 

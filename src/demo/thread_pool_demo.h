@@ -8,14 +8,13 @@
 #include "../pool/thread_pool.hpp"
 #include "../log/async_log4q.h"
 
-
 class ThreadPoolDemo {
  public:
   ThreadPoolDemo() noexcept;
   void Test();
  private:
   void ProduceTask();
-  static void DealTask(std::shared_ptr<double> &task);
+  static void DealTask(std::shared_ptr<double> &task, void *arg);
   ThreadPool<double> thread_pool_;
 };
 #endif //QWEBSERVER_SRC_DEMO_THREAD_POOL_DEMO_H_

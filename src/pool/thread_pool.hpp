@@ -18,8 +18,8 @@
 template<typename T>
 class ThreadPool : private Uncopyable {
  public:
-  using deal_task_func = std::function<void(std::shared_ptr<T> &sp_task)>;
-  ThreadPool(int thread_num, int max_task_num, const deal_task_func &func) noexcept;
+  using deal_task_func = std::function<void(std::shared_ptr<T> &sp_task, void *arg)>;
+  ThreadPool(int thread_num, int max_task_num, const deal_task_func &func, void *arg) noexcept;
   ~ThreadPool() noexcept;
 
   void Start();
@@ -30,6 +30,7 @@ class ThreadPool : private Uncopyable {
 
   void WorkerThreadFunc();
 
+  void *p_arg_;
   int thread_num_;
   int max_task_num_;
   deal_task_func deal_task_func_;
@@ -59,15 +60,16 @@ void ThreadPool<T>::WorkerThreadFunc() {
         task_queue_.pop();
       }
     }
-    deal_task_func_(task);
+    deal_task_func_(task, p_arg_);
   }
 }
 
 template<typename T>
-ThreadPool<T>::ThreadPool(int thread_num, int max_task_num, const deal_task_func &func) noexcept
+ThreadPool<T>::ThreadPool(int thread_num, int max_task_num, const deal_task_func &func, void *arg) noexcept
     :thread_num_(thread_num),
      max_task_num_(max_task_num),
-     deal_task_func_(func) {
+     deal_task_func_(func),
+     p_arg_(arg) {
   assert(thread_num_ > 0);
   assert(max_task_num_ > 0);
   thread_vector_ = std::vector<std::thread>(thread_num_);

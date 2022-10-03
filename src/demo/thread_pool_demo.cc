@@ -7,7 +7,7 @@
 
 #include <memory>
 
-void ThreadPoolDemo::DealTask(std::shared_ptr<double> &task) {
+void ThreadPoolDemo::DealTask(std::shared_ptr<double> &task, void *arg) {
   std::string str = "deal task " + std::to_string(*task);
   AsyncLog4Q::Info(str);
 }
@@ -28,4 +28,4 @@ void ThreadPoolDemo::Test() {
   }
 }
 ThreadPoolDemo::ThreadPoolDemo() noexcept
-    : thread_pool_(5, 1000, ThreadPoolDemo::DealTask) {}
+    : thread_pool_(5, 1000, ThreadPoolDemo::DealTask, this) {}

@@ -2,9 +2,21 @@
 
 ## Log
 
+## 2022.10.03
+
+- 11:31:41: Reconstruct the AsyncLog4Q, use `#define` can log the source file and the code line.
+
 ## 2022.10.02
 
 - 09:41:02: Finish refactoring code. I give up the `class Thread` self-encapsulated and use the `std::thread`(C++11).
+
+- 16:21:23: Finish `HttpRequest` analyze and construct `HttpResponse`.
+
+The day after:
+
+- Add some Http Implements and can response the request.
+
+- Add the log source file and code line.
 
 ## 2022.10.01
 
@@ -17,7 +29,7 @@
 - 23:58:03: Finish Async Log System. During the developing, I find I must create 2 thread to manage their timers
   separately and create a writer thread to write to a file.
 
-- The days after:
+The days after:
 
 - maybe can optimize the Async Log System, add source file and code lines
 

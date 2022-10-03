@@ -15,22 +15,32 @@
 #include "../explanation/semaphore.h"
 #include "../config/config.h"
 
+#define AsyncLog4Q_Debug(content) if(AsyncLog4Q::get_level() <= AsyncLog4Q::Level::Debug) \
+      AsyncLog4Q::Debug(content, __FILE__, __LINE__)
+#define AsyncLog4Q_Info(content) if(AsyncLog4Q::get_level() <= AsyncLog4Q::Level::Info) \
+      AsyncLog4Q::Info(content, __FILE__, __LINE__)
+#define AsyncLog4Q_Warn(content) if(AsyncLog4Q::get_level() <= AsyncLog4Q::Level::Warn) \
+      AsyncLog4Q::Warn(content, __FILE__, __LINE__)
+#define AsyncLog4Q_Error(content) if(AsyncLog4Q::get_level() <= AsyncLog4Q::Level::Error) \
+      AsyncLog4Q::Error(content, __FILE__, __LINE__)
 
-// TODO can optimize: use std::thread
 class AsyncLog4Q {
  public:
   enum class Level {
     Debug = 0, Info = 1, Warn = 2, Error = 4
   };
 
-//  static void Init() noexcept;
+  static void set_level(const Level &level) noexcept;
+  static Level get_level() noexcept;
 
-  static void SetLevel(const Level &level, AsyncLog4Q &async_log = instance_) noexcept;
-
-  static void Debug(const std::string &content, AsyncLog4Q &async_log = instance_);
-  static void Info(const std::string &content, AsyncLog4Q &async_log = instance_);
-  static void Warn(const std::string &content, AsyncLog4Q &async_log = instance_);
-  static void Error(const std::string &content, AsyncLog4Q &async_log = instance_);
+  static void Debug(const std::string &content);
+  static void Debug(const std::string &content, const std::string &file, int line);
+  static void Info(const std::string &content);
+  static void Info(const std::string &content, const std::string &file, int line);
+  static void Warn(const std::string &content);
+  static void Warn(const std::string &content, const std::string &file, int line);
+  static void Error(const std::string &content);
+  static void Error(const std::string &content, const std::string &file, int line);
 
  private:
   AsyncLog4Q() noexcept;
@@ -64,8 +74,8 @@ class AsyncLog4Q {
     static int hour;
     static int minute;
     static int second;
-    static std::string GetDate();
-    static std::string GetTime();
+    static std::string get_date();
+    static std::string get_time();
     static void Tick();
   };
 

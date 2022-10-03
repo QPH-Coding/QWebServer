@@ -21,7 +21,10 @@ set(time
         src/time/timer.cc
         src/time/time_wheel.cc)
 set(http
-        src/http/http_connection.cc)
+        src/http/http_connection.cc
+        src/http/http_request.cc
+        src/http/http_response.cc
+        src/http/http_service.cc)
 
 set(log
         src/log/async_log4q.cc)
