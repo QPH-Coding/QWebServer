@@ -9,6 +9,7 @@ add_subdirectory(third_party/jsoncpp)
 
 INCLUDE_DIRECTORIES(/usr/include/mysql++ /usr/include/mysql)
 
+set(config src/config/config.cc)
 set(explanation
         src/explanation/net.cc
         src/explanation/file.cc
@@ -35,6 +36,7 @@ set(demo
         src/demo/async_log_demo.cc)
 
 add_executable(QWebServer src/main.cpp
+        ${config}
         ${explanation}
         ${time}
         ${log}

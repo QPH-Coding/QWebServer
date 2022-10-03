@@ -10,8 +10,7 @@
 
 namespace HttpService {
 
-HttpResponse DealWithRequest(const HttpRequest &http_request);
-
+std::shared_ptr<HttpResponse> DealWithRequest(const HttpRequest &http_request);
 
 }
 

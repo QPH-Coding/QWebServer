@@ -5,17 +5,22 @@
 
 #include "http_service.h"
 
-HttpResponse HttpService::DealWithRequest(const HttpRequest &http_request) {
+std::shared_ptr<HttpResponse> HttpService::DealWithRequest(const HttpRequest &http_request) {
+  std::shared_ptr<HttpResponse> http_response(new HttpResponse);
+  http_response->set_protocol_version(http_request.get_protocol());
   if (!http_request.is_effective()) {
-    HttpResponse http_response;
-    http_response.set_protocol_version(http_request.get_protocol());
-    http_response.set_status(HttpResponseStatus::BadRequest);
+    http_response->set_status(HttpResponseStatus::BadRequest);
     return http_response;
   }
 
   HttpRequest::Method method = http_request.get_method();
   std::string url = http_request.get_url();
-  if (method == HttpRequest::Method::GET && url == "/") {
-
+  if (url == "/") {
+    http_response->set_status(HttpResponseStatus::OK);
+    http_response->add_wait_send_file("/server/root/index.html");
+    return http_response;
   }
+
+  http_response->set_status(HttpResponseStatus::NotFound);
+  return http_response;
 }

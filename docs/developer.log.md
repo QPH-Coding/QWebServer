@@ -6,6 +6,20 @@
 
 - 11:31:41: Reconstruct the AsyncLog4Q, use `#define` can log the source file and the code line.
 
+- 14:23:08: Now the server can response a simple index.html.
+
+The day after:
+
+- Read `Config` from `/server/config/config.json`
+
+- Object Pool
+
+- Connect to MySql
+
+- Connect to ElasticSearch
+
+- Finish Http Implements
+
 ## 2022.10.02
 
 - 09:41:02: Finish refactoring code. I give up the `class Thread` self-encapsulated and use the `std::thread`(C++11).

@@ -11,11 +11,11 @@
 
 class HttpConnection {
  public:
-  HttpConnection(const int client_fd, const std::string &raw_string) noexcept;
-  int get_client_fd() const noexcept;
+  HttpConnection(const Client &client_fd, const std::string &raw_string) noexcept;
+  Client get_client() const noexcept;
   HttpRequest get_http_request() const noexcept;
  private:
-  int client_fd_;
+  Client client_;
   HttpRequest http_request_;
 };
 

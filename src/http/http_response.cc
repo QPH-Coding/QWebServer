@@ -21,8 +21,8 @@ void HttpResponse::add_head(const http_response_head &key, const std::string &va
   response_head_.emplace_back(key, value);
 }
 
-void HttpResponse::set_response_body(const std::string &request_body) noexcept {
-  response_body_ = request_body;
+void HttpResponse::set_response_body(const std::string &response_body) noexcept {
+  response_body_ = response_body;
 }
 std::string HttpResponse::to_string() const noexcept {
   std::string http_response_string;
@@ -37,8 +37,23 @@ std::string HttpResponse::to_string() const noexcept {
   return http_response_string;
 }
 void HttpResponse::add_wait_send_file(const std::string &file_path) noexcept {
-  wait_send_file_.push_back(file_path);
+//  wait_send_file_.push_back(file_path);
+  FILE *file_fd = fopen(file_path.c_str(), "r");
+  std::string response_body = file::ReadNonblockFile(file_fd);
+  set_response_body(response_body);
 }
 std::vector<std::string> HttpResponse::get_wait_send_file() const noexcept {
   return wait_send_file_;
+}
+void HttpResponse::set_client_socket_fd(int client_socket_fd) noexcept {
+  client_socket_fd_ = client_socket_fd;
+}
+int HttpResponse::get_client_socket_fd() const noexcept {
+  return client_socket_fd_;
+}
+void HttpResponse::set_client_ip_port(const std::string &client_ip_port) noexcept {
+  client_ip_port_ = client_ip_port;
+}
+std::string HttpResponse::get_client_ip_port() const noexcept {
+  return client_ip_port_;
 }
