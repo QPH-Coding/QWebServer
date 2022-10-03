@@ -15,7 +15,7 @@ TimeWheel::TimeWheel() noexcept
 
 void TimeWheel::Start() noexcept {
   close_timer_.SetTimeWheel(this);
-  std::thread time_wheel_thread(&TimeWheel::Run, this);
+  std::thread time_wheel_thread([&] { close_timer_.Start(); });
   time_wheel_thread.detach();
 }
 
@@ -25,8 +25,16 @@ void TimeWheel::add(int fd) noexcept {
   ++fd_count_map_[fd];
 }
 
-void TimeWheel::Run() {
-  close_timer_.Start();
+void TimeWheel::Close() {
+  std::lock_guard<std::mutex> lock(mutex_);
+  for (int i = 0; i < 8; ++i) {
+    for (auto &fd : *p_curr_) {
+      close(fd);
+    }
+    p_curr_->clear();
+    p_pre_ = p_curr_;
+    p_curr_ = cycle_queue_.next();
+  }
 }
 
 TimeWheel::CloseTimer::CloseTimer() noexcept: Timer(1) {}

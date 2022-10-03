@@ -16,7 +16,7 @@ class TimeWheel {
   TimeWheel() noexcept;
   void Start() noexcept;
   void add(int fd) noexcept;
-  void Run();
+  void Close();
  private:
   class CloseTimer : public Timer {
    public:

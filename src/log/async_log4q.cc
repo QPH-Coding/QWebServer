@@ -125,14 +125,6 @@ void AsyncLog4Q::BufferTimer::OnTick() {
   instance_.empty_buffers_.pop();
 }
 
-void AsyncLog4Q::RunBufferTimer() {
-  buffer_timer_.Start();
-}
-
-void AsyncLog4Q::RunTimeStampTimer() {
-  time_stamp_timer_.Start();
-}
-
 void AsyncLog4Q::WriteBufferToFile() {
   while (true) {
     // en:

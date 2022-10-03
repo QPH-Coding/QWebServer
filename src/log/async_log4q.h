@@ -27,7 +27,7 @@
 class AsyncLog4Q {
  public:
   enum class Level {
-    Debug = 0, Info = 1, Warn = 2, Error = 4
+    Debug = 0, Info = 1, Warn = 2, Error = 3
   };
 
   static void set_level(const Level &level) noexcept;
@@ -47,10 +47,6 @@ class AsyncLog4Q {
   void Log(const Level &level, const std::string &content);
 
   void UpdateFileName() noexcept;
-
-  void RunBufferTimer();
-
-  void RunTimeStampTimer();
 
   void WriteBufferToFile();
 
