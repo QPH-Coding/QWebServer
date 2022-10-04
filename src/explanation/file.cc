@@ -52,3 +52,9 @@ bool file::ReadNonblockFile(int fd, std::string &wait_read) {
     }
   }
 }
+
+long file::GetFileSize(const char *file_path) {
+  struct stat file_status{};
+  stat(file_path, &file_status);
+  return file_status.st_size;
+}

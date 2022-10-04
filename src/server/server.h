@@ -16,6 +16,8 @@
 #include "../http/http_response.h"
 #include "../http/http_service.h"
 #include "../log/async_log4q.h"
+#include "../pool/object_pool.hpp"
+#include "../database/mysql_conn_raii.h"
 
 class QWebServer {
  public:

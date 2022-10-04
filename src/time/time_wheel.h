@@ -10,6 +10,7 @@
 #include "timer.h"
 #include <thread>
 #include "cycle_queue.hpp"
+#include "../log/async_log4q.h"
 
 class TimeWheel {
  public:

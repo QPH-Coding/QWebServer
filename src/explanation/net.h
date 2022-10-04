@@ -32,6 +32,6 @@ sockaddr_in SocketAddress4(int domain, int port, in_addr_t address);
 void SetReuseAddress(int socket_fd);
 void Bind(int socket_fd, sockaddr_in socket_address);
 void Listen(int socket_fd, int backlog);
-std::shared_ptr<Client> Accept(int socket_fd);
+std::shared_ptr<Client> Accept(const int socket_fd);
 }  // namespace net
 #endif  // WEBSERVER_NET_H

@@ -17,7 +17,12 @@ std::shared_ptr<HttpResponse> HttpService::DealWithRequest(const HttpRequest &ht
   std::string url = http_request.get_url();
   if (url == "/") {
     http_response->set_status(HttpResponseStatus::OK);
-    http_response->add_wait_send_file("/server/root/index.html");
+    http_response->add_file("/server/root/index.html");
+    return http_response;
+  } else if (url == "/test") {
+    http_response->set_status(HttpResponseStatus::OK);
+    http_response->add_head(HttpResponseHead::ContentType, "application/json");
+    http_response->set_response_body("{'status': 'success'}");
     return http_response;
   }
 

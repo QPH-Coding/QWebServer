@@ -23,6 +23,7 @@ void TimeWheel::add(int fd) noexcept {
   std::lock_guard<std::mutex> lock(mutex_);
   p_pre_->push_back(fd);
   ++fd_count_map_[fd];
+  AsyncLog4Q_Info("TimeWheel add fd: " + std::to_string(fd));
 }
 
 void TimeWheel::Close() {
@@ -50,6 +51,7 @@ void TimeWheel::CloseTimer::OnTick() {
     --time_wheel_->fd_count_map_[fd];
     if (time_wheel_->fd_count_map_[fd] == 0) {
       close(fd);
+      AsyncLog4Q_Info("TimeWheel close fd: " + std::to_string(fd));
     }
   }
   // en: while operating the pointer, lock the mutex

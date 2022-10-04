@@ -2,6 +2,22 @@
 
 ## Log
 
+## 2022.10.04
+
+- 16:06:40: Change the development environment, now I develop in VM and can use mysql++ to connect to mysql. And I find that I ignore 2 important thing, one is I must write the response head, the other one is I should deal with the signal.
+
+- 22:50:27: Finish Object Pool and can use mysql connector `mysql++`. Now add the file will add head `content-type` and `content-length` automatically. 
+
+The day after:
+
+- Use ElasticSearch
+
+- Design user table
+
+- Finish Http implements
+
+- Write some html
+
 ## 2022.10.03
 
 - 11:31:41: Reconstruct the AsyncLog4Q, use `#define` can log the source file and the code line.

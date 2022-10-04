@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="03eec6a3-b6e2-46bf-88c0-ced47af55bc3" name="vm-qwebserver">
+        <fileTransfer accessType="SFTP" host="192.168.3.4" port="22" sshConfigId="5e088b6e-06d6-47b8-b3a7-0c5292647ec0" sshConfig="qph@192.168.3.4:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="60000" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

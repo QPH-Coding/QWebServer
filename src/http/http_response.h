@@ -8,6 +8,7 @@
 
 #include <string>
 #include <vector>
+#include <regex>
 #include "http_response_status.h"
 #include "http_response_head.h"
 #include "../explanation/file.h"
@@ -17,6 +18,7 @@ class HttpResponse {
  public:
   using http_response_status = HttpResponseStatus::http_response_status;
   using http_response_head = HttpResponseHead::http_response_head;
+  static const std::unordered_map<std::string, std::string> content_type;
   HttpResponse() = default;
 
   void set_protocol_version(const std::string &protocol_version) noexcept;
@@ -26,11 +28,8 @@ class HttpResponse {
   void set_response_body(const std::string &response_body) noexcept;
 
   void set_client_socket_fd(int client_socket_fd) noexcept;
-  void set_client_ip_port(const std::string& client_ip_port) noexcept;
-  void add_wait_send_file(const std::string &file_path) noexcept;
+  void add_file(const std::string &file_path) noexcept;
   int get_client_socket_fd() const noexcept;
-  std::string get_client_ip_port() const noexcept;
-  std::vector<std::string> get_wait_send_file() const noexcept;
   std::string to_string() const noexcept;
  private:
   // en: response line
@@ -44,7 +43,6 @@ class HttpResponse {
   // zh: 响应实体
   std::string response_body_;
 
-  std::vector<std::string> wait_send_file_;
   int client_socket_fd_;
   std::string client_ip_port_;
 };

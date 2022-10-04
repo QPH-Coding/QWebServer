@@ -1,11 +1,12 @@
 {
-  "port": 8080,
-  "enable_async_log": true,
-  "database_conn_num": 20,
+  "port": 8090,
   "thread_num": 20,
   "mysql": {
-    "url": "",
-    "user": "",
-    "password": ""
+    "num": 20,
+    "host": "localhost",
+    "port": 3306,
+    "database": "qwebserver",
+    "username": "root",
+    "password": "123456"
   }
 }

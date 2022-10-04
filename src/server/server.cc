@@ -20,11 +20,17 @@ void QWebServer::EventLoop() {
     std::vector<epoll_event> epoll_events = epoll_listener_.GetEpollReadyEvents();
     for (auto &epoll_event : epoll_events) {
       if (epoll_event.data.fd == listen_socket_fd_) {
-        std::shared_ptr<Client> sp_client = net::Accept(listen_socket_fd_);
-        AsyncLog4Q_Info("Accept connection from " + sp_client->get_address_port());
-        epoll_listener_.AddReadEvent(sp_client->get_fd());
-        time_wheel_.add(sp_client->get_fd());
-        fd_ip_map_[sp_client->get_fd()] = sp_client->get_address_port();
+        while (true) {
+          std::shared_ptr<Client> sp_client = net::Accept(listen_socket_fd_);
+          if (!sp_client) {
+            break;
+          }
+          AsyncLog4Q_Info("Accept connection from " + sp_client->get_address_port());
+          epoll_listener_.AddReadEvent(sp_client->get_fd());
+          time_wheel_.add(sp_client->get_fd());
+          fd_ip_map_[sp_client->get_fd()] = sp_client->get_address_port();
+          AsyncLog4Q_Info(sp_client->get_address_port() + " use fd: " + std::to_string(sp_client->get_fd()));
+        }
       } else if (epoll_event.events & EPOLLIN) {
         int client_fd = epoll_event.data.fd;
         sub_reactor_read_.Enqueue(std::make_shared<Client>(client_fd, fd_ip_map_[client_fd]));
@@ -38,8 +44,13 @@ QWebServer::QWebServer() noexcept
       sub_reactor_write_(2, 1000, SubReactorWriteFunc, this),
       service_(4, 1000, ServiceFunc, this) {
   sub_reactor_read_.Start();
+  AsyncLog4Q_Info("SubReadReactor init successfully.");
   service_.Start();
+  AsyncLog4Q_Info("Service init successfully.");
   sub_reactor_write_.Start();
+  AsyncLog4Q_Info("SubWriteReactor init successfully.");
+  time_wheel_.Start();
+  AsyncLog4Q_Info("TimeWheel init successfully.");
 }
 
 void QWebServer::SubReactorReadFunc(std::shared_ptr<Client> &sp_client, void *arg) {
@@ -60,9 +71,9 @@ void QWebServer::SubReactorWriteFunc(std::shared_ptr<HttpResponse> &sp_http_resp
   if (file::WriteSocket(
       sp_http_response->get_client_socket_fd(),
       sp_http_response->to_string())) {
-    AsyncLog4Q_Info("Response " + sp_http_response->get_client_ip_port() + " successfully.");
+    AsyncLog4Q_Info("Response " + p_server->fd_ip_map_[sp_http_response->get_client_socket_fd()] + " successfully.");
   } else {
-    AsyncLog4Q_Warn("Response " + sp_http_response->get_client_ip_port() + " failed.");
+    AsyncLog4Q_Warn("Response " + p_server->fd_ip_map_[sp_http_response->get_client_socket_fd()] + " failed.");
   }
 }
 
@@ -70,7 +81,6 @@ void QWebServer::ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection
   auto p_server = static_cast<QWebServer *>(arg);
   std::shared_ptr<HttpResponse> sp_http_response = HttpService::DealWithRequest(sp_http_connection->get_http_request());
   sp_http_response->set_client_socket_fd(sp_http_connection->get_client().get_fd());
-  sp_http_response->set_client_ip_port(sp_http_connection->get_client().get_address_port());
   p_server->sub_reactor_write_.Enqueue(sp_http_response);
   std::cout << sp_http_response->to_string() << std::endl;
 }

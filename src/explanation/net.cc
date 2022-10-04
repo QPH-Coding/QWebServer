@@ -69,13 +69,17 @@ void net::Listen(int socket_fd, int backlog) {
   AsyncLog4Q_Info("Server listen socket successfully.");
 }
 
-std::shared_ptr<Client> net::Accept(int socket_fd) {
+std::shared_ptr<Client> net::Accept(const int socket_fd) {
   sockaddr_in client_address;
   socklen_t client_address_len = sizeof(client_address);
   int fd = accept(socket_fd, (sockaddr *) &client_address, &client_address_len);
+  if (fd <= 0) {
+    return nullptr;
+  }
   char *client_ip;
-  inet_ntop(AF_INET, &client_address.sin_addr, client_ip, INET_ADDRSTRLEN);
+//  inet_ntop(AF_INET, &client_address.sin_addr, client_ip, INET_ADDRSTRLEN);
   int client_port = ntohs(client_address.sin_port);
+  client_ip = inet_ntoa(client_address.sin_addr);
   std::string client_address_port = client_ip;
   client_address_port += +":" + std::to_string(client_port);
   return std::make_shared<Client>(fd, client_address_port);

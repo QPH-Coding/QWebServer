@@ -21,5 +21,4 @@ Config::Config() {
 //  Json::Value config_json;
 //  reader.parse(ifs, config_json, false);
 //  ifs.close();
-
 }
