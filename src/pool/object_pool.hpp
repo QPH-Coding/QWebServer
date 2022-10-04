@@ -6,7 +6,9 @@
 #ifndef QWEBSERVER_SRC_POOL_OBJECT_POOL_HPP_
 #define QWEBSERVER_SRC_POOL_OBJECT_POOL_HPP_
 
+template<typename T>
 class ObjectPool {
+ public:
 
 };
 #endif //QWEBSERVER_SRC_POOL_OBJECT_POOL_HPP_

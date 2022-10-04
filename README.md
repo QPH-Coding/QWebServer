@@ -49,7 +49,7 @@ And before you run this project, please make sure:
 You can use this command to install `MySql-connector-c++` in Ubuntu 20.04:
 
 ```shell
-$ sudo apt-get install libmysql++-dev
+$ sudo apt-get install mysql-client mysql-server libmysql++-dev 
 ```
 ## TODO List
 

@@ -9,8 +9,8 @@ void QWebServer::EventLoop() {
   listen_socket_fd_ = net::TcpSocket();
   // TODO temp port: 8090
   sockaddr_in server_address = net::SocketAddress4(AF_INET, 8090, INADDR_ANY);
-  // en: reuse port, easy to restart the server
-  // zh: 端口复用，能够方便重启服务器
+  /// \brief en: reuse port, easy to restart the server \n
+  /// zh: 端口复用，能够方便重启服务器
   net::SetReuseAddress(listen_socket_fd_);
   net::Bind(listen_socket_fd_, server_address);
   net::Listen(listen_socket_fd_, 5);
@@ -76,4 +76,5 @@ void QWebServer::ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection
 }
 QWebServer::~QWebServer() noexcept {
   close(listen_socket_fd_);
+  time_wheel_.Close();
 }
