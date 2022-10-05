@@ -1,7 +1,7 @@
-#!/usr/bin bash
+#!/usr/bin/bash
 
-sudo mkdir -p /server/log
-sudo mkdir -p /server/config
+mkdir -p /server/log
+mkdir -p /server/config
 
-sudo cp ./config.json /server/config/config.json
-sudo cp -r ./root /server
+cp ./config.json /server/config/config.json
+cp -r ./root /server

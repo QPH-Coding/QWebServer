@@ -17,7 +17,9 @@ set(explanation
         src/log/buffer.cc
         src/explanation/semaphore.cc
         src/explanation/epoll_listener.cc)
-set(db src/database/mysql_conn_raii.cc)
+set(db
+        src/database/mysql_conn_raii.cc
+        src/database/mysql_deal.cc)
 set(server src/server/server.cc)
 
 set(time
@@ -32,6 +34,9 @@ set(http
 set(log
         src/log/async_log4q.cc)
 
+set(utils
+        src/utils/utils.cc)
+
 set(demo
         src/demo/epoll_demo.cc
         src/demo/thread_pool_demo.cc
@@ -45,7 +50,8 @@ add_executable(QWebServer src/main.cpp
         ${log}
         ${server}
         ${http}
+        ${utils}
         ${demo})
 
 # 链接子工程
-target_link_libraries(${PROJECT_NAME} jsoncpp mysqlclient mysqlpp)
+target_link_libraries(${PROJECT_NAME} jsoncpp mysqlclient mysqlpp ssl crypto)

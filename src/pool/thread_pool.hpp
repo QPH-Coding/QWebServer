@@ -14,6 +14,7 @@
 
 #include "../base/uncopyable.h"
 #include "../explanation/semaphore.h"
+#include "../log/async_log4q.h"
 
 template<typename T>
 class ThreadPool : private Uncopyable {
@@ -92,7 +93,7 @@ template<typename T>
 void ThreadPool<T>::Enqueue(const std::shared_ptr<T> &task) {
   std::lock_guard<std::mutex> lock(task_mutex_);
   if (task_queue_.size() >= max_task_num_) {
-    // TODO log
+    AsyncLog4Q_Warn("The num of task exceeds the maximum, it will throw task.");
     return;
   }
   task_queue_.push(task);

@@ -2,6 +2,14 @@
 
 ## Log
 
+## 2022.10.05
+
+- 18:38:58: Finish some html. Finish some mysql operation. Add config reading.
+
+The day after:
+
+- Same as yesterday
+
 ## 2022.10.04
 
 - 16:06:40: Change the development environment, now I develop in VM and can use mysql++ to connect to mysql. And I find that I ignore 2 important thing, one is I must write the response head, the other one is I should deal with the signal.

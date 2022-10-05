@@ -68,7 +68,7 @@ void Timer::Reset() noexcept {
   timerfd_settime(timer_fd_, TFD_TIMER_ABSTIME, &new_value, nullptr);
 }
 
-// @TEST
+// TEST
 //void Timer::OnTick() {
 //  timeval tv_begin{};
 //  gettimeofday(&tv_begin, nullptr);

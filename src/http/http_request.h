@@ -45,7 +45,7 @@ class HttpRequest {
   std::string protocol_version_;
   // en: request head
   // zh: 请求头
-  Json::Value request_head_;
+  std::unordered_map<std::string, std::string> request_head_;
   // en: request body
   // zh: 请求实体
   std::string request_body_;

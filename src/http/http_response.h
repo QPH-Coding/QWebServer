@@ -12,6 +12,8 @@
 #include "http_response_status.h"
 #include "http_response_head.h"
 #include "../explanation/file.h"
+#include <sys/mman.h>
+#include "../log/async_log4q.h"
 
 // TODO this class design can be optimized
 class HttpResponse {
@@ -21,7 +23,7 @@ class HttpResponse {
   static const std::unordered_map<std::string, std::string> content_type;
   HttpResponse() = default;
 
-  void set_protocol_version(const std::string &protocol_version) noexcept;
+  void set_protocol_version(const std::string &protocol_version = "HTTP/1.1") noexcept;
   void set_status(const http_response_status &status) noexcept;
   void add_head(const std::pair<http_response_head, std::string> &head) noexcept;
   void add_head(const http_response_head &key, const std::string &value) noexcept;

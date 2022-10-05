@@ -63,14 +63,14 @@ void AsyncLog4Q::TimeStamp::Tick() {
   }
   if (hour == 24) {
     hour = 0;
-    /// en: use localtime instead of complex logical judgment \n
-    /// zh: 用localtime函数，而不是用一些复杂的逻辑判断
+    // en: use localtime instead of complex logical judgment
+    // zh: 用localtime函数，而不是用一些复杂的逻辑判断
     time_t now = time(nullptr);
     tm *ltm = localtime(&now);
     year = ltm->tm_year + 1900;
     month = ltm->tm_mon + 1;
     day = ltm->tm_mday;
-    /// TODO maybe can optimize
+    // TODO maybe can optimize
     instance_.UpdateFileName();
   }
 }
@@ -88,8 +88,8 @@ AsyncLog4Q::AsyncLog4Q() noexcept
   }
   full_buffers_ = std::queue<std::shared_ptr<Buffer>>();
 
-  /// en: Init the timestamp \n
-  /// zh: 初始化时间戳timestamp
+  // en: Init the timestamp
+  // zh: 初始化时间戳timestamp
   time_t now = time(nullptr);
   tm *ltm = localtime(&now);
   AsyncLog4Q::TimeStamp::year = ltm->tm_year + 1900;
@@ -127,10 +127,10 @@ void AsyncLog4Q::BufferTimer::OnTick() {
 
 void AsyncLog4Q::WriteBufferToFile() {
   while (true) {
-    ///  en:
-    /// semaphore_ add one means have one full buffer wait to write \n
-    /// zh:
-    /// semaphore_加一说明有一块写满的buffer要去写入文件
+    //  en:
+    // semaphore_ add one means have one full buffer wait to write
+    // zh:
+    // semaphore_加一说明有一块写满的buffer要去写入文件
     semaphore_.Wait();
     FILE *write_file = fopen(log_file_full_path_.c_str(), "a");
     std::shared_ptr<Buffer> sp_write_buffer = full_buffers_.front();
@@ -152,14 +152,14 @@ void AsyncLog4Q::TimeStampTimer::OnTick() {
 }
 
 void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content) {
-  /// en: \n
-  /// if sp_curr_buffer_ is nullptr and empty_buffers is empty
-  /// it means that some wrongs happen and have detected out it before
-  /// just keep throwing log_line away. \n
-  /// zh: \n
-  /// 如果sp_curr_buffer_是空指针，并且empty_buffers是空的,
-  /// 就说明有什么错误发生了，并且在之前已经检测出错误了
-  /// 在这里保持扔掉日志就可以了
+  // en:
+  // if sp_curr_buffer_ is nullptr and empty_buffers is empty
+  // it means that some wrongs happen and have detected out it before
+  // just keep throwing log_line away.
+  // zh:
+  // 如果sp_curr_buffer_是空指针，并且empty_buffers是空的,
+  // 就说明有什么错误发生了，并且在之前已经检测出错误了
+  // 在这里保持扔掉日志就可以了
   {
     std::lock_guard lock(mutex_);
     if (!sp_curr_buffer_) {
@@ -173,8 +173,8 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   }
 
 
-  /// log_line format: ${date} ${time}.${nanosecond}Z ${level} ${content} \n
-  /// log_line example: "20220930 214950.513518Z INFO Hello world"
+  // log_line format: ${date} ${time}.${nanosecond}Z ${level} ${content}
+  // log_line example: "20220930 214950.513518Z INFO Hello world"
   // region make Log
   std::string log_line =
       AsyncLog4Q::TimeStamp::get_date() + " " +
@@ -201,28 +201,28 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   log_line += " " + content + "\n";
   // endregion
 
-  /// TODO @TEST
+  // TEST
   std::cout << log_line << std::endl;
-  /// en: while append current buffer, should lock the mutex_ \n
-  /// zh: 当往当前的buffer写入东西时，需要加锁
+  // en: while append current buffer, should lock the mutex_
+  // zh: 当往当前的buffer写入东西时，需要加锁
   std::lock_guard<std::mutex> lock(mutex_);
 
-  /// en: \n
-  /// if try to append to buffer failed, get one from empty buffer queue
-  /// push full buffer to full buffer queue
-  /// if empty buffer queue is empty, it probably has some wrongs
-  /// and produce Log in some the same places
-  /// we just throw these Log \n
-  /// zh: \n
-  /// 如果尝试写入buffer失败，从空buffer队列中取出一块新的buffer
-  /// 往full buffer队列中放入当前的buffer
-  /// 如果空buffer队列空了，很有可能程序出现了问题，导致在某个地方产生日志
-  /// 对于这部分日志我们可以直接扔掉他们
+  // en:
+  // if try to append to buffer failed, get one from empty buffer queue
+  // push full buffer to full buffer queue
+  // if empty buffer queue is empty, it probably has some wrongs
+  // and produce Log in some the same places
+  // we just throw these Log
+  // zh:
+  // 如果尝试写入buffer失败，从空buffer队列中取出一块新的buffer
+  // 往full buffer队列中放入当前的buffer
+  // 如果空buffer队列空了，很有可能程序出现了问题，导致在某个地方产生日志
+  // 对于这部分日志我们可以直接扔掉他们
   if (!sp_curr_buffer_->Append(log_line.c_str(), log_line.length())) {
     full_buffers_.push(sp_curr_buffer_);
     semaphore_.Signal();
-    /// en: after push a new full buffer, should reset the buffer timer \n
-    /// zh: 在放入一块新的full buffer后，要重置buffer的计时器
+    // en: after push a new full buffer, should reset the buffer timer
+    // zh: 在放入一块新的full buffer后，要重置buffer的计时器
     buffer_timer_.Reset();
 
     if (empty_buffers_.empty()) {
@@ -281,8 +281,8 @@ void AsyncLog4Q::set_level(const AsyncLog4Q::Level &level) noexcept {
 }
 
 void AsyncLog4Q::UpdateFileName() noexcept {
-  /// log_file_name format: QWebSever.${date}-${time}.${pid}.Log \n
-  /// log_file_name example: QWebServer.20220930-202826.10612.Log
+  // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
+  // log_file_name example: QWebServer.20220930-202826.10612.Log
   log_file_name_ = "QWebServer." +
       AsyncLog4Q::TimeStamp::get_date() +
       "-" +

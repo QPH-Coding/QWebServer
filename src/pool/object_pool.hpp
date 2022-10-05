@@ -25,10 +25,10 @@ class Object {
 template<typename T>
 class ObjectPool {
  public:
-  using init_func = std::function<void(T &)>;
-  using destruct_func = std::function<void(T &)>;
+//  using init_func = std::function<void(T &)>;
+//  using destruct_func = std::function<void(T &)>;
   explicit ObjectPool(int init_num);
-  explicit ObjectPool(int init_num, init_func &init_function, destruct_func &destruct_function);
+  explicit ObjectPool(int init_num, std::function<void(T &)> init_function, std::function<void(T &)> destruct_function);
   ~ObjectPool();
   Object<T> &get_one();
   void give_back_one(Object<T> object);
@@ -36,8 +36,8 @@ class ObjectPool {
   std::mutex mutex_;
   std::vector<Object<T> *> objects_;
   std::queue<int> free_objects_;
-  init_func init_func_ = nullptr;
-  destruct_func destruct_func_ = nullptr;
+  std::function<void(T &)> init_func_ = nullptr;
+  std::function<void(T &)> destruct_func_ = nullptr;
 };
 
 template<typename T>
@@ -65,8 +65,8 @@ ObjectPool<T>::ObjectPool(int init_num) {
 
 template<typename T>
 ObjectPool<T>::ObjectPool(int init_num,
-                          ObjectPool::init_func &init_function,
-                          ObjectPool::destruct_func &destruct_function)
+                          std::function<void(T &)> init_function,
+                          std::function<void(T &)> destruct_function)
     :init_func_(init_function),
      destruct_func_(destruct_function) {
   for (int i = 0; i < init_num; ++i) {

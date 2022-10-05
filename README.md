@@ -51,6 +51,18 @@ You can use this command to install `MySql-connector-c++` in Ubuntu 20.04:
 ```shell
 $ sudo apt-get install mysql-client mysql-server libmysql++-dev 
 ```
+
+```sql
+CREATE TABLE `user` (
+    `id` INT unsigned  NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(64) NOT NULL,
+    `salt` CHAR(6) NOT NULL,
+    `sha256` CHAR(64) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `key_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```
+
 ## TODO List
 
 - HTTP 解析

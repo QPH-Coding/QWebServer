@@ -7,10 +7,10 @@
 
 void QWebServer::EventLoop() {
   listen_socket_fd_ = net::TcpSocket();
-  // TODO temp port: 8090
+  // TODO temp port: 8090, use Config
   sockaddr_in server_address = net::SocketAddress4(AF_INET, 8090, INADDR_ANY);
-  /// \brief en: reuse port, easy to restart the server \n
-  /// zh: 端口复用，能够方便重启服务器
+  // en: reuse port, easy to restart the server
+  // zh: 端口复用，能够方便重启服务器
   net::SetReuseAddress(listen_socket_fd_);
   net::Bind(listen_socket_fd_, server_address);
   net::Listen(listen_socket_fd_, 5);
@@ -27,7 +27,6 @@ void QWebServer::EventLoop() {
           }
           AsyncLog4Q_Info("Accept connection from " + sp_client->get_address_port());
           epoll_listener_.AddReadEvent(sp_client->get_fd());
-          time_wheel_.add(sp_client->get_fd());
           fd_ip_map_[sp_client->get_fd()] = sp_client->get_address_port();
           AsyncLog4Q_Info(sp_client->get_address_port() + " use fd: " + std::to_string(sp_client->get_fd()));
         }
@@ -61,7 +60,16 @@ void QWebServer::SubReactorReadFunc(std::shared_ptr<Client> &sp_client, void *ar
   auto p_server = static_cast<QWebServer *>(arg);
   std::string raw_request;
   if (file::ReadNonblockFile(sp_client->get_fd(), raw_request)) {
+    // TEST
+    std::cout << raw_request << std::endl;
     std::shared_ptr<HttpConnection> sp_http_connection(new HttpConnection(*sp_client, raw_request));
+    // en: if request head 'Connection' is not keep-alive, just close the fd
+    // zh: 如果请求头中的'Connection'不是keep-alive，读取完所有东西后可以直接关闭fd
+    if (sp_http_connection->get_http_request().get_head(HttpRequestHead::Connection) == "keep-alive") {
+      p_server->time_wheel_.add(sp_client->get_fd());
+    } else {
+      close(sp_client->get_fd());
+    }
     p_server->service_.Enqueue(sp_http_connection);
   }
 }
@@ -79,7 +87,9 @@ void QWebServer::SubReactorWriteFunc(std::shared_ptr<HttpResponse> &sp_http_resp
 
 void QWebServer::ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection, void *arg) {
   auto p_server = static_cast<QWebServer *>(arg);
-  std::shared_ptr<HttpResponse> sp_http_response = HttpService::DealWithRequest(sp_http_connection->get_http_request());
+  // TODO
+  std::shared_ptr<HttpResponse> sp_http_response = HttpService::DealWithRequest(sp_http_connection->get_http_request(),
+                                                                                nullptr);
   sp_http_response->set_client_socket_fd(sp_http_connection->get_client().get_fd());
   p_server->sub_reactor_write_.Enqueue(sp_http_response);
   std::cout << sp_http_response->to_string() << std::endl;

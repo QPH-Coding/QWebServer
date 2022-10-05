@@ -34,7 +34,10 @@ std::string HttpRequest::get_request_body() const noexcept {
 }
 
 std::string HttpRequest::get_head(const http_request_head &head_key) const noexcept {
-  return request_head_[head_key].asString();
+  if (request_head_.count(head_key) == 1) {
+    return request_head_.find(head_key)->second;
+  }
+  return "";
 }
 
 void HttpRequest::Analyze(const std::string &raw_request_) noexcept {

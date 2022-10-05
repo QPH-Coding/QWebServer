@@ -5,7 +5,7 @@
     "num": 20,
     "host": "localhost",
     "port": 3306,
-    "database": "qwebserver",
+    "database": "server",
     "username": "root",
     "password": "123456"
   }

@@ -26,35 +26,35 @@ const static std::string kESPassword = "";
 
 class Config {
  public:
-  static std::string LogDirPath();
+//  static std::string LogDirPath();
 
   static int Port();
 
   static int MySqlInitNum();
-  static const char *MySqlHost();
+  static std::string MySqlHost();
   static unsigned int MySqlPort();
-  static const char *MySqlDatabase();
-  static const char *MySqlUsername();
-  static const char *MySqlPassword();
+  static std::string MySqlDatabase();
+  static std::string MySqlUsername();
+  static std::string MySqlPassword();
  private:
   Config();
 
   static Config instance_;
-  static const std::string config_path_;
-  static const std::string log_dir_path_;
+  const std::string config_path_ = "/server/config/config.json";
+  const std::string log_dir_path_ = "/server/log";
 
-  int port_;
+  int server_port_;
 
   int my_sql_init_num_;
-  const char *my_sql_host_;
+  std::string my_sql_host_;
   unsigned int my_sql_port_;
-  const char *my_sql_database_;
-  const char *my_sql_username_;
-  const char *my_sql_password_;
+  std::string my_sql_database_;
+  std::string my_sql_username_;
+  std::string my_sql_password_;
 
-  std::string elastic_search_url_;
-  std::string elastic_search_username_;
-  std::string elastic_search_password_;
+//  std::string elastic_search_url_;
+//  std::string elastic_search_username_;
+//  std::string elastic_search_password_;
 };
 
 #endif //QWEBSERVER_SRC_CONFIG_CONFIG_H_

@@ -10,6 +10,7 @@
 #include "../config/config.h"
 #include "../pool/object_pool.hpp"
 
+
 class MySqlConnectionRaii {
  public:
   explicit MySqlConnectionRaii(ObjectPool<mysqlpp::Connection> *mysql_conn_pool) noexcept;

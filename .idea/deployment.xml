@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="vm-qwebserver" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="vm-qwebserver" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="vm-qwebserver">
         <serverdata>
@@ -15,11 +16,7 @@
             <mapping deploy="/home/qph/QWebServer" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/build/debug" />
             <excludedPath local="true" path="$PROJECT_DIR$/build/Realease" />
-            <excludedPath local="true" path="$PROJECT_DIR$/build/release" />
-            <excludedPath local="true" path="$PROJECT_DIR$/build/realease" />
-            <excludedPath local="true" path="$PROJECT_DIR$/vm-build/debug" />
             <excludedPath local="true" path="$PROJECT_DIR$/build/Debug" />
           </excludedPaths>
         </serverdata>

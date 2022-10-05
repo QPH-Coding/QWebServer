@@ -59,9 +59,28 @@ std::string HttpResponse::to_string() const noexcept {
   return http_response_string;
 }
 void HttpResponse::add_file(const std::string &file_path) noexcept {
-  FILE *file_fd = fopen(file_path.c_str(), "r");
-  std::string response_body = file::ReadNonblockFile(file_fd);
-  set_response_body(response_body);
+//  FILE *file_fd = fopen(file_path.c_str(), "r");
+//  std::string response_body = file::ReadNonblockFile(file_fd);
+//  set_response_body(response_body);
+
+  int tmp_fd = open(file_path.c_str(), O_RDONLY);
+  if (tmp_fd < 0) {
+    set_status(HttpResponseStatus::NotFound);
+    return;
+  }
+
+  long file_size = file::GetFileSize(file_path.c_str());
+  int *mm_file = (int *) mmap(nullptr, file_size, PROT_READ, MAP_PRIVATE, tmp_fd, 0);
+  if (*mm_file == -1) {
+    AsyncLog4Q_Warn("fd: " + std::to_string(get_client_socket_fd()) + " mmap " + file_path + " failed.");
+  }
+  set_response_body((char *) mm_file);
+  close(tmp_fd);
+  int ret = munmap(mm_file, file_size);
+  if (ret == -1) {
+    AsyncLog4Q_Warn("fd: " + std::to_string(get_client_socket_fd()) + " mun-map " + file_path + " failed.");
+  }
+
   // en: add content-type header by suffix automatically
   // zh: 自动添加content-type头根据文件后缀
   std::regex dot_regex("\\.[a-z]+");
@@ -71,7 +90,7 @@ void HttpResponse::add_file(const std::string &file_path) noexcept {
   if (content_type.count(suffix_str) == 1) {
     add_head(HttpResponseHead::ContentType, content_type.find(suffix_str)->second);
   }
-  add_head(HttpResponseHead::ContentLength, std::to_string(file::GetFileSize(file_path.c_str())));
+  add_head(HttpResponseHead::ContentLength, std::to_string(file_size));
 }
 
 void HttpResponse::set_client_socket_fd(int client_socket_fd) noexcept {
