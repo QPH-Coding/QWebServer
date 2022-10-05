@@ -6,6 +6,8 @@
 
 - 18:38:58: Finish some html. Finish some mysql operation. Add config reading.
 
+- 23:55:43: Finish MySql implements. Now can insert user and check user password.
+
 The day after:
 
 - Same as yesterday
