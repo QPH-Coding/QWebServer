@@ -21,8 +21,18 @@ bool CheckUserPassword(const std::string &user,
                        const std::string &password,
                        MySqlConnectionRaii &my_sql_connection_raii);
 
-bool AddUser(const std::string &user, const std::string &password, MySqlConnectionRaii &my_sql_connection_raii);
+bool AddUser(const std::string &user,
+             const std::string &password,
+             MySqlConnectionRaii &my_sql_connection_raii);
 
+bool ChangePassword(const std::string &user,
+                    const std::string &old_password,
+                    const std::string &new_password,
+                    MySqlConnectionRaii &my_sql_connection_raii);
+
+bool DeleteUser(const std::string &user,
+                const std::string &password,
+                MySqlConnectionRaii &my_sql_connection_raii);
 }
 
 #endif //QWEBSERVER_SRC_DATABASE_MYSQL_DEAL_H_

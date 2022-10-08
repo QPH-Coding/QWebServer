@@ -288,8 +288,8 @@ void AsyncLog4Q::UpdateFileName() noexcept {
       "-" +
       AsyncLog4Q::TimeStamp::get_time() +
       "." +
-      std::to_string(config::kPid) + ".Log";
-  log_file_full_path_ = config::kLogPath + "/" + log_file_name_;
+      std::to_string(Config::Pid()) + ".Log";
+  log_file_full_path_ = Config::LogDirPath() + "/" + log_file_name_;
 }
 AsyncLog4Q::Level AsyncLog4Q::get_level() noexcept {
   return instance_.level_;

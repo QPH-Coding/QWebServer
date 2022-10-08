@@ -27,6 +27,7 @@ const http_response_head ContentType = "Content-Type";
 const http_response_head Date = "Date";
 const http_response_head ETag = "ETag";
 const http_response_head Expires = "Expires";
+const http_response_head KeepAlive = "Keep-Alive";
 const http_response_head LastModified = "Last-Modified";
 const http_response_head Link = "Link";
 const http_response_head Location = "Location";

@@ -7,8 +7,7 @@
 
 void QWebServer::EventLoop() {
   listen_socket_fd_ = net::TcpSocket();
-  // TODO temp port: 8090, use Config
-  sockaddr_in server_address = net::SocketAddress4(AF_INET, 8090, INADDR_ANY);
+  sockaddr_in server_address = net::SocketAddress4(AF_INET, Config::Port(), INADDR_ANY);
   // en: reuse port, easy to restart the server
   // zh: 端口复用，能够方便重启服务器
   net::SetReuseAddress(listen_socket_fd_);
@@ -39,9 +38,10 @@ void QWebServer::EventLoop() {
 }
 QWebServer::QWebServer() noexcept
     : epoll_listener_(EpollListener(1000)),
-      sub_reactor_read_(2, 1000, SubReactorReadFunc, this),
-      sub_reactor_write_(2, 1000, SubReactorWriteFunc, this),
-      service_(4, 1000, ServiceFunc, this) {
+      sub_reactor_read_(Config::SubReactorNum(), 1000, SubReactorReadFunc, this),
+      sub_reactor_write_(Config::SubReactorNum(), 1000, SubReactorWriteFunc, this),
+      service_(Config::ThreadNum(), 1000, ServiceFunc, this),
+      mysql_conn_pool_(Config::MySqlInitNum(), mysql_deal::ConstructConnection, mysql_deal::DestructConnection) {
   sub_reactor_read_.Start();
   AsyncLog4Q_Info("SubReadReactor init successfully.");
   service_.Start();
@@ -78,7 +78,8 @@ void QWebServer::SubReactorWriteFunc(std::shared_ptr<HttpResponse> &sp_http_resp
   auto p_server = static_cast<QWebServer *>(arg);
   if (file::WriteSocket(
       sp_http_response->get_client_socket_fd(),
-      sp_http_response->to_string())) {
+      sp_http_response->get_response_header(),
+      sp_http_response->get_response_body())) {
     AsyncLog4Q_Info("Response " + p_server->fd_ip_map_[sp_http_response->get_client_socket_fd()] + " successfully.");
   } else {
     AsyncLog4Q_Warn("Response " + p_server->fd_ip_map_[sp_http_response->get_client_socket_fd()] + " failed.");
@@ -87,12 +88,12 @@ void QWebServer::SubReactorWriteFunc(std::shared_ptr<HttpResponse> &sp_http_resp
 
 void QWebServer::ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection, void *arg) {
   auto p_server = static_cast<QWebServer *>(arg);
-  // TODO
-  std::shared_ptr<HttpResponse> sp_http_response = HttpService::DealWithRequest(sp_http_connection->get_http_request(),
-                                                                                nullptr);
+  std::shared_ptr<HttpResponse> sp_http_response = http_service::DealWithRequest(
+      sp_http_connection->get_http_request(), &p_server->mysql_conn_pool_);
   sp_http_response->set_client_socket_fd(sp_http_connection->get_client().get_fd());
   p_server->sub_reactor_write_.Enqueue(sp_http_response);
-  std::cout << sp_http_response->to_string() << std::endl;
+  // TEST
+  std::cout << sp_http_response->get_response_header() << std::endl;
 }
 QWebServer::~QWebServer() noexcept {
   close(listen_socket_fd_);

@@ -62,6 +62,30 @@ bool mysql_deal::AddUser(const std::string &user,
   std::string sha256 = utils::SHA256(password + salt);
   std::string sql = "INSERT INTO user(name, salt, sha256) VALUES";
   sql += "('" + user + "', '" + salt + "', '" + sha256 + "')";
-  mysqlpp::Query query = my_sql_connection_raii.get_conn().query();
-  return query.exec(sql);
+  return my_sql_connection_raii.get_conn().query().exec(sql);
+}
+
+bool mysql_deal::ChangePassword(const std::string &user,
+                                const std::string &old_password,
+                                const std::string &new_password,
+                                MySqlConnectionRaii &my_sql_connection_raii) {
+  if (!CheckUserPassword(user, old_password, my_sql_connection_raii)) {
+    return false;
+  }
+  std::string salt = utils::MakeSalt();
+  std::string sha256 = utils::SHA256(new_password + salt);
+  std::string sql = "UPDATE user SET salt='";
+  sql += salt + "', sha256='" + sha256 + "' WHERE name='" + user + "'";
+  return my_sql_connection_raii.get_conn().query().exec(sql);
+}
+
+bool mysql_deal::DeleteUser(const std::string &user,
+                            const std::string &password,
+                            MySqlConnectionRaii &my_sql_connection_raii) {
+  if (!CheckUserPassword(user, password, my_sql_connection_raii)) {
+    return false;
+  }
+  std::string sql = "DELETE FROM user WHERE name='";
+  sql += user + "'";
+  return my_sql_connection_raii.get_conn().query().exec(sql);
 }

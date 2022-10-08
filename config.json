@@ -1,6 +1,8 @@
 {
   "port": 8090,
-  "thread_num": 20,
+  "sub_reactor_num": 4,
+  "thread_num": 4,
+  "root": "/server/root",
   "mysql": {
     "num": 20,
     "host": "localhost",

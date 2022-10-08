@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>Login</title>
 </head>
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-</script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script>
     function login() {
         let json = {}
-        json["user"] = document.getElementById("user").value;
+        let user = document.getElementById("user").value;
+        json["user"] = user;
         json["password"] = document.getElementById("password").value;
         if (json["user"] === "" || json["password"] === "") {
             alert("'User' and 'Password' can not be empty!");
+            return;
         }
         json = JSON.stringify(json);
         $.ajax({
@@ -22,20 +23,50 @@
             dataType: "json",
             data: json,
             success: function (data) {
-                console.log(data);
                 data = JSON.stringify(data);
+                data = JSON.parse(data);
+                if (data["status"] === true) {
+                    alert("Login success. Welcome!");
+                    localStorage.setItem("user", user);
+                    location.href = "/home.html";
+                } else {
+                    alert("Login failed. Please check your username and password!");
+                }
             },
             error: function () {
-                alert("Server response failed.")
+                alert("Server response failed.");
             }
         })
     }
+
+    function switch_register() {
+        location.href = "/register.html";
+    }
+
+    $(document).keyup(function (e) {
+        let key = e.which;
+        if (key === 13) {
+            login();
+        }
+    });
 </script>
 <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    .footer {
+        text-align: center;
+        position: absolute;
+        bottom: 175px;
+        left: 0;
+        right: 0;
+    }
+
     .login-box {
-        margin: auto;
-        width: 275px;
-        height: 200px;
+        width: 350px;
+        height: 225px;
         text-align: center;
         background: linear-gradient(blue, blue) left top,
         linear-gradient(blue, blue) left top,
@@ -52,38 +83,68 @@
         left: 0;
         right: 0;
         bottom: 0;
+        margin: auto;
+    }
+
+    .title-split {
+        clear: left;
+        float: left;
+        width: 60px;
+        height: 35px;
+    }
+
+    .title {
+        float: left;
+        width: 75px;
+        height: 35px;
+        text-align: left;
+    }
+
+    .input {
+        float: left;
+        width: 175px;
+        height: 35px;
+        text-align: left;
+    }
+
+    .button {
+        float: left;
+        width: 70px;
+        height: 20px;
     }
 </style>
 <body>
 <div class="login-box">
-    <header class="login_header">
+    <header class="login-header">
         <h2>Login</h2>
     </header>
-    <div class="login_form">
-        <div style="float: left;width: 20px;height: 35px;"></div>
-        <div style="float: left;width: 80px;height: 35px;text-align: left">
+    <div class="login-form">
+        <div class="title-split"></div>
+        <div class="title">
             <label for="user">User</label>
         </div>
-        <div style="float: left;width: 175px;height: 35px;text-align: left">
+        <div class="input">
             <input id="user" name="user" placeholder="user">
         </div>
-        <div style="clear: left;float: left;width: 20px;height: 35px;"></div>
-        <div style="float: left;width: 80px;height: 35px;text-align: left">
+
+        <div class="title-split"></div>
+        <div class="title">
             <label for="password">Password</label>
         </div>
-        <div style="float: left;width: 175px;height: 35px;text-align: left">
+        <div class="input">
             <input type="password" id="password" name="password" placeholder="password">
         </div>
+
         <div style="clear: left;width: 275px;height: 10px"></div>
-        <div style="float: left;width: 50px;height: 25px;"></div>
-        <div>
-            <button onclick="login()" style="float: left;width: 70px;height: 20px;">Login</button>
-        </div>
+        <div style="float: left;width: 90px;height: 25px;"></div>
+        <button onclick="login()" class="button">Login</button>
         <div style="float: left;width: 50px;height: 20px;"></div>
-        <form method="get" action="/register">
-            <button type="submit" style="float: left;width: 70px;height: 20px;">Register</button>
-        </form>
+        <button onclick="switch_register()" class="button">Register</button>
     </div>
 </div>
+<div class="footer">
+    <a href="http://qph-coding.com">个人博客: http://qph-coding.com</a>
+</div>
+
 </body>
 </html>

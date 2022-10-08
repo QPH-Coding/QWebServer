@@ -6,8 +6,6 @@
 #include "config.h"
 
 Config Config::instance_ = Config();
-//const std::string Config::config_path_ = "/server/config/config.json";
-//const std::string Config::log_dir_path_ = "/server/log";
 
 Config::Config() {
   std::ifstream ifs;
@@ -21,7 +19,11 @@ Config::Config() {
   Json::Value config_json;
   reader.parse(ifs, config_json, false);
 
+  pid_ = getpid();
+  server_root_ = config_json["root"].asString();
   server_port_ = config_json["port"].asInt();
+  thread_num_ = config_json["thread_num"].asInt();
+  sub_reactor_num_ = config_json["sub_reactor_num"].asInt();
 
   my_sql_init_num_ = config_json["mysql"]["num"].asInt();
   my_sql_host_ = config_json["mysql"]["host"].asString();
@@ -31,24 +33,39 @@ Config::Config() {
   my_sql_password_ = config_json["mysql"]["password"].asString();
   ifs.close();
 }
-int Config::MySqlInitNum() {
+const int &Config::MySqlInitNum() {
   return instance_.my_sql_init_num_;
 }
-std::string Config::MySqlHost() {
+const std::string &Config::MySqlHost() {
   return instance_.my_sql_host_;
 }
-unsigned int Config::MySqlPort() {
+const unsigned int &Config::MySqlPort() {
   return instance_.my_sql_port_;
 }
-std::string Config::MySqlDatabase() {
+const std::string &Config::MySqlDatabase() {
   return instance_.my_sql_database_;
 }
-std::string Config::MySqlUsername() {
+const std::string &Config::MySqlUsername() {
   return instance_.my_sql_username_;
 }
-std::string Config::MySqlPassword() {
+const std::string &Config::MySqlPassword() {
   return instance_.my_sql_password_;
 }
-int Config::Port() {
+const int &Config::Port() {
   return instance_.server_port_;
+}
+const std::string &Config::Root() {
+  return instance_.server_root_;
+}
+const int &Config::ThreadNum() {
+  return instance_.thread_num_;
+}
+const int &Config::SubReactorNum() {
+  return instance_.sub_reactor_num_;
+}
+const int &Config::Pid() {
+  return instance_.pid_;
+}
+const std::string &Config::LogDirPath() {
+  return instance_.log_dir_path_;
 }

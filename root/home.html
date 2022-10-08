@@ -4,7 +4,109 @@
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+    function show_hide_image() {
+        document.getElementById("img").hidden = !document.getElementById("img").hidden;
+        if (document.getElementById("img").hidden === false) {
+            document.getElementById("video").hidden = true;
+        }
+    }
+
+    function show_hide_video() {
+        document.getElementById("video").hidden = !document.getElementById("video").hidden;
+        if (document.getElementById("video").hidden === false) {
+            document.getElementById("img").hidden = true;
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem("user");
+        location.href = "/index.html";
+    }
+
+    function change_password() {
+        location.href = "/change_password.html";
+    }
+
+    function delete_user() {
+        let user = localStorage.getItem("user");
+        if (user === null || user === "") {
+            alert("No user login.");
+            return;
+        }
+        let password = prompt("Please enter the password of the '" + user + "'");
+        if (password !== null && password !== "") {
+            let json = {};
+            json["user"] = user;
+            json["password"] = password;
+            json = JSON.stringify(json);
+            $.ajax({
+                type: "DELETE",
+                url: "/delete",
+                contentType: "application/json",
+                dataType: "json",
+                data: json,
+                success: function (data) {
+                    data = JSON.stringify(data);
+                    data = JSON.parse(data);
+                    if (data["status"] === true) {
+                        alert("Delete user success. It will jump to login page.");
+                        localStorage.removeItem("user");
+                        location.href = "/index.html";
+                    } else {
+                        alert("Delete user failed. The user not exist or the password not correct.");
+                    }
+                },
+                error: function () {
+                    alert("Server response failed.");
+                }
+            })
+        }
+    }
+</script>
+<style>
+    .main {
+        height: 500px;
+        text-align: center;
+    }
+
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 150px);
+        grid-template-rows: repeat(1, 50px);
+        grid-gap: 50px;
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+        align-content: center;
+        width: 100%;
+        height: 100px;
+        background: #f3f3f3;
+    }
+
+    .button {
+        width: 150px;
+        height: 25px;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+    }
+</style>
 <body>
+<div class="main" id="content">
+    <img src="QWebServer.png" id="img" height="450px" alt="" hidden>
+    <video src="video.mp4" id="video" height="500px" controls hidden></video>
+</div>
+<div style="text-align: center;left: 0;right: 0;position: absolute">
+    <div class="button-grid">
+        <button class="button" onclick="show_hide_image()">Show/Hide Image</button>
+        <button class="button" onclick="show_hide_video()">Show/Hide Video</button>
+        <button class="button" onclick="logout()">Logout</button>
+        <button class="button" onclick="change_password()">Change Password</button>
+        <button class="button" onclick="delete_user()">Delete User</button>
+    </div>
+</div>
 
 </body>
 </html>

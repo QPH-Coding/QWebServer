@@ -2,6 +2,24 @@
 
 ## Log
 
+## 2022.10.08
+
+- 17:19:50: Now the server almost complete.
+
+The day after:
+
+- Use `ElasticSearch`
+
+- Deal with some signal, such as `SIGPIPE`
+
+## 2022.10.07
+
+- 15:34:16: Now the server support request head `Range` and can show the video.
+
+## 2022.10.06
+
+- 15:31:10: Finish some html, now can show the image.
+
 ## 2022.10.05
 
 - 18:38:58: Finish some html. Finish some mysql operation. Add config reading.
@@ -163,3 +181,7 @@ Future arrangement:
   Solution: I use `stop()` and `start()` to do reset simply, but it can not work. After read `timerfd_settime()`
   carefully, I find I can use this function to reset the Timer instead of using `Stop()` and `Start()`. And now I think
   the Timer member function's name `Exit()`  more appropriate than `Stop()`
+
+- Question: Can not send image by HTTP, web error is `ERR_CONTENT_LENGTH_MISMATCH`.
+  
+  Solution: First, I think the appearance of this problem because of my `write socket`. However, it has nothing to do with the problem. Finally, I find that image can be read with `char`, but it not mean that it can be cast to `std::string`. So I split the response's head and body, use `std::vector<char>` to storage the image data.

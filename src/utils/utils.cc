@@ -6,7 +6,6 @@
 #include "utils.h"
 
 std::string utils::MakeSalt() {
-//  srand((unsigned) time(nullptr));
   std::default_random_engine e(time(nullptr));
   std::uniform_int_distribution<unsigned> u(0, random_character.length());
   std::string salt;

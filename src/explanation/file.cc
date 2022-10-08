@@ -27,14 +27,38 @@ std::string file::ReadNonblockFile(FILE *fd) {
   return res_str;
 }
 
-bool file::WriteSocket(int socket_fd, const std::string &wait_write_str) {
-  const char *buffer = wait_write_str.c_str();
-  int have_write = write(socket_fd, buffer, wait_write_str.length());
-  if (have_write == wait_write_str.length()) {
-    return true;
-  } else {
+bool file::WriteSocket(int socket_fd,
+                       const std::string &response_header,
+                       const std::vector<char> &response_body) {
+  const char *buffer = response_header.c_str();
+  ssize_t have_write = write(socket_fd, buffer, response_header.length());
+  if (have_write != response_header.length()) {
     return false;
   }
+  char response_body_char[response_body.size()];
+  for (int i = 0; i < response_body.size(); ++i) {
+    response_body_char[i] = response_body[i];
+  }
+  size_t write_index = 0, rest_size = response_body.size();
+  EpollListener epoll_listener(1);
+  epoll_listener.AddWriteEvent(socket_fd);
+  while (rest_size > 0) {
+    std::vector<epoll_event> epoll_events = epoll_listener.GetEpollReadyEvents();
+    if (epoll_events[0].data.fd == socket_fd && epoll_events[0].events & EPOLLOUT) {
+      have_write = write(socket_fd, response_body_char + write_index, rest_size);
+      if (have_write <= 0) {
+        if (errno == EWOULDBLOCK || errno == EAGAIN) {
+          have_write = 0;
+        } else {
+          return false;
+        }
+      } else {
+        write_index += have_write;
+        rest_size -= have_write;
+      }
+    }
+  }
+  return true;
 }
 
 bool file::ReadNonblockFile(int fd, std::string &wait_read) {

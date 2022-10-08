@@ -4,7 +4,130 @@
     <meta charset="UTF-8">
     <title>Register</title>
 </head>
-<body>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+    function register() {
+        let json = {}
+        json["user"] = document.getElementById("user").value;
+        json["password"] = document.getElementById("password").value;
+        json["confirm"] = document.getElementById("confirm").value;
+        if (json["user"] === "" || json["password"] === "" || json["confirm"] === "") {
+            alert("'User' and 'Password' can not be empty!");
+            return;
+        } else if (json["password"] !== json["confirm"]) {
+            alert("The password entered two times are not the same!");
+            return;
+        }
+        json = JSON.stringify(json);
+        $.ajax({
+            type: "POST",
+            url: "/register",
+            contentType: "application/json",
+            dataType: "json",
+            data: json,
+            success: function (data) {
+                data = JSON.stringify(data);
+                data = JSON.parse(data);
+                if (data["status"] === true) {
+                    alert("Register success. Please return and login.");
+                    location.href = "/index.html";
+                } else {
+                    alert("Register failed. The username already exists.");
+                }
+            },
+            error: function () {
+                alert("Server response failed.")
+            }
+        })
+    }
 
+    function switch_index() {
+        location.href = "/index.html";
+    }
+</script>
+<style>
+    .register-box {
+        margin: auto;
+        width: 350px;
+        height: 225px;
+        text-align: center;
+        background: linear-gradient(blue, blue) left top,
+        linear-gradient(blue, blue) left top,
+        linear-gradient(blue, blue) right top,
+        linear-gradient(blue, blue) right top,
+        linear-gradient(blue, blue) left bottom,
+        linear-gradient(blue, blue) left bottom,
+        linear-gradient(blue, blue) right bottom,
+        linear-gradient(blue, blue) right bottom;
+        background-repeat: no-repeat;
+        background-size: 1px 24px, 24px 1px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .title-split {
+        clear: left;
+        float: left;
+        width: 60px;
+        height: 35px;
+    }
+
+    .title {
+        float: left;
+        width: 75px;
+        height: 35px;
+        text-align: left;
+    }
+
+    .input {
+        float: left;
+        width: 175px;
+        height: 35px;
+        text-align: left;
+    }
+
+    .button {
+        float: left;
+        width: 70px;
+        height: 20px;
+    }
+</style>
+<body>
+<div class="register-box">
+    <header class="register-header">
+        <h2>Register</h2>
+    </header>
+    <div class="register-form">
+        <div class="title-split"></div>
+        <div class="title">
+            <label for="user">User</label>
+        </div>
+        <div class="input">
+            <input id="user" name="user" placeholder="Your username">
+        </div>
+        <div class="title-split"></div>
+        <div class="title">
+            <label for="password">Password</label>
+        </div>
+        <div class="input">
+            <input type="password" id="password" name="password" placeholder="Your password">
+        </div>
+        <div class="title-split"></div>
+        <div class="title">
+            <label for="confirm">Confirm</label>
+        </div>
+        <div class="input">
+            <input type="password" id="confirm" name="confirm" placeholder="Confirm your password">
+        </div>
+        <div style="clear: left;width: 275px;height: 10px"></div>
+        <div style="float: left;width: 90px;height: 25px;"></div>
+        <button onclick="switch_index()" class="button">Return</button>
+        <div style="float: left;width: 50px;height: 20px;"></div>
+        <button onclick="register()" class="button">Register</button>
+    </div>
+</div>
 </body>
 </html>

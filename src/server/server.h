@@ -18,6 +18,7 @@
 #include "../log/async_log4q.h"
 #include "../pool/object_pool.hpp"
 #include "../database/mysql_conn_raii.h"
+#include "../database/mysql_deal.h"
 
 class QWebServer {
  public:
@@ -29,6 +30,7 @@ class QWebServer {
   using client_fd = int;
 
   int listen_socket_fd_;
+  ObjectPool<mysqlpp::Connection> mysql_conn_pool_;
   ThreadPool<Client> sub_reactor_read_; // responsible for reading from socket
   ThreadPool<HttpResponse> sub_reactor_write_; // responsible for writing to socket and send file
   ThreadPool<HttpConnection> service_; // responsible for deal with the http request

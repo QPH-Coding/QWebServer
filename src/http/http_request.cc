@@ -86,11 +86,11 @@ void HttpRequest::Analyze(const std::string &raw_request_) noexcept {
     return;
   }
   std::string method = request_line_it->str();
-  if (method.find("GET")) {
+  if (method == "GET") {
     method_ = Method::GET;
-  } else if (method.find("POST")) {
+  } else if (method == "POST") {
     method_ = Method::POST;
-  } else if (method.find("DELETE")) {
+  } else if (method == "DELETE") {
     method_ = Method::DELETE;
   } else {
     is_effective_ = false;

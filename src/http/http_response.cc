@@ -43,10 +43,24 @@ void HttpResponse::add_head(const http_response_head &key, const std::string &va
   response_head_.emplace_back(key, value);
 }
 
-void HttpResponse::set_response_body(const std::string &response_body) noexcept {
-  response_body_ = response_body;
+void HttpResponse::set_response_body(const char *response_body,
+                                     long whole_file_size,
+                                     long start_index,
+                                     long end_index) noexcept {
+  long index = 0;
+  if (end_index == -1) {
+    response_body_.resize(whole_file_size - start_index);
+    for (long i = start_index; i < whole_file_size; ++i) {
+      response_body_[index++] = response_body[i];
+    }
+  } else {
+    response_body_.resize(end_index - start_index);
+    for (long i = start_index; i < end_index; ++i) {
+      response_body_[index++] = response_body[i];
+    }
+  }
 }
-std::string HttpResponse::to_string() const noexcept {
+std::string HttpResponse::get_response_header() const noexcept {
   std::string http_response_string;
   http_response_string += protocol_version_ + " "
       + std::to_string(status_.first) + " "
@@ -55,27 +69,33 @@ std::string HttpResponse::to_string() const noexcept {
     http_response_string += head.first + ": " + head.second + "\r\n";
   }
   http_response_string += "\r\n";
-  http_response_string += response_body_;
   return http_response_string;
 }
-void HttpResponse::add_file(const std::string &file_path) noexcept {
-//  FILE *file_fd = fopen(file_path.c_str(), "r");
-//  std::string response_body = file::ReadNonblockFile(file_fd);
-//  set_response_body(response_body);
-
-  int tmp_fd = open(file_path.c_str(), O_RDONLY);
-  if (tmp_fd < 0) {
+bool HttpResponse::add_file(const std::string &file_path, long start_index, long end_index) noexcept {
+  int file_fd = open(file_path.c_str(), O_RDONLY);
+  if (file_fd < 0) {
     set_status(HttpResponseStatus::NotFound);
-    return;
+    return false;
   }
 
-  long file_size = file::GetFileSize(file_path.c_str());
-  int *mm_file = (int *) mmap(nullptr, file_size, PROT_READ, MAP_PRIVATE, tmp_fd, 0);
+  std::string range;
+  long file_size, whole_file_size;
+  whole_file_size = file::GetFileSize(file_path.c_str());
+  if (end_index == -1 && start_index == 0) {
+    file_size = whole_file_size;
+  } else if (start_index != 0 && end_index == -1) {
+    file_size = whole_file_size - start_index;
+    range += std::to_string(start_index) + "-" + std::to_string(whole_file_size);
+  } else {
+    file_size = end_index - start_index;
+    range += std::to_string(start_index) + "-" + std::to_string(end_index);
+  }
+  int *mm_file = (int *) mmap(nullptr, (size_t) whole_file_size, PROT_READ, MAP_PRIVATE, file_fd, 0);
   if (*mm_file == -1) {
     AsyncLog4Q_Warn("fd: " + std::to_string(get_client_socket_fd()) + " mmap " + file_path + " failed.");
   }
-  set_response_body((char *) mm_file);
-  close(tmp_fd);
+  set_response_body((char *) mm_file, whole_file_size, start_index, end_index);
+  close(file_fd);
   int ret = munmap(mm_file, file_size);
   if (ret == -1) {
     AsyncLog4Q_Warn("fd: " + std::to_string(get_client_socket_fd()) + " mun-map " + file_path + " failed.");
@@ -83,7 +103,7 @@ void HttpResponse::add_file(const std::string &file_path) noexcept {
 
   // en: add content-type header by suffix automatically
   // zh: 自动添加content-type头根据文件后缀
-  std::regex dot_regex("\\.[a-z]+");
+  std::regex dot_regex("\\.[a-z,A-Z,0-9]+");
   std::smatch suffix;
   std::regex_search(file_path, suffix, dot_regex);
   std::string suffix_str = suffix[suffix.size() - 1];
@@ -91,6 +111,10 @@ void HttpResponse::add_file(const std::string &file_path) noexcept {
     add_head(HttpResponseHead::ContentType, content_type.find(suffix_str)->second);
   }
   add_head(HttpResponseHead::ContentLength, std::to_string(file_size));
+  if (!range.empty()) {
+    add_head(HttpResponseHead::ContentRange, range);
+  }
+  return true;
 }
 
 void HttpResponse::set_client_socket_fd(int client_socket_fd) noexcept {
@@ -98,4 +122,7 @@ void HttpResponse::set_client_socket_fd(int client_socket_fd) noexcept {
 }
 int HttpResponse::get_client_socket_fd() const noexcept {
   return client_socket_fd_;
+}
+std::vector<char> HttpResponse::get_response_body() {
+  return response_body_;
 }
