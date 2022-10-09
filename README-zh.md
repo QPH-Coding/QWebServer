@@ -2,15 +2,17 @@
 
 <img src="docs/assets/QWebServer.png" align="center" alt="HEAD">
 
-## OverView
+## 概述
 
-`QWebServer` is a Linux high performance WebServer written in modern C++. 
+`QWebServer` 是一款使用现代C++编写的高性能Web服务器。
 
-QWebServer refers to the design concept of the `muduo` Net Library.
+`QWebServer`使用了Multi-Reactor事件处理模型及半同步半异步堆并发模型。
+
+为了保持大部分的主要源码为现代C++风格，封装了一些Linux C的函数。
 
 ## Feature
 
-- Multi-Reactor Model
+- Multi-Reactor模型()
 
 - Half Sync / Half Async Heap Model
 
@@ -24,7 +26,7 @@ QWebServer refers to the design concept of the `muduo` Net Library.
 
 - Timer Wheel deal with inactive connection
 
-- Use Regex analyze HTTP Request 
+- Use Regex analyze HTTP Request
 
 ## Development Environment
 

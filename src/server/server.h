@@ -7,6 +7,7 @@
 #define QWEBSERVER_SRC_SERVER_SERVER_H_
 #include <string>
 #include <unistd.h>
+#include <csignal>
 #include <unordered_map>
 #include "../pool/thread_pool.hpp"
 #include "../explanation/net.h"

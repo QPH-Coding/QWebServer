@@ -87,7 +87,8 @@ class AsyncLog4Q {
   std::thread time_stamp_timer_thread_;
   std::thread write_to_file_thread_;
 
-  std::mutex mutex_;
+  std::mutex buffer_mutex_;
+  std::mutex file_mutex_;
   Semaphore semaphore_;
   std::shared_ptr<Buffer> sp_curr_buffer_;
   std::queue<std::shared_ptr<Buffer>> empty_buffers_;

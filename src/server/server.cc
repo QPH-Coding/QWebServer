@@ -42,6 +42,7 @@ QWebServer::QWebServer() noexcept
       sub_reactor_write_(Config::SubReactorNum(), 1000, SubReactorWriteFunc, this),
       service_(Config::ThreadNum(), 1000, ServiceFunc, this),
       mysql_conn_pool_(Config::MySqlInitNum(), mysql_deal::ConstructConnection, mysql_deal::DestructConnection) {
+  signal(SIGPIPE, SIG_IGN);
   sub_reactor_read_.Start();
   AsyncLog4Q_Info("SubReadReactor init successfully.");
   service_.Start();
@@ -60,8 +61,8 @@ void QWebServer::SubReactorReadFunc(std::shared_ptr<Client> &sp_client, void *ar
   auto p_server = static_cast<QWebServer *>(arg);
   std::string raw_request;
   if (file::ReadNonblockFile(sp_client->get_fd(), raw_request)) {
-    // TEST
-    std::cout << raw_request << std::endl;
+    // TEST: output request
+//    std::cout << raw_request << std::endl;
     std::shared_ptr<HttpConnection> sp_http_connection(new HttpConnection(*sp_client, raw_request));
     // en: if request head 'Connection' is not keep-alive, just close the fd
     // zh: 如果请求头中的'Connection'不是keep-alive，读取完所有东西后可以直接关闭fd
@@ -92,8 +93,8 @@ void QWebServer::ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection
       sp_http_connection->get_http_request(), &p_server->mysql_conn_pool_);
   sp_http_response->set_client_socket_fd(sp_http_connection->get_client().get_fd());
   p_server->sub_reactor_write_.Enqueue(sp_http_response);
-  // TEST
-  std::cout << sp_http_response->get_response_header() << std::endl;
+  // TEST: output response
+//  std::cout << sp_http_response->get_response_header() << std::endl;
 }
 QWebServer::~QWebServer() noexcept {
   close(listen_socket_fd_);

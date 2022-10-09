@@ -49,10 +49,6 @@ class Config {
   std::string my_sql_database_;
   std::string my_sql_username_;
   std::string my_sql_password_;
-
-//  std::string elastic_search_url_;
-//  std::string elastic_search_username_;
-//  std::string elastic_search_password_;
 };
 
 #endif //QWEBSERVER_SRC_CONFIG_CONFIG_H_

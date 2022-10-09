@@ -76,7 +76,7 @@ void AsyncLog4Q::TimeStamp::Tick() {
 }
 
 AsyncLog4Q::AsyncLog4Q() noexcept
-    : mutex_(std::mutex()),
+    : buffer_mutex_(std::mutex()),
       semaphore_(Semaphore()),
       buffer_timer_(BufferTimer()),
       time_stamp_timer_(TimeStampTimer()),
@@ -114,7 +114,7 @@ AsyncLog4Q::AsyncLog4Q() noexcept
 AsyncLog4Q::BufferTimer::BufferTimer() noexcept: Timer(3) {}
 
 void AsyncLog4Q::BufferTimer::OnTick() {
-  std::lock_guard<std::mutex> lock(instance_.mutex_);
+  std::lock_guard<std::mutex> lock(instance_.buffer_mutex_);
   instance_.full_buffers_.push(instance_.sp_curr_buffer_);
   instance_.semaphore_.Signal();
   if (instance_.empty_buffers_.empty()) {
@@ -132,12 +132,13 @@ void AsyncLog4Q::WriteBufferToFile() {
     // zh:
     // semaphore_加一说明有一块写满的buffer要去写入文件
     semaphore_.Wait();
+    std::lock_guard<std::mutex> file_lock(file_mutex_);
     FILE *write_file = fopen(log_file_full_path_.c_str(), "a");
     std::shared_ptr<Buffer> sp_write_buffer = full_buffers_.front();
     while (sp_write_buffer->WriteToFd(write_file, sp_write_buffer->size()) > 0) {}
     sp_write_buffer->Reset();
     {
-      std::lock_guard<std::mutex> lock(mutex_);
+      std::lock_guard<std::mutex> buffer_lock(buffer_mutex_);
       empty_buffers_.push(sp_write_buffer);
       full_buffers_.pop();
     }
@@ -161,7 +162,7 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   // 就说明有什么错误发生了，并且在之前已经检测出错误了
   // 在这里保持扔掉日志就可以了
   {
-    std::lock_guard lock(mutex_);
+    std::lock_guard lock(buffer_mutex_);
     if (!sp_curr_buffer_) {
       if (empty_buffers_.empty()) {
         return;
@@ -203,9 +204,9 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
 
   // TEST
   std::cout << log_line << std::endl;
-  // en: while append current buffer, should lock the mutex_
+  // en: while append current buffer, should lock the buffer_mutex_
   // zh: 当往当前的buffer写入东西时，需要加锁
-  std::lock_guard<std::mutex> lock(mutex_);
+  std::lock_guard<std::mutex> lock(buffer_mutex_);
 
   // en:
   // if try to append to buffer failed, get one from empty buffer queue
@@ -281,6 +282,7 @@ void AsyncLog4Q::set_level(const AsyncLog4Q::Level &level) noexcept {
 }
 
 void AsyncLog4Q::UpdateFileName() noexcept {
+  std::lock_guard<std::mutex> lock(file_mutex_);
   // log_file_name format: QWebSever.${date}-${time}.${pid}.Log
   // log_file_name example: QWebServer.20220930-202826.10612.Log
   log_file_name_ = "QWebServer." +
