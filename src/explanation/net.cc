@@ -5,9 +5,6 @@
 
 #include "net.h"
 
-#include <memory>
-#include <utility>
-
 Client::Client(int fd, std::string address_port) noexcept
     : fd_(fd),
       address_port_(std::move(address_port)) {}
@@ -23,16 +20,6 @@ int net::TcpSocket() {
     exit(1);
   }
   AsyncLog4Q_Info("Init tcp socket successfully.");
-  return res;
-}
-
-int net::UdpSocket() {
-  int res = socket(PF_INET, SOCK_DGRAM, 0);
-  if (res == -1) {
-    AsyncLog4Q_Error("Init udp socket failed.");
-    exit(1);
-  }
-  AsyncLog4Q_Info("Init udp socket successfully.");
   return res;
 }
 
@@ -69,18 +56,17 @@ void net::Listen(int socket_fd, int backlog) {
   AsyncLog4Q_Info("Server listen socket successfully.");
 }
 
-std::shared_ptr<Client> net::Accept(const int socket_fd) {
+Client net::Accept(const int socket_fd) {
   sockaddr_in client_address;
   socklen_t client_address_len = sizeof(client_address);
   int fd = accept(socket_fd, (sockaddr *) &client_address, &client_address_len);
   if (fd <= 0) {
-    return nullptr;
+    return {-1, ""};
   }
   char *client_ip;
-//  inet_ntop(AF_INET, &client_address.sin_addr, client_ip, INET_ADDRSTRLEN);
   int client_port = ntohs(client_address.sin_port);
   client_ip = inet_ntoa(client_address.sin_addr);
   std::string client_address_port = client_ip;
   client_address_port += +":" + std::to_string(client_port);
-  return std::make_shared<Client>(fd, client_address_port);
+  return {fd, client_address_port};
 }

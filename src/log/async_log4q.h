@@ -6,6 +6,7 @@
 #ifndef QWEBSERVER_SRC_LOG_ASYNC_LOG4Q_H_
 #define QWEBSERVER_SRC_LOG_ASYNC_LOG4Q_H_
 
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>

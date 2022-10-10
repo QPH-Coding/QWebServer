@@ -3,7 +3,6 @@
 // File: async_log4q.cc
 // License: Apache 2.0
 
-#include <iostream>
 #include "async_log4q.h"
 
 AsyncLog4Q AsyncLog4Q::instance_ = AsyncLog4Q();
@@ -98,9 +97,6 @@ AsyncLog4Q::AsyncLog4Q() noexcept
   AsyncLog4Q::TimeStamp::hour = ltm->tm_hour;
   AsyncLog4Q::TimeStamp::minute = ltm->tm_min;
   AsyncLog4Q::TimeStamp::second = ltm->tm_sec;
-
-  // TODO dir choose can optimize, can write a shell instead it
-  system("mkdir -p /server/log");
   UpdateFileName();
 
   buffer_timer_thread_ = std::thread([&] { buffer_timer_.Start(); });
@@ -173,7 +169,6 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
     }
   }
 
-
   // log_line format: ${date} ${time}.${nanosecond}Z ${level} ${content}
   // log_line example: "20220930 214950.513518Z INFO Hello world"
   // region make Log
@@ -202,8 +197,8 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
   log_line += " " + content + "\n";
   // endregion
 
-  // TEST
-  std::cout << log_line << std::endl;
+  // TEST print the log_line
+//  std::cout << log_line << std::endl;
   // en: while append current buffer, should lock the buffer_mutex_
   // zh: 当往当前的buffer写入东西时，需要加锁
   std::lock_guard<std::mutex> lock(buffer_mutex_);
@@ -225,7 +220,6 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
     // en: after push a new full buffer, should reset the buffer timer
     // zh: 在放入一块新的full buffer后，要重置buffer的计时器
     buffer_timer_.Reset();
-
     if (empty_buffers_.empty()) {
       sp_curr_buffer_ = nullptr;
       return;

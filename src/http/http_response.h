@@ -9,10 +9,10 @@
 #include <string>
 #include <vector>
 #include <regex>
+#include <sys/mman.h>
 #include "http_response_status.h"
 #include "http_response_head.h"
 #include "../explanation/file.h"
-#include <sys/mman.h>
 #include "../log/async_log4q.h"
 
 // TODO this class design can be optimized
@@ -32,11 +32,13 @@ class HttpResponse {
                          long start_index = 0,
                          long end_index = -1) noexcept;
 
-  void set_client_socket_fd(int client_socket_fd) noexcept;
   bool add_file(const std::string &file_path, long start_index = 0, long end_index = -1) noexcept;
-  int get_client_socket_fd() const noexcept;
-  std::string get_response_header() const noexcept;
+  std::vector<char> get_response_header() const noexcept;
+  void set_have_write_head() noexcept;
+  bool is_have_write_head() const noexcept;
   std::vector<char> get_response_body();
+  void append_body_index(long body_index) noexcept;
+  void append_header_index(long header_index) noexcept;
  private:
   // en: response line
   // zh: 响应行
@@ -45,12 +47,12 @@ class HttpResponse {
   // en: response head
   // zh: 响应头
   std::vector<std::pair<http_response_head, std::string>> response_head_;
+  long header_index_ = 0;
+  bool have_write_head_ = false;
   // en: response body
   // zh: 响应实体
   std::vector<char> response_body_;
-
-  int client_socket_fd_;
-  std::string client_ip_port_;
+  long body_index_ = 0;
 };
 
 #endif //QWEBSERVER_SRC_HTTP_HTTP_RESPONSE_H_

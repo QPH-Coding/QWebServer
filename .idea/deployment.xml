@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="vm-qwebserver" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
+  <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
-      <paths name="vm-qwebserver">
+      <paths name="vm (40156014-aacb-4718-bd88-dfa0b026dbb3)">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/qph/QWebServer" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="vm-ubuntu (8fe13d04-add2-4882-8216-7e770ed2147a)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/qph/QWebServer" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/tmp/tmp.zi1A7rK451" local="$PROJECT_DIR$" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/build/Realease" />
+            <excludedPath local="true" path="$PROJECT_DIR$/build/Release" />
             <excludedPath local="true" path="$PROJECT_DIR$/build/Debug" />
           </excludedPaths>
         </serverdata>

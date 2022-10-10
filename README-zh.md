@@ -4,33 +4,31 @@
 
 ## 概述
 
-`QWebServer` 是一款使用现代C++编写的高性能Web服务器。
+`QWebServer` 是一款使用现代C++编写的高性能Web服务器，能够负荷上万的并发量。
 
-`QWebServer`使用了Multi-Reactor事件处理模型及半同步半异步堆并发模型。
+为了保持大部分的源码为现代C++风格，手动封装了一些Linux C的函数。
 
-为了保持大部分的主要源码为现代C++风格，封装了一些Linux C的函数。
-
-## Feature
+## 项目亮点
 
 - Multi-Reactor模型()
 
-- Half Sync / Half Async Heap Model
+- 半同步/半异步堆模型
 
-- Highly reusable Thread Pool and Object Pool
+- 高可用的线程池和对象池
 
-- Highly efficient Async Log System
+- 高效的双缓冲异步日志
 
-- Object Pool manage MySqlConnections
+- 对象池管理MySql连接
 
-- Use RAII get MySqlConnection from Object Pool
+- 使用RAII从对象池获取MySql连接
 
-- Timer Wheel deal with inactive connection
+- 时间轮处理非活跃连接
 
-- Use Regex analyze HTTP Request
+- 使用正则表达式解析HTTP请求
 
-## Development Environment
+## 开发环境
 
-Here is the list of the environment of this project:
+开发此项目时使用的环境(VM-Ware):
 
 - CPU: 12th Gen Intel i7-12700H (4) @ 2.688GHz
 
@@ -38,27 +36,27 @@ Here is the list of the environment of this project:
 
 - Memory: 4 GB
 
-## Dependencies
+## 开发依赖
 
-Before you run this project, please make sure:
+在开始使用此项目前，请确定以下的依赖均已齐全:
 
 - CMake
 
-- g++ 11 (at least support C++20)
+- g++ 11 (至少支持 C++20)
 
 - MySql 5.7 / 8.0
 
-- lib: openssl, mysql++, jsoncpp(included)
+- lib: openssl, mysql++, jsoncpp(已包含)
 
-> Before you compile and run this project, please make sure have installed these libs.
+>  在编译此项目之前，应保证已经配置好以上的依赖库
 
-You can use this command to install `MySql` and `libmysql++` in Ubuntu 20.04:
+你可以使用以下命令去安装 `MySql` 和 `libmysql++` 在 Ubuntu 22.04 中:
 
 ```shell
 $ sudo apt-get install mysql-client mysql-server libmysql++-dev 
 ```
 
-The create table's SQL in mysql is:
+本项目用的MySql建表语句如下:
 
 ```mysql
 CREATE TABLE `user` (
@@ -71,48 +69,48 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-> tips: Make sure you can connect to MySql Server in the host where this project run.
+> 在运行此项目前应该保证在运行项目的主机上能够连接到使用的MySql服务器
 
-## Quick Start
+## 快速开始
 
-1. Use the default config or customize your config in `config.json`. The detailed description of the `config.json` can be found in [config.md]().
+1. 使用默认的配置或在 `config.json`中写入你的配置。有关配置文件  `config.json` 的详细详细说明可见 [config-zh.md](docs/config-zh.md).
 
-2. Run the commands in shell as follows:
+2. 在Shell中输入如下命令:
 
 ```shell
 $ chmod 744 install.sh
 $ sudo ./install.sh $USER
 ```
 
-> tips: You can change the content of the install.sh, but you must fully understand how the config work of this project before you do that.
+> 在确保了解整个项目的配置和运行流程后，可以自行修改install.sh
 
-3. Build the project with `CMake`
+3. 用 `CMake`构建项目
 
 ```shell
 $ cmake --build ./build/Debug --target QWebServer -- -j 6
 ```
 
-4. Run this project and test
+4. 运行这个项目并且进行测试
 
-Run the project in your Linux Server
+在Linux服务器上运行如下命令
 
 ```shell
-# In the project path
+# 在项目的路径中
 $ cd ./build/Debug
-# If you just want to do some tests 
+# 如果进行临时测试 
 $ ./QWebServer
-# If you want to run it for long time
-# Because this project have own AsyncLog, the stdout will only output some error log.
+# 如果想要长时间运行此项目
+# 因为项目中有自己的异步日志记录，所以标准输出只会输出错误信息
 $ nohup ./QWebServer > error.log &
 ```
 
-> tips: Make sure you can ping the Linux Server
+> 确保本地是可以与所运行的Linux服务器是能够Ping通的
 
-Type in `${Linux Server IP}:${port}` on your browser.
+在浏览器中输入 `${Linux Server IP}:${port}` 
 
-If every things is OK, you will see the HTML like the images in the **Screenshot**.
+如果所有事情都顺利的话，你会看到一个HTML页面，可见 **运行截图**部分
 
-## Screenshot
+## 运行截图
 
 - Index/Login Page
 
@@ -130,6 +128,11 @@ If every things is OK, you will see the HTML like the images in the **Screenshot
 
 ![](docs/assets/async-log.png)
 
-- Bench Test
+## 压力测试
 
-TODO
+![](docs/assets/bench.png)
+
+> 使用[WebBench1.5](https://github.com/EZLippi/WebBench)进行测试
+
+## 相关文档
+

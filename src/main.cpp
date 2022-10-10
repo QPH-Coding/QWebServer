@@ -1,18 +1,12 @@
-#include <iostream>
-#include "database/mysql_deal.h"
 #include "server/server.h"
-#include "utils/utils.h"
 
 int main() {
-//  ObjectPool<mysqlpp::Connection> mysql_pool(5, mysql_deal::ConstructConnection, mysql_deal::DestructConnection);
-//  MySqlConnectionRaii my_sql_connection_raii(&mysql_pool);
-//  mysql_deal::IsUserExist("root", my_sql_connection_raii);
-//  mysql_deal::AddUser("user1", "123456", my_sql_connection_raii);
-//  bool flag = mysql_deal::CheckUserPassword("user1", "123456", my_sql_connection_raii);
-//  if (flag) {
-//    std::cout << "right password." << std::endl;
-//  }
+  // TEST BENCH
+//  AsyncLog4Q::set_level(AsyncLog4Q::Level::Warn);
+//  signal(SIGPIPE, [](int signum) { /*AsyncLog4Q_Warn("Receive a SIGPIPE.");*/ });
+
+  signal(SIGPIPE, [](int signum) { AsyncLog4Q_Warn("Receive a SIGPIPE."); });
   QWebServer q_web_server;
-  q_web_server.EventLoop();
+  q_web_server.Start();
   return 0;
 }

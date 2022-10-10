@@ -11,7 +11,6 @@
 #include <queue>
 #include <thread>
 #include <functional>
-
 #include "../base/uncopyable.h"
 #include "../explanation/semaphore.h"
 #include "../log/async_log4q.h"

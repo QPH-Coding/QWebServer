@@ -5,6 +5,7 @@
 
 #ifndef QWEBSERVER_SRC_CONFIG_CONFIG_H_
 #define QWEBSERVER_SRC_CONFIG_CONFIG_H_
+
 #include <string>
 #include <atomic>
 #include <fstream>
@@ -15,21 +16,21 @@ class Config {
  public:
   // en: server config
   // zh: 服务器配置
-   const static int &Pid();
-   const static int &Port();
-   const static int &ThreadNum();
-   const static int &SubReactorNum();
-   const static std::string &Root();
-   const static std::string &LogDirPath();
+  const static int &Pid();
+  const static int &Port();
+  const static int &ThreadNum();
+  const static int &SubReactorNum();
+  const static std::string &Root();
+  const static std::string &LogDirPath();
 
   // en: MySql config
   // zh: MySql配置
-   const static int &MySqlInitNum();
-   const static std::string &MySqlHost();
-   const static unsigned int &MySqlPort();
-   const static std::string &MySqlDatabase();
-   const static std::string &MySqlUsername();
-   const static std::string &MySqlPassword();
+  const static int &MySqlInitNum();
+  const static std::string &MySqlHost();
+  const static unsigned int &MySqlPort();
+  const static std::string &MySqlDatabase();
+  const static std::string &MySqlUsername();
+  const static std::string &MySqlPassword();
  private:
   Config();
 

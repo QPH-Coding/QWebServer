@@ -13,10 +13,6 @@ const std::regex HttpRequest::space_regex_ = std::regex(" ");
 
 const std::regex HttpRequest::colon_regex_ = std::regex(": ");
 
-HttpRequest::HttpRequest(const std::string &raw_request_) noexcept {
-  Analyze(raw_request_);
-}
-
 HttpRequest::Method HttpRequest::get_method() const noexcept {
   return method_;
 }

@@ -60,7 +60,7 @@ void HttpResponse::set_response_body(const char *response_body,
     }
   }
 }
-std::string HttpResponse::get_response_header() const noexcept {
+std::vector<char> HttpResponse::get_response_header() const noexcept {
   std::string http_response_string;
   http_response_string += protocol_version_ + " "
       + std::to_string(status_.first) + " "
@@ -69,7 +69,11 @@ std::string HttpResponse::get_response_header() const noexcept {
     http_response_string += head.first + ": " + head.second + "\r\n";
   }
   http_response_string += "\r\n";
-  return http_response_string;
+  std::vector<char> response_header(http_response_string.size());
+  for (int i = 0; i < http_response_string.size(); ++i) {
+    response_header[i] = http_response_string[i];
+  }
+  return {response_header.begin() + header_index_, response_header.end()};
 }
 bool HttpResponse::add_file(const std::string &file_path, long start_index, long end_index) noexcept {
   int file_fd = open(file_path.c_str(), O_RDONLY);
@@ -92,13 +96,13 @@ bool HttpResponse::add_file(const std::string &file_path, long start_index, long
   }
   int *mm_file = (int *) mmap(nullptr, (size_t) whole_file_size, PROT_READ, MAP_PRIVATE, file_fd, 0);
   if (*mm_file == -1) {
-    AsyncLog4Q_Warn("fd: " + std::to_string(get_client_socket_fd()) + " mmap " + file_path + " failed.");
+    AsyncLog4Q_Warn("mmap " + file_path + " failed.");
   }
   set_response_body((char *) mm_file, whole_file_size, start_index, end_index);
   close(file_fd);
   int ret = munmap(mm_file, file_size);
   if (ret == -1) {
-    AsyncLog4Q_Warn("fd: " + std::to_string(get_client_socket_fd()) + " mun-map " + file_path + " failed.");
+    AsyncLog4Q_Warn("mun-map " + file_path + " failed.");
   }
 
   // en: add content-type header by suffix automatically
@@ -117,12 +121,18 @@ bool HttpResponse::add_file(const std::string &file_path, long start_index, long
   return true;
 }
 
-void HttpResponse::set_client_socket_fd(int client_socket_fd) noexcept {
-  client_socket_fd_ = client_socket_fd;
-}
-int HttpResponse::get_client_socket_fd() const noexcept {
-  return client_socket_fd_;
-}
 std::vector<char> HttpResponse::get_response_body() {
-  return response_body_;
+  return {response_body_.begin() + body_index_, response_body_.end()};
+}
+void HttpResponse::append_body_index(long body_index) noexcept {
+  body_index_ += body_index;
+}
+void HttpResponse::set_have_write_head() noexcept {
+  have_write_head_ = true;
+}
+bool HttpResponse::is_have_write_head() const noexcept {
+  return have_write_head_;
+}
+void HttpResponse::append_header_index(long header_index) noexcept {
+  header_index_ += header_index;
 }

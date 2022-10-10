@@ -5,6 +5,7 @@
 
 #ifndef QWEBSERVER_SRC_UTILS_UTILS_H_
 #define QWEBSERVER_SRC_UTILS_UTILS_H_
+
 #include <openssl/sha.h>
 #include <string>
 #include <random>

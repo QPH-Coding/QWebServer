@@ -22,16 +22,23 @@ void EpollListener::AddReadEvent(int fd) const noexcept {
   file::SetNonblockSocket(fd);
 }
 
-void EpollListener::AddWriteEvent(int fd) noexcept {
+void EpollListener::ModReadToWriteEvent(int fd) noexcept {
   epoll_event event{};
   event.events = EPOLLOUT | EPOLLET;
   event.data.fd = fd;
-  epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, fd, &event);
+  epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, fd, &event);
   file::SetNonblockSocket(fd);
 }
 
-void EpollListener::RemoveEvent(int fd) noexcept {
-  epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, fd, nullptr);
+void EpollListener::RemoveReadEvent(int fd) noexcept {
+  epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, epoll_fd_, nullptr);
+}
+
+void EpollListener::ModWriteToReadEvent(int fd) noexcept {
+  epoll_event event{};
+  event.events = EPOLLIN | EPOLLET;
+  event.data.fd = fd;
+  epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, epoll_fd_, &event);
 }
 
 std::vector<epoll_event> EpollListener::GetEpollReadyEvents() {
@@ -43,3 +50,4 @@ std::vector<epoll_event> EpollListener::GetEpollReadyEvents() {
     return {epoll_events_.get(), epoll_events_.get() + epoll_ready_num};
   }
 }
+

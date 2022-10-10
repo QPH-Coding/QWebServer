@@ -37,11 +37,6 @@ set(log
 set(utils
         src/utils/utils.cc)
 
-set(demo
-        src/demo/epoll_demo.cc
-        src/demo/thread_pool_demo.cc
-        src/demo/async_log_demo.cc)
-
 add_executable(QWebServer src/main.cpp
         ${db}
         ${config}
@@ -50,8 +45,7 @@ add_executable(QWebServer src/main.cpp
         ${log}
         ${server}
         ${http}
-        ${utils}
-        ${demo})
+        ${utils})
 
 # 链接子工程
 target_link_libraries(${PROJECT_NAME} jsoncpp mysqlclient mysqlpp ssl crypto)

@@ -4,6 +4,7 @@
 // License: Apache 2.0
 
 #include "time_wheel.h"
+
 TimeWheel::TimeWheel() noexcept
     : mutex_(std::mutex()),
       close_timer_(CloseTimer()),

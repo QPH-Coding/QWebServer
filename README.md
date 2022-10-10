@@ -4,19 +4,17 @@
 
 ## OverView
 
-`QWebServer` is a Linux high performance WebServer written in modern C++. 
-
-QWebServer refers to the design concept of the `muduo` Net Library.
+`QWebServer` is a Linux high performance WebServer written in modern C++. It can handle tens of thousands of concurrent HTTP Request.
 
 ## Feature
 
 - Multi-Reactor Model
 
-- Half Sync / Half Async Heap Model
+- Half Synchronous / Half Asynchronous Heap Model
 
 - Highly reusable Thread Pool and Object Pool
 
-- Highly efficient Async Log System
+- Highly efficient Double Buffer Asynchronous Log System
 
 - Object Pool manage MySqlConnections
 
@@ -28,7 +26,7 @@ QWebServer refers to the design concept of the `muduo` Net Library.
 
 ## Development Environment
 
-Here is the list of the environment of this project:
+Here is the list of the environment of this project(VM-Ware):
 
 - CPU: 12th Gen Intel i7-12700H (4) @ 2.688GHz
 
@@ -73,7 +71,7 @@ CREATE TABLE `user` (
 
 ## Quick Start
 
-1. Use the default config or customize your config in `config.json`. The detailed description of the `config.json` can be found in [config.md]().
+1. Use the default config or customize your config in `config.json`. The detailed description of the `config.json` can be found in [config.md](docs/config.md).
 
 2. Run the commands in shell as follows:
 
@@ -128,6 +126,14 @@ If every things is OK, you will see the HTML like the images in the **Screenshot
 
 ![](docs/assets/async-log.png)
 
-- Bench Test
+## Bench
 
-TODO
+![](docs/assets/bench.png)
+
+> Bench test uses [WebBench1.5](https://github.com/EZLippi/WebBench)
+
+## Documents
+
+## TODO
+
+This project has some places can be optimized, these places I have use `TODO` annotation to mark them.

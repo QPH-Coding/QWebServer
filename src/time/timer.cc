@@ -41,7 +41,7 @@ void Timer::Start() noexcept {
 
 void Timer::Stop() noexcept {
 
-  epoll_listener_.RemoveEvent(timer_fd_);
+  epoll_listener_.RemoveReadEvent(timer_fd_);
   is_running_ = false;
 }
 
@@ -67,10 +67,3 @@ void Timer::Reset() noexcept {
   new_value.it_interval.tv_nsec = 0;
   timerfd_settime(timer_fd_, TFD_TIMER_ABSTIME, &new_value, nullptr);
 }
-
-// TEST
-//void Timer::OnTick() {
-//  timeval tv_begin{};
-//  gettimeofday(&tv_begin, nullptr);
-//  std::cout << "on tick " << tv_begin.tv_sec << "." << tv_begin.tv_usec << std::endl;
-//}

@@ -10,8 +10,8 @@
 #include <unordered_map>
 #include <vector>
 #include <regex>
-#include "json.h"
 #include <iostream>
+#include "json.h"
 #include "http_request_head.h"
 
 class HttpRequest {
@@ -22,7 +22,8 @@ class HttpRequest {
     GET, POST, DELETE
   };
   using http_request_head = HttpRequestHead::http_request_head;
-  explicit HttpRequest(const std::string &raw_request_) noexcept;
+  HttpRequest() = default;
+  void Analyze(const std::string &raw_request_) noexcept;
 
   Method get_method() const noexcept;
   std::string get_url() const noexcept;
@@ -31,8 +32,6 @@ class HttpRequest {
   std::string get_head(const http_request_head &head_key) const noexcept;
   bool is_effective() const noexcept;
  private:
-  void Analyze(const std::string &raw_request_) noexcept;
-
   inline static bool JudgeFormat(
       const std::sregex_token_iterator &lhs,
       const std::sregex_token_iterator &rhs) noexcept;

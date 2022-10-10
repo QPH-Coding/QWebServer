@@ -5,6 +5,7 @@
 
 #ifndef QWEBSERVER_SRC_DATABASE_MYSQL_DEAL_H_
 #define QWEBSERVER_SRC_DATABASE_MYSQL_DEAL_H_
+
 #include "mysql_conn_raii.h"
 #include "../config/config.h"
 #include "../utils/utils.h"

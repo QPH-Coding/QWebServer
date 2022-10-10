@@ -5,14 +5,14 @@
 
 #ifndef WEBSERVER_NET_H
 #define WEBSERVER_NET_H
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
 
 #include <fcntl.h>
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include "../log/async_log4q.h"
 
 class Client {
@@ -27,11 +27,10 @@ class Client {
 
 namespace net {
 int TcpSocket();
-int UdpSocket();
 sockaddr_in SocketAddress4(int domain, int port, in_addr_t address);
 void SetReuseAddress(int socket_fd);
 void Bind(int socket_fd, sockaddr_in socket_address);
 void Listen(int socket_fd, int backlog);
-std::shared_ptr<Client> Accept(const int socket_fd);
+Client Accept(const int socket_fd);
 }  // namespace net
 #endif  // WEBSERVER_NET_H
