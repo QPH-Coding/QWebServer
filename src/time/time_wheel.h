@@ -12,6 +12,14 @@
 #include "timer.h"
 #include "../log/async_log4q.h"
 
+// en:
+// manage connected socket
+// use cycle queue store the connected socket
+// use std::unordered_map count connected socket num
+// zh:
+// 管理连接的socket
+// 使用循环队列存储连接的socket
+// 使用std::unordered_map统计连接的socket数量
 class TimeWheel {
  public:
   TimeWheel() noexcept;

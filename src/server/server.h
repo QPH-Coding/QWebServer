@@ -12,9 +12,9 @@
 #include <unordered_map>
 #include <memory>
 #include "../pool/thread_pool.hpp"
-#include "../explanation/net.h"
+#include "../encapsulation/net.h"
 #include "../http/http_connection.h"
-#include "../explanation/epoll_listener.h"
+#include "../encapsulation/epoll_listener.h"
 #include "../time/time_wheel.h"
 #include "../http/http_response.h"
 #include "../http/http_service.h"
@@ -23,6 +23,16 @@
 #include "../database/mysql_conn_raii.h"
 #include "../database/mysql_deal.h"
 
+// en:
+// core code
+// use multi-Reactor model deal with the event
+// use TimeWheel manage connected socket
+// use epoll listen read/write event
+// zh:
+// 核心代码
+// 使用多Reactor模型处理事件
+// 使用时间轮管理连接的socket
+// 使用epoll监听读/写事件
 class QWebServer {
  public:
   QWebServer() noexcept;
@@ -35,6 +45,7 @@ class QWebServer {
   enum class SubReactorTaskType {
     READ, WRITE, WAITING
   };
+  // TODO can put the type in http connection
   struct ServerTask {
     SubReactorTaskType type_;
     HttpConnection http_connection_;

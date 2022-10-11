@@ -11,6 +11,12 @@
 #include <mutex>
 #include <functional>
 
+// en:
+// class Object the Object Pool use
+// store the Object-T and the index in the Object Pool
+// zh:
+// 对象池使用的Object类
+// 存储对象 T 及其在对象池中的索引
 template<typename T>
 class Object {
  public:
@@ -22,11 +28,22 @@ class Object {
   int index_;
 };
 
+// TODO I think this class have a big flaw:
+// In modern C++, I think should not appear the raw pointer and call the new/delete function
+
+// en:
+// high reusable Object Pool
+// use a std::vector store the pointer of object and a std::queue store indexes of the free object
+// if you want to customize init and destruct object-T
+// you can input the 2 more parameters: init_func_ and destruct_func_
+// zh:
+// 高可用的对象次
+// 使用了std::vector存储对象的指针还有std::queue存储空闲对象的索引
+// 如果你想定制化对象的初始化和对象析构前的动作
+// 你可以额外传入2个参数: init_func_ 和 destruct_func_
 template<typename T>
 class ObjectPool {
  public:
-//  using init_func = std::function<void(T &)>;
-//  using destruct_func = std::function<void(T &)>;
   explicit ObjectPool(int init_num);
   explicit ObjectPool(int init_num, std::function<void(T &)> init_function, std::function<void(T &)> destruct_function);
   ~ObjectPool();
@@ -71,7 +88,9 @@ ObjectPool<T>::ObjectPool(int init_num,
      destruct_func_(destruct_function) {
   for (int i = 0; i < init_num; ++i) {
     T raw_object;
-    init_func_(raw_object);
+    if (init_func_ != nullptr) {
+      init_func_(raw_object);
+    }
     auto *object = new Object<T>(i, raw_object);
     objects_.push_back(object);
     free_objects_.push(i);

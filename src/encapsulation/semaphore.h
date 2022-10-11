@@ -8,9 +8,10 @@
 
 #include <semaphore.h>
 #include <cassert>
-
 #include "../base/uncopyable.h"
 
+// en: encapsulate the POSIX semaphore
+// zh: 封装POSIX信号量
 class Semaphore : private Uncopyable {
  public:
   explicit Semaphore(int count = 0) noexcept;

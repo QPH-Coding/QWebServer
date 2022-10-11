@@ -1,4 +1,12 @@
-# Description of config.json
+# Config
+
+`QWebServer` configure through a file `config.json`. 
+
+The default path to read this file is `/server/config/config.json`.
+
+If you want to change the config path and log path. You should read and modify the source code in `src/config/config.h`. And change the command in `install.sh`.
+
+## Description of config.json
 
 - The field of the config.json
 

@@ -13,7 +13,7 @@
 #include "buffer.h"
 #include <thread>
 #include "../time/timer.h"
-#include "../explanation/semaphore.h"
+#include "../encapsulation/semaphore.h"
 #include "../config/config.h"
 
 #define AsyncLog4Q_Debug(content) if(AsyncLog4Q::get_level() <= AsyncLog4Q::Level::Debug) \
@@ -25,6 +25,18 @@
 #define AsyncLog4Q_Error(content) if(AsyncLog4Q::get_level() <= AsyncLog4Q::Level::Error) \
       AsyncLog4Q::Error(content, __FILE__, __LINE__)
 
+// en:
+// support 4 level
+// use 3 thread to keep it in operation.
+// buffer_timer_thread_: timing a period time to swap buffer
+// time_stamp_timer_thread_: update timestamp every second
+// write_to_file_thread_: write logs to file
+// zh:
+// 支持4个等级
+// 使用3个线程来维持其运作
+// buffer_timer_thread_: 负责计时一小段时间去交换缓冲
+// time_stamp_timer_thread_: 每秒更新时间戳
+// write_to_file_thread_: 将缓冲中的日志写入文件
 class AsyncLog4Q {
  public:
   enum class Level {

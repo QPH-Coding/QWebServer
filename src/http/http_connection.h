@@ -6,10 +6,14 @@
 #ifndef QWEBSERVER_SRC_HTTP_HTTP_CONNECTION_H_
 #define QWEBSERVER_SRC_HTTP_HTTP_CONNECTION_H_
 
-#include "../explanation/net.h"
+#include "../encapsulation/net.h"
 #include "http_request.h"
 #include "http_response.h"
 
+// TODO make the connection has status
+
+// en:
+// the task of the server deal with
 class HttpConnection {
  public:
   explicit HttpConnection(Client client) noexcept;

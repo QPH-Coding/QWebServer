@@ -6,7 +6,7 @@
       <paths name="vm (40156014-aacb-4718-bd88-dfa0b026dbb3)">
         <serverdata>
           <mappings>
-            <mapping deploy="/tmp/tmp.zi1A7rK451" local="$PROJECT_DIR$" />
+            <mapping deploy="/tmp/tmp.zi1A7rK451" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/build/Release" />

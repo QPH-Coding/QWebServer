@@ -12,11 +12,11 @@ INCLUDE_DIRECTORIES(/usr/include/mysql++)
 
 set(config src/config/config.cc)
 set(explanation
-        src/explanation/net.cc
-        src/explanation/file.cc
+        src/encapsulation/net.cc
+        src/encapsulation/file.cc
         src/log/buffer.cc
-        src/explanation/semaphore.cc
-        src/explanation/epoll_listener.cc)
+        src/encapsulation/semaphore.cc
+        src/encapsulation/epoll_listener.cc)
 set(db
         src/database/mysql_conn_raii.cc
         src/database/mysql_deal.cc)

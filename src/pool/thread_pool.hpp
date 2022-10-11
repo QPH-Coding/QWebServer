@@ -12,9 +12,17 @@
 #include <thread>
 #include <functional>
 #include "../base/uncopyable.h"
-#include "../explanation/semaphore.h"
+#include "../encapsulation/semaphore.h"
 #include "../log/async_log4q.h"
 
+// en:
+// high reusable Thread Pool
+// you can input 2 parameters: std::function<void(std::share_ptr<T>, void*)> and void*
+// make this thread pool call a class member function
+// zh:
+// 高可用的线程池
+// 你可以传入两个参数: std::function<void(std::share_ptr<T>, void*)> and void*
+// 来调用某个类的成员函数
 template<typename T>
 class ThreadPool : private Uncopyable {
  public:

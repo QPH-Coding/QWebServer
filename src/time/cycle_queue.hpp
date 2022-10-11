@@ -8,6 +8,10 @@
 
 #include <vector>
 
+// en:
+// data structure - cycle queue
+// zh:
+// 数据结构-循环队列
 template<typename T>
 class CycleQueue {
  public:

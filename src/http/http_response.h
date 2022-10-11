@@ -12,7 +12,7 @@
 #include <sys/mman.h>
 #include "http_response_status.h"
 #include "http_response_head.h"
-#include "../explanation/file.h"
+#include "../encapsulation/file.h"
 #include "../log/async_log4q.h"
 
 // TODO this class design can be optimized

@@ -1,4 +1,12 @@
-# config.json详细介绍
+# 配置
+
+`QWebServer` 通过一个文件 `config.json`进行配置。
+
+默认的配置文件路径是 `/server/config/config.json`.
+
+如果你想要改变配置文件及日志文件的路径，请阅读并修改在 `src/config/config.h`中的源码，并且修改 `install.sh`中的命令。
+
+## config.json详细介绍
 
 - config.json的字段
 

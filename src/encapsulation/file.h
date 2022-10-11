@@ -14,8 +14,10 @@
 #include <csignal>
 #include <sys/socket.h>
 #include <sys/stat.h>
-#include "../explanation/epoll_listener.h"
+#include "../encapsulation/epoll_listener.h"
 
+// en: encapsulate some file and socket read/write operation
+// zh: 封装了一些文件和socket的读写操作
 namespace file {
 void SetNonblockSocket(int fd);
 

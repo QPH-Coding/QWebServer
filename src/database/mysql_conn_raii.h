@@ -10,6 +10,10 @@
 #include "../config/config.h"
 #include "../pool/object_pool.hpp"
 
+// en:
+// Use RAII get MySql connection from Object Pool(MySql Connection Pool)
+// zh:
+// 用RAII的处理从对象池(MySql连接池)获取MySql连接
 class MySqlConnectionRaii {
  public:
   explicit MySqlConnectionRaii(ObjectPool<mysqlpp::Connection> *mysql_conn_pool) noexcept;

@@ -15,6 +15,8 @@
 #include <sys/socket.h>
 #include "../log/async_log4q.h"
 
+// en: an object store the client ip and fd/socket it used
+// zh: 一个存储其ip及使用的fd/socket的对象
 class Client {
  public:
   Client(int fd, std::string address_port) noexcept;
@@ -25,6 +27,8 @@ class Client {
   std::string address_port_;
 };
 
+// en: encapsulate the basic socket net operation
+// zh: 封装了基础的socket网络操作
 namespace net {
 int TcpSocket();
 sockaddr_in SocketAddress4(int domain, int port, in_addr_t address);

@@ -2,9 +2,13 @@
 
 <img src="docs/assets/QWebServer.png" align="center" alt="HEAD">
 
+> If you need a Chinese version of README, here: [README-zh](README-zh.md)
+
 ## OverView
 
 `QWebServer` is a Linux high performance WebServer written in modern C++. It can handle tens of thousands of concurrent HTTP Request.
+
+In order to keep most of the source code in modern C++ style, some Linux C functions are manually encapsulated.
 
 ## Feature
 
@@ -106,7 +110,7 @@ $ nohup ./QWebServer > error.log &
 
 Type in `${Linux Server IP}:${port}` on your browser.
 
-If every things is OK, you will see the HTML like the images in the **Screenshot**.
+If every thing is OK, you will see the HTML like the images in the **Screenshot**.
 
 ## Screenshot
 
@@ -128,11 +132,17 @@ If every things is OK, you will see the HTML like the images in the **Screenshot
 
 ## Bench
 
+- 10000 Clients, 30228 QPS
+
 ![](docs/assets/bench.png)
 
 > Bench test uses [WebBench1.5](https://github.com/EZLippi/WebBench)
 
 ## Documents
+
+- [Config](docs/config.md)
+
+- [AsyncLogSystem](docs/asynclog.md)
 
 ## TODO
 

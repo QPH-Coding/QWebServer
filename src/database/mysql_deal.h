@@ -10,6 +10,12 @@
 #include "../config/config.h"
 #include "../utils/utils.h"
 
+// en:
+// Deal with MySql operation
+// operate the user
+// zh:
+// 处理MySql操作
+// 主要是处理用户相关的操作
 namespace mysql_deal {
 
 void ConstructConnection(mysqlpp::Connection &connection);

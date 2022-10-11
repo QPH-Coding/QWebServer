@@ -11,6 +11,14 @@
 #include <memory>
 #include <cstring>
 
+// TODO can design a more reusable class Buffer
+
+// en:
+// default size is 2 MB
+// only the AsyncLog use
+// zh:
+// 默认的大小为 2 MB
+// 只有异步日志系统使用
 class Buffer : private Uncopyable {
  public:
   explicit Buffer() noexcept;

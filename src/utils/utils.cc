@@ -9,7 +9,7 @@ std::string utils::MakeSalt() {
   std::default_random_engine e(time(nullptr));
   std::uniform_int_distribution<unsigned> u(0, random_character.length());
   std::string salt;
-  for (int i = 0; i < 6; ++i) {
+  for (int i = 0; i < 5; ++i) {
     salt += random_character[u(e)];
   }
   return salt;

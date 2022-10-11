@@ -185,3 +185,7 @@ Future arrangement:
 - Question: Can not send image by HTTP, web error is `ERR_CONTENT_LENGTH_MISMATCH`.
   
   Solution: First, I think the appearance of this problem because of my `write socket`. However, it has nothing to do with the problem. Finally, I find that image can be read with `char`, but it not mean that it can be cast to `std::string`. So I split the response's head and body, use `std::vector<char>` to storage the image data.
+
+- Question: After reconstructing the code, can not transfer the video
+
+  Solution: Actually, the problem is can not transfer big file. Because the epoll listen `EPOLLOUT` failed. The reason is that I didn't understand the epoll event manage. When the fd has existed in the epoll, can not simply add the fd and its `EPOLLOUT` event. It should use modify to add listening `EPOLLOUT` event.

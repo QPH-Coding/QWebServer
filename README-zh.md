@@ -130,9 +130,14 @@ $ nohup ./QWebServer > error.log &
 
 ## 压力测试
 
+- 10000并发，30228 QPS
+
 ![](docs/assets/bench.png)
 
 > 使用[WebBench1.5](https://github.com/EZLippi/WebBench)进行测试
 
 ## 相关文档
 
+- [配置](docs/config-zh.md)
+
+- [异步日志系统](docs/asynclog-zh.md)

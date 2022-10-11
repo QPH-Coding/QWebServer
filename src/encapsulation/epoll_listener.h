@@ -13,6 +13,14 @@
 #include "file.h"
 #include "../base/uncopyable.h"
 
+// TODO design a more reusable class about epoll / 设计一个复用性更好的有关epoll类
+
+// en:
+// encapsulate some operation the server used in this class.
+// this object can not be copied, we should make the epoll_fd singleton
+// zh:
+// 封装了一些服务器会用到的epoll操作
+// 这个对象不可以被拷贝，因为监听的epoll_fd应该是唯一的
 class EpollListener : private Uncopyable {
  public:
   explicit EpollListener(int max_event_num) noexcept;
