@@ -10,6 +10,10 @@
 
 In order to keep most of the source code in modern C++ style, some Linux C functions are manually encapsulated.
 
+The `QWebServer` use Multi-Reactor and Thread Pool deal with the connection. Here is the main overall architecture.
+
+![](docs/assets/WebserverArchitecture.drawio.png)
+
 ## Feature
 
 - Multi-Reactor Model

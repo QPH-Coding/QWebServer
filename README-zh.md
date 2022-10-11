@@ -8,6 +8,10 @@
 
 为了保持大部分的源码为现代C++风格，手动封装了一些Linux C的函数。
 
+`QWebServer`使用了Multi-Reactor模型和线程池来处理连接，这里是主要的架构图。
+
+![](docs/assets/WebserverArchitecture.drawio.png)
+
 ## 项目亮点
 
 - Multi-Reactor模型()
