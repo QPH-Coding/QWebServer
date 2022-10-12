@@ -47,8 +47,5 @@ add_executable(QWebServer src/main.cpp
         ${http}
         ${utils})
 
-add_executable(log_test src/log_test.cc ${config} ${explanation} ${time} ${log})
-target_link_libraries(log_test jsoncpp)
-
 # 链接子工程
 target_link_libraries(${PROJECT_NAME} jsoncpp mysqlclient mysqlpp ssl crypto)
