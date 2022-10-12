@@ -1,6 +1,6 @@
 <h1 align="center"> QWebServer </h1>
 
-<img src="docs/assets/QWebServer.png" align="center" alt="HEAD">
+![](docs/assets/QWebServer.png)
 
 ## 概述
 
@@ -60,6 +60,11 @@
 $ sudo apt-get install mysql-client mysql-server libmysql++-dev 
 ```
 
+你可以使用以下命令去安装`openssl`
+```shell
+$ sudo apt-get install openssl
+```
+
 本项目用的MySql建表语句如下:
 
 ```mysql
@@ -91,7 +96,16 @@ $ sudo ./install.sh $USER
 3. 用 `CMake`构建项目
 
 ```shell
-$ cmake --build ./build/Debug --target QWebServer -- -j 6
+# 1. 创建构建目录
+$ mkdir build
+# 2. 进入构建目录
+$ cd build
+# 3. 生成debug版本的Makefile
+$ cmake .. -DCMAKE_BUILD_TYPE=Debug
+# 3. 生成release版本的Makefile
+$ cmake .. -DCMAKE_BUILD_TYPE=Release
+# 4. 使用make命令构建项目
+$ make
 ```
 
 4. 运行这个项目并且进行测试
@@ -100,7 +114,7 @@ $ cmake --build ./build/Debug --target QWebServer -- -j 6
 
 ```shell
 # 在项目的路径中
-$ cd ./build/Debug
+$ cd ./build
 # 如果进行临时测试 
 $ ./QWebServer
 # 如果想要长时间运行此项目
@@ -145,3 +159,39 @@ $ nohup ./QWebServer > error.log &
 - [配置](docs/config-zh.md)
 
 - [异步日志系统](docs/asynclog-zh.md)
+
+- [对象池](docs/object-pool-zh.md)
+
+- [线程池](docs/thread-pool-zh.md)
+
+- [计时器](docs/timer-zh.md)
+
+## 代办(待优化)
+
+本项目仍有一些地方值得优化，我已经在注释中使用TODO将他们标注出来了
+
+具体来说，值得优化的地方主要在:
+
+- `src/pool/object_pool.hpp`(2 TODO)
+
+- `src/log/buffer.h`(1 TODO)
+
+- `src/encapsulation/epoll_listener.h`(1 TODO)
+
+- `src/time/timer.h`(1 TODO)
+
+## 致谢
+
+@游双 - 著"Linux 高性能服务器编程"
+
+@[陈硕](https://github.com/chenshuo) - 网络库`muduo`的作者
+
+## 其他
+
+本项目仅用于学习与交流。
+
+我不需要任何赞助，如果想要支持本项目，给个star即可。
+
+欢迎Issue和PR。
+
+> 本人英语水平有限，若在查看英文文档时，发现有错误的地方，欢迎将其修正并提交PR。

@@ -11,6 +11,16 @@
 #include <mutex>
 #include <functional>
 
+// TODO
+// en:
+// Try to reconstruct the Object Pool
+// get_one() return a Object<T>, not a T
+// obviously, it is not convenient and elegant
+// zh:
+// 可以尝试重构对象池
+// get_one()返回的是一个Object<T>，而不是一个T
+// 很显然，这不方便，也不优美
+
 // en:
 // class Object the Object Pool use
 // store the Object-T and the index in the Object Pool
@@ -28,8 +38,9 @@ class Object {
   int index_;
 };
 
-// TODO I think this class have a big flaw:
-// In modern C++, I think should not appear the raw pointer and call the new/delete function
+// TODO
+// en: In modern C++, I think should not appear the raw pointer and exposed call the new/delete function
+// zh: 在现代的C++中，我认为不应该出现裸露的指针及暴露地使用new/delete函数
 
 // en:
 // high reusable Object Pool
@@ -37,7 +48,7 @@ class Object {
 // if you want to customize init and destruct object-T
 // you can input the 2 more parameters: init_func_ and destruct_func_
 // zh:
-// 高可用的对象次
+// 高可用的对象池
 // 使用了std::vector存储对象的指针还有std::queue存储空闲对象的索引
 // 如果你想定制化对象的初始化和对象析构前的动作
 // 你可以额外传入2个参数: init_func_ 和 destruct_func_

@@ -11,7 +11,13 @@
 #include <memory>
 #include <cstring>
 
-// TODO can design a more reusable class Buffer
+// TODO
+// en:
+// The reason I design this class is for AsyncLogSystem
+// In fact, it can design a more usable class
+// zh:
+// 我设计这个类的原因是为了给异步日志系统使用
+// 实际上，他可以设计成可复用性更高的类
 
 // en:
 // default size is 2 MB

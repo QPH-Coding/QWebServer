@@ -15,4 +15,11 @@ HttpResponse &HttpConnection::http_response() noexcept {
   return http_response_;
 }
 HttpConnection::HttpConnection(Client client) noexcept
-    : client_(std::move(client)) {}
+    : client_(std::move(client)), status_(Status::Wait) {}
+
+const HttpConnection::Status &HttpConnection::get_status() const noexcept {
+  return status_;
+}
+void HttpConnection::set_status(HttpConnection::Status status) noexcept {
+  status_ = status;
+}

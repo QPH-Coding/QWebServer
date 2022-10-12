@@ -69,7 +69,6 @@ void AsyncLog4Q::TimeStamp::Tick() {
     year = ltm->tm_year + 1900;
     month = ltm->tm_mon + 1;
     day = ltm->tm_mday;
-    // TODO maybe can optimize
     instance_.UpdateFileName();
   }
 }

@@ -1,8 +1,8 @@
 <h1 align="center"> QWebServer </h1>
 
-<img src="docs/assets/QWebServer.png" align="center" alt="HEAD">
+![](docs/assets/QWebServer.png)
 
-> If you need a Chinese version of README, here: [README-zh](README-zh.md)
+> 如果你需要一份中文版本的README，请见: [README-zh](README-zh.md)
 
 ## OverView
 
@@ -56,10 +56,16 @@ Before you run this project, please make sure:
 
 > Before you compile and run this project, please make sure have installed these libs.
 
-You can use this command to install `MySql` and `libmysql++` in Ubuntu 20.04:
+You can use this command to install `MySql` and `libmysql++` in Ubuntu 22.04:
 
 ```shell
 $ sudo apt-get install mysql-client mysql-server libmysql++-dev 
+```
+
+You can use this command to install `openssl`
+
+```shell
+$ sudo apt install openssl
 ```
 
 The create table's SQL in mysql is:
@@ -68,7 +74,7 @@ The create table's SQL in mysql is:
 CREATE TABLE `user` (
     `id` INT unsigned  NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(64) NOT NULL,
-    `salt` CHAR(6) NOT NULL,
+    `salt` CHAR(5) NOT NULL,
     `sha256` CHAR(64) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `key_name` (`name`)
@@ -93,7 +99,16 @@ $ sudo ./install.sh $USER
 3. Build the project with `CMake`
 
 ```shell
-$ cmake --build ./build/Debug --target QWebServer -- -j 6
+# 1. Create a build directory
+$ mkdir build
+# 2. Step into build directory
+$ cd build
+# 3. Generate debug version makefile
+$ cmake .. -DCMAKE_BUILD_TYPE=Debug
+# 3. Generate release version makefile
+$ cmake .. -DCMAKE_BUILD_TYPE=Release
+# 4. Use make to build this project
+$ make
 ```
 
 4. Run this project and test
@@ -130,7 +145,7 @@ If every thing is OK, you will see the HTML like the images in the **Screenshot*
 
 ![](docs/assets/change-password.png)
 
-- AsyncLog
+- AsynchronousLog
 
 ![](docs/assets/async-log.png)
 
@@ -146,8 +161,38 @@ If every thing is OK, you will see the HTML like the images in the **Screenshot*
 
 - [Config](docs/config.md)
 
-- [AsyncLogSystem](docs/asynclog.md)
+- [Asynchronous Log System](docs/asynclog.md)
+
+- [Object Pool](docs/object-pool.md)
+
+- [Thread Pool](docs/thread-pool.md)
+
+- [Timer](docs/timer.md)
 
 ## TODO
 
 This project has some places can be optimized, these places I have use `TODO` annotation to mark them.
+
+Specifically, the TODO things in the files:
+
+- `src/pool/object_pool.hpp`(2 TODO)
+
+- `src/log/buffer.h`(1 TODO)
+
+- `src/encapsulation/epoll_listener.h`(1 TODO)
+
+- `src/time/timer.h`(1 TODO)
+
+## Thanks
+
+@YouShuang - the author of the "Linux 高性能服务器编程"
+
+@[ChenShuo](https://github.com/chenshuo) - the author of the net library `muduo`
+
+## Other
+
+This project is for learning and communication only.
+
+I don't need you to buy me a cup of coffee or any sponsorship. If you want to support this project, you just need to star this project.
+
+Welcome Issue and PR.

@@ -6,7 +6,14 @@
       <paths name="vm (40156014-aacb-4718-bd88-dfa0b026dbb3)">
         <serverdata>
           <mappings>
-            <mapping deploy="/tmp/tmp.zi1A7rK451" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/qph/QWebServer" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="vm (a2bc280c-3b20-4245-9288-9bad45d39d32)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/qph/QWebServer" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/build/Release" />

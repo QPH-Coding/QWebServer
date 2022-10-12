@@ -1,8 +1,8 @@
-# AsyncLog
+# Asynchronous Log System
 
 ## Overview
 
-The Async Log System have features as follows:
+The Asynchronous Log System have features as follows:
 
 - Accurate to subtlety
 
@@ -13,6 +13,13 @@ The Async Log System have features as follows:
 - Log the source file and code line
 
 - Thread safe
+
+## Difference between SynchronousLog and AsynchronousLog
+
+- Synchronous Log System's work flow: `make log line->obtain the mutex->write to file`
+- Asynchronous Log System's work flow: `make log line->obtain the mutex->write to buffer`
+
+The most important difference between Synchronous Log System(abbreviated as SyncLog) and Asynchronous Log System(abbreviated as AsyncLog) is that, SyncLog need write to the log file by itself after obtaining the mutex, the AsyncLog just write to buffer after obtaining the mutex. As we all know, the speed of the file I/O operation is much lower than the speed of writing to buffer in the program. In the case of high concurrency, the SyncLog will block other thread/process write log. The advantage of the AsyncLog is that it needn't do file I/O operation, just write log line to the buffer of the Log System. It's more efficient than SyncLog.
 
 ## Design
 

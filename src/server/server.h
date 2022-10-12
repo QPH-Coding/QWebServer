@@ -41,29 +41,18 @@ class QWebServer {
 
  private:
   void EventLoop();
-  using client_fd = int;
-  enum class SubReactorTaskType {
-    READ, WRITE, WAITING
-  };
-  // TODO can put the type in http connection
-  struct ServerTask {
-    SubReactorTaskType type_;
-    HttpConnection http_connection_;
-    explicit ServerTask(const Client &client) : http_connection_(client), type_(SubReactorTaskType::WAITING) {}
-  };
-
   int listen_socket_fd_;
   ObjectPool<mysqlpp::Connection> mysql_conn_pool_;
-  ThreadPool<ServerTask> sub_reactor_pool_;
-  ThreadPool<ServerTask> service_pool_;
+  ThreadPool<HttpConnection> sub_reactor_pool_;
+  ThreadPool<HttpConnection> service_pool_;
   TimeWheel time_wheel_;
   EpollListener epoll_listener_;
 
-  static void SubReactorRead(std::shared_ptr<ServerTask> &sp_server_task, QWebServer *p_server);
-  static void SubReactorWrite(std::shared_ptr<ServerTask> &sp_server_task, QWebServer *p_server);
-  static void SubReactorFunc(std::shared_ptr<ServerTask> &sp_server_task, void *arg);
-  static void ServiceFunc(std::shared_ptr<ServerTask> &sp_server_task, void *arg);
+  static void SubReactorRead(std::shared_ptr<HttpConnection> &sp_http_connection, QWebServer *p_server);
+  static void SubReactorWrite(std::shared_ptr<HttpConnection> &sp_http_connection, QWebServer *p_server);
+  static void SubReactorFunc(std::shared_ptr<HttpConnection> &sp_http_connection, void *arg);
+  static void ServiceFunc(std::shared_ptr<HttpConnection> &sp_http_connection, void *arg);
 
-  std::unordered_map<int, std::shared_ptr<ServerTask>> fd_conn_map_;
+  std::unordered_map<int, std::shared_ptr<HttpConnection>> fd_conn_map_;
 };
 #endif //QWEBSERVER_SRC_SERVER_SERVER_H_

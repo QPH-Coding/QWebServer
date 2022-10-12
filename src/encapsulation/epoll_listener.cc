@@ -44,7 +44,6 @@ void EpollListener::ModWriteToReadEvent(int fd) noexcept {
 std::vector<epoll_event> EpollListener::GetEpollReadyEvents() {
   int epoll_ready_num = epoll_wait(epoll_fd_, epoll_events_.get(), max_event_num_, -1);
   if (epoll_ready_num < 0) {
-    // TODO log-error
     return {};
   } else {
     return {epoll_events_.get(), epoll_events_.get() + epoll_ready_num};

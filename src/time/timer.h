@@ -10,6 +10,16 @@
 #include <functional>
 #include "../encapsulation/epoll_listener.h"
 
+// TODO
+// en:
+// Use select instead of epoll
+// Because a timer only listen one fd
+// In this case, select is more effective than epoll
+// zh:
+// 使用select代替epoll
+// 因为一个计时器只会监听一个fd
+// 在这种情况下，select比epoll更加高效
+
 // en:
 // use functions about timerfd to time
 // have a pure virtual OnTick()

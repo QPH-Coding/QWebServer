@@ -13,7 +13,13 @@
 #include "file.h"
 #include "../base/uncopyable.h"
 
-// TODO design a more reusable class about epoll / 设计一个复用性更好的有关epoll类
+// TODO
+// en:
+// This class only has some operations the server will use
+// It can design a more reusable class about epoll
+// zh:
+// 这个类只有服务器会用到相关操作
+// 设计一个复用性更好的有关epoll类
 
 // en:
 // encapsulate some operation the server used in this class.
