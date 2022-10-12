@@ -202,3 +202,5 @@ I don't need you to buy me a cup of coffee or any sponsorship. If you want to su
 Welcome Issue and PR.
 
 Personal blog: [http://qph-coding.com](http://qph-coding.com)
+
+> I'm sorry that my blog is only in Chinese.
