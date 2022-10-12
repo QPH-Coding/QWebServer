@@ -198,4 +198,6 @@ $ nohup ./QWebServer > error.log &
 
 欢迎Issue和PR。
 
+个人博客: [http://qph-coding.com](http://qph-coding.com)
+
 > 本人英语水平有限，若在查看英文文档时，发现有错误的地方，欢迎将其修正并提交PR。
