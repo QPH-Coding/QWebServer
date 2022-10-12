@@ -8,8 +8,6 @@
 
 The day after:
 
-- Use `ElasticSearch`
-
 - Deal with some signal, such as `SIGPIPE`
 
 ## 2022.10.07
@@ -38,8 +36,6 @@ The day after:
 
 The day after:
 
-- Use ElasticSearch
-
 - Design user table
 
 - Finish Http implements
@@ -59,8 +55,6 @@ The day after:
 - Object Pool
 
 - Connect to MySql
-
-- Connect to ElasticSearch
 
 - Finish Http Implements
 

@@ -33,6 +33,7 @@ class HttpResponse {
                          long end_index = -1) noexcept;
 
   bool add_file(const std::string &file_path, long start_index = 0, long end_index = -1) noexcept;
+  const http_response_status& get_response_status() noexcept;
   std::vector<char> get_response_header() const noexcept;
   void set_have_write_head() noexcept;
   bool is_have_write_head() const noexcept;

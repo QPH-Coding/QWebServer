@@ -136,3 +136,6 @@ bool HttpResponse::is_have_write_head() const noexcept {
 void HttpResponse::append_header_index(long header_index) noexcept {
   header_index_ += header_index;
 }
+const HttpResponse::http_response_status &HttpResponse::get_response_status() noexcept {
+  return status_;
+}

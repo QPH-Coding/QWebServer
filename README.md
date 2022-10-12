@@ -137,6 +137,10 @@ If every thing is OK, you will see the HTML like the images in the **Screenshot*
 
 ![](docs/assets/login.png)
 
+- Register Page
+
+![](docs/assets/register.png)
+
 - Home Page
 
 ![](docs/assets/home.png)
@@ -151,7 +155,7 @@ If every thing is OK, you will see the HTML like the images in the **Screenshot*
 
 ## Bench
 
-- 10000 Clients, 30228 QPS
+- 10000 Concurrent Clients, 30228 QPS
 
 ![](docs/assets/bench.png)
 

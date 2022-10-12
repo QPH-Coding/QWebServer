@@ -28,12 +28,15 @@ class HttpConnection {
 
   explicit HttpConnection(Client client) noexcept;
   const Client &get_client() noexcept;
-  const Status& get_status() const noexcept;
+  const Status &get_status() const noexcept;
+  void set_start_time() noexcept;
+  const timeval &get_start_time() const noexcept;
   void set_status(Status status) noexcept;
   HttpRequest &http_request() noexcept;
   HttpResponse &http_response() noexcept;
  private:
   Status status_;
+  timeval start_time_;
   Client client_;
   HttpRequest http_request_;
   HttpResponse http_response_;

@@ -23,3 +23,9 @@ const HttpConnection::Status &HttpConnection::get_status() const noexcept {
 void HttpConnection::set_status(HttpConnection::Status status) noexcept {
   status_ = status;
 }
+void HttpConnection::set_start_time() noexcept {
+  gettimeofday(&start_time_, nullptr);
+}
+const timeval &HttpConnection::get_start_time() const noexcept {
+  return start_time_;
+}

@@ -130,25 +130,29 @@ $ nohup ./QWebServer > error.log &
 
 ## 运行截图
 
-- Index/Login Page
+- 登录页面
 
 ![](docs/assets/login.png)
 
-- Home Page
+- 注册页面
+
+![](docs/assets/register.png)
+
+- 主页
 
 ![](docs/assets/home.png)
 
-- Change Password Page
+- 修改密码界面
 
 ![](docs/assets/change-password.png)
 
-- AsyncLog
+- 异步日志
 
 ![](docs/assets/async-log.png)
 
 ## 压力测试
 
-- 10000并发，30228 QPS
+- 10000 并发客户端，30228 QPS
 
 ![](docs/assets/bench.png)
 
