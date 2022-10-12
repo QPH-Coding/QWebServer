@@ -110,6 +110,9 @@ AsyncLog4Q::BufferTimer::BufferTimer() noexcept: Timer(3) {}
 
 void AsyncLog4Q::BufferTimer::OnTick() {
   std::lock_guard<std::mutex> lock(instance_.buffer_mutex_);
+  // TEST
+//  std::cout << "BufferTimer push buffer" << std::endl;
+
   instance_.full_buffers_.push(instance_.sp_curr_buffer_);
   instance_.semaphore_.Signal();
   if (instance_.empty_buffers_.empty()) {
@@ -130,6 +133,8 @@ void AsyncLog4Q::WriteBufferToFile() {
     std::lock_guard<std::mutex> file_lock(file_mutex_);
     FILE *write_file = fopen(log_file_full_path_.c_str(), "a");
     std::shared_ptr<Buffer> sp_write_buffer = full_buffers_.front();
+    // TEST
+//    std::cout << "Write Buffer, size: " << sp_write_buffer->size() << std::endl;
     while (sp_write_buffer->WriteToFd(write_file, sp_write_buffer->size()) > 0) {}
     sp_write_buffer->Reset();
     {
@@ -198,34 +203,36 @@ void AsyncLog4Q::Log(const AsyncLog4Q::Level &level, const std::string &content)
 
   // TEST print the log_line
   std::cout << log_line << std::endl;
-  // en: while append current buffer, should lock the buffer_mutex_
-  // zh: 当往当前的buffer写入东西时，需要加锁
-  std::lock_guard<std::mutex> lock(buffer_mutex_);
+  {
+    // en: while append current buffer, should lock the buffer_mutex_
+    // zh: 当往当前的buffer写入东西时，需要加锁
+    std::lock_guard<std::mutex> lock(buffer_mutex_);
 
-  // en:
-  // if try to append to buffer failed, get one from empty buffer queue
-  // push full buffer to full buffer queue
-  // if empty buffer queue is empty, it probably has some wrongs
-  // and produce Log in some the same places
-  // we just throw these Log
-  // zh:
-  // 如果尝试写入buffer失败，从空buffer队列中取出一块新的buffer
-  // 往full buffer队列中放入当前的buffer
-  // 如果空buffer队列空了，很有可能程序出现了问题，导致在某个地方产生日志
-  // 对于这部分日志我们可以直接扔掉他们
-  if (!sp_curr_buffer_->Append(log_line.c_str(), log_line.length())) {
-    full_buffers_.push(sp_curr_buffer_);
-    semaphore_.Signal();
-    // en: after push a new full buffer, should reset the buffer timer
-    // zh: 在放入一块新的full buffer后，要重置buffer的计时器
-    buffer_timer_.Reset();
-    if (empty_buffers_.empty()) {
-      sp_curr_buffer_ = nullptr;
-      return;
+    // en:
+    // if try to append to buffer failed, get one from empty buffer queue
+    // push full buffer to full buffer queue
+    // if empty buffer queue is empty, it probably has some wrongs
+    // and produce Log in some the same places
+    // we just throw these Log
+    // zh:
+    // 如果尝试写入buffer失败，从空buffer队列中取出一块新的buffer
+    // 往full buffer队列中放入当前的buffer
+    // 如果空buffer队列空了，很有可能程序出现了问题，导致在某个地方产生日志
+    // 对于这部分日志我们可以直接扔掉他们
+    if (!sp_curr_buffer_->Append(log_line.c_str(), log_line.length())) {
+      full_buffers_.push(sp_curr_buffer_);
+      semaphore_.Signal();
+      // en: after push a new full buffer, should reset the buffer timer
+      // zh: 在放入一块新的full buffer后，要重置buffer的计时器
+      buffer_timer_.Reset();
+      if (empty_buffers_.empty()) {
+        sp_curr_buffer_ = nullptr;
+        return;
+      }
+      sp_curr_buffer_ = empty_buffers_.front();
+      empty_buffers_.pop();
+      sp_curr_buffer_->Append(log_line.c_str(), log_line.length());
     }
-    sp_curr_buffer_ = empty_buffers_.front();
-    empty_buffers_.pop();
-    sp_curr_buffer_->Append(log_line.c_str(), log_line.length());
   }
 }
 

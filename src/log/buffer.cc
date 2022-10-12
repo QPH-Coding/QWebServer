@@ -30,7 +30,6 @@ size_t Buffer::WriteToFd(FILE *fd, size_t length) {
   }
   fseek(fd, 0, SEEK_END);
   size_t have_write = fwrite(buffer_ + read_index_, sizeof(char), length, fd);
-  fseek(fd, 0, SEEK_END);
   read_index_ += have_write;
   return have_write;
 }
@@ -40,6 +39,7 @@ size_t Buffer::size() const noexcept {
 }
 
 void Buffer::Reset() noexcept {
+  memset(buffer_, '\0', kCapacity);
   read_index_ = 0;
   write_index_ = 0;
 }
