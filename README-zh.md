@@ -1,6 +1,14 @@
 <h1 align="center"> QWebServer </h1>
 
+<div align="center">
+
+![](https://img.shields.io/badge/License-Apache--2.0-yellowgreen)
+![](https://img.shields.io/badge/Author-QPH--Coding-yellowgreen)
+![](https://img.shields.io/badge/Language-CPlusPlus-yellowgreen)
+
+
 <img src="docs/assets/QWebServer.png" align="center" alt="head">
+</div>
 
 ## 概述
 
@@ -10,7 +18,11 @@
 
 `QWebServer`使用了Multi-Reactor模型和线程池来处理连接，这里是主要的架构图。
 
+<div align="center">
+
 <img src="docs/assets/WebserverArchitecture.drawio.png"  align="center" alt="architecture">
+
+</div>
 
 ## 项目亮点
 

@@ -1,6 +1,14 @@
 <h1 align="center"> QWebServer </h1>
 
-<img src="docs/assets/QWebServer.png" align="center" alt="Head">
+<div align="center">
+
+![](https://img.shields.io/badge/License-Apache--2.0-yellowgreen)
+![](https://img.shields.io/badge/Author-QPH--Coding-yellowgreen)
+![](https://img.shields.io/badge/Language-CPlusPlus-yellowgreen)
+
+<img src="docs/assets/QWebServer.png" align="center" alt="head">
+</div>
+
 
 > 如果你需要一份中文版本的README，请见: [README-zh](README-zh.md)
 
@@ -12,7 +20,11 @@ In order to keep most of the source code in modern C++ style, some Linux C funct
 
 The `QWebServer` use Multi-Reactor and Thread Pool deal with the connection. Here is the main overall architecture.
 
+<div align="center">
+
 <img src="docs/assets/WebserverArchitecture.drawio.png" align="center" alt="architecture">
+
+</div>
 
 ## Feature
 
