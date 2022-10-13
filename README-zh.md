@@ -1,6 +1,6 @@
 <h1 align="center"> QWebServer </h1>
 
-![](docs/assets/QWebServer.png)
+<img src="docs/assets/QWebServer.png" align="center" alt="head">
 
 ## 概述
 
@@ -10,7 +10,7 @@
 
 `QWebServer`使用了Multi-Reactor模型和线程池来处理连接，这里是主要的架构图。
 
-![](docs/assets/WebserverArchitecture.drawio.png)
+<img src="docs/assets/WebserverArchitecture.drawio.png"  align="center" alt="architecture">
 
 ## 项目亮点
 
@@ -132,29 +132,29 @@ $ nohup ./QWebServer > error.log &
 
 - 登录页面
 
-![](docs/assets/login.png)
+<img src="docs/assets/login.png" align="center" alt="login">
 
 - 注册页面
 
-![](docs/assets/register.png)
+<img src="docs/assets/register.png" align="center" alt="register">
 
 - 主页
 
-![](docs/assets/home.png)
+<img src="docs/assets/home.png" align="center" alt="home">
 
 - 修改密码界面
 
-![](docs/assets/change-password.png)
+<img src="docs/assets/change-password.png" align="center" alt="change-password">
 
 - 异步日志
 
-![](docs/assets/async-log.png)
+<img src="docs/assets/async-log.png" align="center" alt="async-log">
 
 ## 压力测试
 
 - 10000 并发客户端，30228 QPS
 
-![](docs/assets/bench.png)
+<img src="docs/assets/bench.png" align="center" alt="bench-test">
 
 > 使用[WebBench1.5](https://github.com/EZLippi/WebBench)进行测试
 

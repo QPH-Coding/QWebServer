@@ -1,6 +1,6 @@
 <h1 align="center"> QWebServer </h1>
 
-![](docs/assets/QWebServer.png)
+<img src="docs/assets/QWebServer.png" align="center" alt="Head">
 
 > 如果你需要一份中文版本的README，请见: [README-zh](README-zh.md)
 
@@ -12,7 +12,7 @@ In order to keep most of the source code in modern C++ style, some Linux C funct
 
 The `QWebServer` use Multi-Reactor and Thread Pool deal with the connection. Here is the main overall architecture.
 
-![](docs/assets/WebserverArchitecture.drawio.png)
+<img src="docs/assets/WebserverArchitecture.drawio.png" align="center" alt="architecture">
 
 ## Feature
 
@@ -135,29 +135,29 @@ If every thing is OK, you will see the HTML like the images in the **Screenshot*
 
 - Index/Login Page
 
-![](docs/assets/login.png)
+<img src="docs/assets/login.png" align="center" alt="login">
 
 - Register Page
 
-![](docs/assets/register.png)
+<img src="docs/assets/register.png" align="center" alt="register">
 
 - Home Page
 
-![](docs/assets/home.png)
+<img src="docs/assets/home.png" align="center" alt="home">
 
 - Change Password Page
 
-![](docs/assets/change-password.png)
+<img src="docs/assets/change-password.png" align="center" alt="change-password">
 
 - AsynchronousLog
 
-![](docs/assets/async-log.png)
+<img src="docs/assets/async-log.png" align="center" alt="Async-log">
 
 ## Bench
 
 - 10000 Concurrent Clients, 30228 QPS
 
-![](docs/assets/bench.png)
+<img src="docs/assets/bench.png" align="center" alt="bench-test">
 
 > Bench test uses [WebBench1.5](https://github.com/EZLippi/WebBench)
 
