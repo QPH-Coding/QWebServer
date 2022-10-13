@@ -157,6 +157,14 @@ If every thing is OK, you will see the HTML like the images in the **Screenshot*
 
 <img src="docs/assets/home.png" align="center" alt="home">
 
+- HTTP transfer Image
+
+<img src="docs/assets/image.png" align="center" alt="image">
+
+- HTTP transfer video
+
+<img src="docs/assets/video.png" align="center" alt="video">
+
 - Change Password Page
 
 <img src="docs/assets/change-password.png" align="center" alt="change-password">

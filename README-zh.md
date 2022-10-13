@@ -161,6 +161,14 @@ $ nohup ./QWebServer > error.log &
 
 <img src="docs/assets/home.png" align="center" alt="home">
 
+- HTTP 传输图片
+
+<img src="docs/assets/image.png" align="center" alt="image">
+
+- HTTP 传输视频
+
+<img src="docs/assets/video.png" align="center" alt="video">
+
 - 修改密码界面
 
 <img src="docs/assets/change-password.png" align="center" alt="change-password">
