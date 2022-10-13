@@ -1,13 +1,6 @@
-<style>
-image {
-   align-content: center;
-   align-self: center;
-}
-</style>
-
 <h1 align="center"> QWebServer </h1>
 
-<img src="docs/assets/QWebServer.png" alt="head">
+<img src="docs/assets/QWebServer.png" align="center" alt="head">
 
 ## 概述
 
