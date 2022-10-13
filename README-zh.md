@@ -68,7 +68,7 @@
 
 > 在编译此项目之前，应保证已经配置好以上的依赖库
 
-你可以使用以下命令去安装 `MySql` 和 `libmysql++` 在 Ubuntu 22.04 中:
+在`Ubuntu 22.04`中，你可以使用以下命令去安装 `MySql` 和 `libmysql++` :
 
 ```shell
 $ sudo apt-get install mysql-client mysql-server libmysql++-dev 
