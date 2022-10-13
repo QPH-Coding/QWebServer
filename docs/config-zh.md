@@ -20,12 +20,12 @@
 
 - MySql的配置字段
 
-| Field    | Type   | Description                     |
-| -------- | ------ | ------------------------------- |
-| num      | int    | 初始化的MySql连接               |
-| host     | string | MySql服务器使用的IP地址         |
-| port     | int    | MySql服务器监听的端口           |
+| Field    | Type   | Description           |
+| -------- | ------ |-----------------------|
+| num      | int    | 初始化的MySql连接数量         |
+| host     | string | MySql服务器使用的IP地址       |
+| port     | int    | MySql服务器监听的端口         |
 | database | string | server使用的在MySql里面的数据库 |
-| username | string | 连接MySql使用的用户名           |
-| password | string | 连接MySql使用的密码             |
+| username | string | 连接MySql使用的用户名         |
+| password | string | 连接MySql使用的密码          |
 
