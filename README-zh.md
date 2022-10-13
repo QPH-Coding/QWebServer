@@ -1,6 +1,13 @@
+<style>
+image {
+   align-content: center;
+   align-self: center;
+}
+</style>
+
 <h1 align="center"> QWebServer </h1>
 
-<img src="docs/assets/QWebServer.png" align="center" alt="head">
+<img src="docs/assets/QWebServer.png" alt="head">
 
 ## 概述
 
@@ -14,7 +21,7 @@
 
 ## 项目亮点
 
-- Multi-Reactor模型()
+- Multi-Reactor模型
 
 - 半同步/半异步堆模型
 
@@ -29,6 +36,8 @@
 - 时间轮处理非活跃连接
 
 - 使用正则表达式解析HTTP请求
+
+- 能够实现上万并发的数据交互
 
 ## 开发环境
 
@@ -52,7 +61,7 @@
 
 - lib: openssl, mysql++, jsoncpp(已包含)
 
->  在编译此项目之前，应保证已经配置好以上的依赖库
+> 在编译此项目之前，应保证已经配置好以上的依赖库
 
 你可以使用以下命令去安装 `MySql` 和 `libmysql++` 在 Ubuntu 22.04 中:
 
@@ -61,6 +70,7 @@ $ sudo apt-get install mysql-client mysql-server libmysql++-dev
 ```
 
 你可以使用以下命令去安装`openssl`
+
 ```shell
 $ sudo apt-get install openssl
 ```
@@ -68,21 +78,25 @@ $ sudo apt-get install openssl
 本项目用的MySql建表语句如下:
 
 ```mysql
-CREATE TABLE `user` (
-    `id` INT unsigned  NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(64) NOT NULL,
-    `salt` CHAR(6) NOT NULL,
-    `sha256` CHAR(64) NOT NULL,
+CREATE TABLE `user`
+(
+    `id`     INT unsigned NOT NULL AUTO_INCREMENT,
+    `name`   VARCHAR(64)  NOT NULL,
+    `salt`   CHAR(6)      NOT NULL,
+    `sha256` CHAR(64)     NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `key_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 ```
 
 > 在运行此项目前应该保证在运行项目的主机上能够连接到使用的MySql服务器
 
 ## 快速开始
 
-1. 使用默认的配置或在 `config.json`中写入你的配置。有关配置文件  `config.json` 的详细详细说明可见 [config-zh.md](docs/config-zh.md).
+1. 使用默认的配置或在 `config.json`中写入你的配置。有关配置文件  `config.json`
+   的详细详细说明可见 [config-zh.md](docs/config-zh.md).
 
 2. 在Shell中输入如下命令:
 
@@ -124,7 +138,7 @@ $ nohup ./QWebServer > error.log &
 
 > 确保本地是可以与所运行的Linux服务器是能够Ping通的
 
-在浏览器中输入 `${Linux Server IP}:${port}` 
+在浏览器中输入 `${Linux Server IP}:${port}`
 
 如果所有事情都顺利的话，你会看到一个HTML页面，可见 **运行截图**部分
 
